@@ -1,0 +1,10 @@
+[
+  {
+    "id": "minecraft",
+    "title": "Minecraft",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/minecraft.jpg",
+    "rating": 8,
+    "gameplay": "Veteran",
+    "url": "https://www.minecraft.net/"
+  }
+]
