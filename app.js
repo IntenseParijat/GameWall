@@ -140,12 +140,22 @@ function createGameCard(game, position) {
   viewLink.setAttribute("aria-label", `View ${game.title} in a new tab`);
 
   if (game.image) {
-    image.src = game.image;
+    const imageUrl = new URL(game.image, window.location.href);
+    imageUrl.searchParams.set("v", Date.now());
     image.alt = `${game.title} poster`;
+    image.addEventListener("load", () => {
+      image.hidden = false;
+      placeholder.hidden = true;
+    }, { once: true });
     image.addEventListener("error", () => {
+      console.error(
+        `GameWall: failed to load poster for "${game.title}"`,
+        imageUrl.toString()
+      );
       image.hidden = true;
       placeholder.hidden = false;
     }, { once: true });
+    image.src = imageUrl.toString();
   } else {
     image.hidden = true;
     placeholder.hidden = false;
