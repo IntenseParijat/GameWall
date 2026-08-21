@@ -182,7 +182,8 @@ a { color: inherit; }
 .game-card:hover .game-poster { filter: brightness(1.08) contrast(1.06); transform: scale(1.055); }
 .game-card:hover .poster-frame::after { opacity: .65; }
 .game-card:hover .corner { width: 24px; height: 24px; opacity: 1; }
-.game-card:hover .card-id, .game-card:hover.poster-meta { opacity: 0; transform: translateY(-3px); pointer-events: none; }
+.game-card:hover .card-id,
+.game-card:hover .poster-meta { opacity: 0; transform: translateY(-3px); pointer-events: none; }
 .game-card:hover .rating-badge { box-shadow: 0 0 23px rgba(0, 240, 255, .25); }
 .game-card:hover .view-game, .view-game:hover { color: #061116; border-color: var(--neon-cyan); background: var(--neon-cyan); box-shadow: 0 0 17px rgba(0, 240, 255, .38); }
 .game-card:hover .view-game span, .view-game:hover span { transform: translate(2px, -2px); }
