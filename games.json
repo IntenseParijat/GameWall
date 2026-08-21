@@ -14,5 +14,13 @@
     "rating": 6,
     "gameplay": "Average",
     "url": "https://play.google.com/store/apps/details?id=com.mojang.minecraftpe"
+  },
+  {
+    "id": "asphalt-nitro",
+    "title": "Asphalt Nitro",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/asphalt-nitro.jpg",
+    "rating": 6,
+    "gameplay": "Veteran",
+    "url": "https://mkt-web.gameloft.com/en/game/asphalt-nitro-mobile"
   }
 ]
