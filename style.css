@@ -158,7 +158,8 @@ a { color: inherit; }
 .poster-placeholder[hidden] { display: none !important; }
 .poster-placeholder::before { width: 3rem; height: 3rem; margin-bottom: .35rem; content: ""; border: 1px solid var(--neon-cyan); background: repeating-linear-gradient(135deg, transparent 0 5px, rgba(0, 240, 255, .08) 5px 6px); clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
 .poster-placeholder small { color: var(--text-secondary); font: 500 .57rem/1 Inter, sans-serif; letter-spacing: .12em; }
-.card-id { position: absolute; z-index: 2; top: .7rem; left: .7rem; padding: .28rem .4rem; color: #dffcff; border: 1px solid rgba(0, 240, 255, .34); background: rgba(5,7,13,.57); font: 600 .6rem/1 Rajdhani, sans-serif; letter-spacing: .13em; backdrop-filter: blur(3px); }
+.card-id { position: absolute; z-index: 2; top: .7rem; left: .7rem; padding: .28rem .4rem; color: #dffcff; border: 1px solid rgba(0, 240, 255, .34); background: rgba(5, 7, 13, .57); font: 600 .6rem/1 Rajdhani, sans-serif; letter-spacing: .13em; backdrop-filter: blur(3px); opacity: 1; transition: opacity .3s ease; }
+.game-card:hover .card-id { transition: opacity .3s ease, transform .3s ease; }
 .rating-badge { position: absolute; z-index: 2; right: .7rem; bottom: .7rem; display: flex; align-items: baseline; gap: .18rem; padding: .43rem .48rem .34rem; border: 1px solid rgba(0, 240, 255, .3); background: rgba(5, 7, 13, .78); box-shadow: 0 0 18px rgba(0, 240, 255, .09); backdrop-filter: blur(3px); }
 .rating-badge small { position: absolute; left: .48rem; top: .27rem; color: var(--text-secondary); font: 600 .43rem/1 Inter, sans-serif; letter-spacing: .1em; white-space: nowrap; }
 .rating-badge b { margin-top: .42rem; color: var(--neon-cyan); font: 700 1.32rem/.85 Rajdhani, sans-serif; text-shadow: 0 0 12px rgba(0, 240, 255, .65); }
