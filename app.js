@@ -202,6 +202,7 @@ function createGameCard(game, position) {
   renderPlatforms(platformBadges, game.platforms, game.title);
   rating.textContent = formatRating(game.rating);
   title.textContent = game.title;
+  requestAnimationFrame(() => {fitText(title, 0.85, 1.35);});
   gameplay.textContent = game.gameplay;
   posterLink.href = game.url;
   posterLink.setAttribute("aria-label", `Open ${game.title} in a new tab`);
@@ -255,7 +256,14 @@ function updateStatistics() {
   );
 
   elements.highestRated.textContent = highest ? highest.title : "—";
-  elements.highestRatedDetail.textContent = highest ? `MY SCORE ${formatRating(highest.rating)} / 10` : "WAITING FOR DATA";
+  elements.highestRatedDetail.textContent =
+      highest
+          ? `MY SCORE ${formatRating(highest.rating)} / 10`
+          : "WAITING FOR DATA";
+
+  requestAnimationFrame(() => {
+      fitText(elements.highestRated, 0.85, 2.3);
+  });
 }
 
 function isCompleted(gameplay) {
@@ -299,6 +307,23 @@ function showError() {
   elements.emptyTitle.textContent = "DATABASE CONNECTION FAILED";
   elements.emptyMessage.textContent = "UNABLE TO LOAD GAMEWALL DATA. PLEASE TRY AGAIN LATER.";
   updateStatistics();
+}
+
+function fitText(element, minSize, maxSize) {
+  if (!element) return;
+  element.style.fontSize = `${maxSize}rem`;
+  const maxHeight = element.clientHeight;
+  let size = maxSize;
+  while (
+      (
+          element.scrollWidth > element.clientWidth ||
+          element.scrollHeight > maxHeight
+      ) &&
+      size > minSize
+  ) {
+      size -= 0.025;
+      element.style.fontSize = `${size}rem`;
+  }
 }
 
 elements.search.addEventListener("input", (event) => {
