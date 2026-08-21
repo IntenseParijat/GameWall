@@ -4,6 +4,38 @@ const state = {
   sortMode: "default"
 };
 
+const PLATFORM_ICONS = {
+  PC: {
+    label: "PC",
+    svg: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"></rect><path d="M8 20h8M12 16v4"></path></svg>`
+  },
+  Mobile: {
+    label: "Mobile",
+    svg: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="1.8"></rect><path d="M10 5h4M11 18.5h2"></path></svg>`
+  },
+  Console: {
+    label: "Console",
+    svg: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 8.5h9.6c2 0 3.3 1.4 4 3.3l1 3.2c.5 1.7-.9 3-2.4 2.3l-3.5-1.7H8.1l-3.5 1.7c-1.5.7-2.9-.6-2.4-2.3l1-3.2c.7-1.9 2-3.3 4-3.3Z"></path><path d="M7.2 11v4M5.2 13h4M15.8 12.5h.01M18.2 14h.01"></path></svg>`
+  },
+  Gameboy: {
+    label: "Gameboy",
+    svg: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="1.8"></rect><rect x="8.5" y="5" width="7" height="6" rx=".5"></rect><path d="M9.5 14h3M11 12.5v3M14.8 15h.01M16.2 16.4h.01"></path></svg>`
+  }
+};
+
+const PLATFORM_ALIASES = {
+  pc: "PC",
+  computer: "PC",
+  mobile: "Mobile",
+  phone: "Mobile",
+  android: "Mobile",
+  ios: "Mobile",
+  console: "Console",
+  controller: "Console",
+  gameboy: "Gameboy",
+  "game boy": "Gameboy"
+};
+
 const elements = {
   grid: document.querySelector("#game-grid"),
   template: document.querySelector("#game-card-template"),
@@ -35,6 +67,22 @@ function hideLoading() {
   setTimeout(() => elements.loadingScreen.classList.add("is-hidden"), 250);
 }
 
+function normalizePlatform(value) {
+  if (typeof value !== "string") return null;
+  const key = value.trim().toLocaleLowerCase();
+  return PLATFORM_ALIASES[key] || null;
+}
+
+function normalizePlatforms(value) {
+  if (!Array.isArray(value)) return [];
+
+  return [...new Set(
+    value
+      .map(normalizePlatform)
+      .filter(Boolean)
+  )];
+}
+
 function normaliseGame(game, index) {
   const rating = Number(game.rating);
   return {
@@ -43,6 +91,7 @@ function normaliseGame(game, index) {
     image: typeof game.image === "string" ? game.image.trim() : "",
     rating: Number.isFinite(rating) ? Math.max(0, Math.min(10, rating)) : 0,
     gameplay: typeof game.gameplay === "string" && game.gameplay.trim() ? game.gameplay.trim() : "Unspecified",
+    platforms: normalizePlatforms(game.platforms),
     url: isSafeUrl(game.url) ? game.url : "#",
     originalIndex: index
   };
@@ -118,12 +167,31 @@ function renderGames() {
   elements.grid.append(fragment);
 }
 
+function renderPlatforms(container, platforms, gameTitle) {
+  container.replaceChildren();
+
+  platforms.forEach((platform) => {
+    const definition = PLATFORM_ICONS[platform];
+    if (!definition) return;
+
+    const badge = document.createElement("span");
+    badge.className = "platform-badge";
+    badge.title = `${gameTitle} — ${definition.label}`;
+    badge.setAttribute("aria-label", definition.label);
+    badge.innerHTML = definition.svg;
+    container.append(badge);
+  });
+
+  container.hidden = platforms.length === 0;
+}
+
 function createGameCard(game, position) {
   const card = elements.template.content.cloneNode(true);
   const posterLink = card.querySelector(".poster-link");
   const image = card.querySelector(".game-poster");
   const placeholder = card.querySelector(".poster-placeholder");
   const cardId = card.querySelector(".card-id");
+  const platformBadges = card.querySelector(".platform-badges");
   const rating = card.querySelector(".rating-badge b");
   const title = card.querySelector(".game-title");
   const gameplay = card.querySelector(".gameplay-badge");
@@ -131,6 +199,7 @@ function createGameCard(game, position) {
 
   const identifier = `GW-${String(position + 1).padStart(3, "0")}`;
   cardId.textContent = identifier;
+  renderPlatforms(platformBadges, game.platforms, game.title);
   rating.textContent = formatRating(game.rating);
   title.textContent = game.title;
   gameplay.textContent = game.gameplay;
@@ -140,22 +209,17 @@ function createGameCard(game, position) {
   viewLink.setAttribute("aria-label", `View ${game.title} in a new tab`);
 
   if (game.image) {
-    const imageUrl = new URL(game.image, window.location.href);
-    imageUrl.searchParams.set("v", Date.now());
+    image.src = game.image;
     image.alt = `${game.title} poster`;
     image.addEventListener("load", () => {
       image.hidden = false;
       placeholder.hidden = true;
     }, { once: true });
     image.addEventListener("error", () => {
-      console.error(
-        `GameWall: failed to load poster for "${game.title}"`,
-        imageUrl.toString()
-      );
+      console.error(`GameWall: failed to load poster for "${game.title}"`, game.image);
       image.hidden = true;
       placeholder.hidden = false;
     }, { once: true });
-    image.src = imageUrl.toString();
   } else {
     image.hidden = true;
     placeholder.hidden = false;
@@ -172,7 +236,7 @@ function createGameCard(game, position) {
 }
 
 function formatRating(rating) {
-  return Number.isInteger(rating) ? rating.toFixed(1) : rating.toFixed(1);
+  return Number(rating).toFixed(1);
 }
 
 function updateStatistics() {

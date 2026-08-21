@@ -155,12 +155,15 @@ a { color: inherit; }
 .game-poster { width: 100%; height: 100%; display: block; object-fit: cover; transition: transform .5s cubic-bezier(.2,.8,.2,1), filter .4s ease; }
 .game-poster[hidden] { display: none !important; }
 .poster-placeholder { position: absolute; z-index: 2; inset: 0; display: grid; align-content: center; justify-items: center; gap: .45rem; padding: 1rem; color: var(--neon-cyan); text-align: center; background: linear-gradient(135deg, #0a1420, #100c21); font: 700 .8rem/1 Rajdhani, sans-serif; letter-spacing: .14em; }
-.poster-placeholder[hidden] { display: none !important; }
 .poster-placeholder::before { width: 3rem; height: 3rem; margin-bottom: .35rem; content: ""; border: 1px solid var(--neon-cyan); background: repeating-linear-gradient(135deg, transparent 0 5px, rgba(0, 240, 255, .08) 5px 6px); clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
 .poster-placeholder small { color: var(--text-secondary); font: 500 .57rem/1 Inter, sans-serif; letter-spacing: .12em; }
-.card-id { position: absolute; z-index: 2; top: .7rem; left: .7rem; padding: .28rem .4rem; color: #dffcff; border: 1px solid rgba(0, 240, 255, .34); background: rgba(5, 7, 13, .57); font: 600 .6rem/1 Rajdhani, sans-serif; letter-spacing: .13em; backdrop-filter: blur(3px); opacity: 1; transition: opacity .3s ease; }
-.game-card:hover .card-id { opacity: 0; transform: translateY(-3px); }
-.rating-badge { position: absolute; z-index: 2; right: .7rem; bottom: .7rem; display: flex; align-items: baseline; gap: .18rem; padding: .43rem .48rem .34rem; border: 1px solid rgba(0, 240, 255, .3); background: rgba(5, 7, 13, .78); box-shadow: 0 0 18px rgba(0, 240, 255, .09); backdrop-filter: blur(3px); }
+.poster-placeholder[hidden] { display: none !important; }
+.card-id { position: absolute; z-index: 2; top: .7rem; left: .7rem; padding: .28rem .4rem; color: #dffcff; border: 1px solid rgba(0, 240, 255, .34); background: rgba(5,7,13,.57); font: 600 .6rem/1 Rajdhani, sans-serif; letter-spacing: .13em; backdrop-filter: blur(3px); transition: opacity .3s ease, transform .3s ease; }
+.poster-meta { position: absolute; z-index: 2; right: .7rem; bottom: .7rem; display: flex; align-items: stretch; gap: .3rem; max-width: calc(100% - 1.4rem); transition: opacity .3s ease, transform .3s ease; }
+.platform-badges { display: flex; align-items: stretch; gap: .25rem; }
+.platform-badge { width: 1.55rem; min-width: 1.55rem; height: 1.9rem; display: grid; place-items: center; color: #dffcff; border: 1px solid rgba(0, 240, 255, .3); background: rgba(5, 7, 13, .78); box-shadow: 0 0 18px rgba(0, 240, 255, .08); backdrop-filter: blur(3px); transition: border-color .25s ease, background .25s ease, box-shadow .25s ease; }
+.platform-badge svg { width: 1rem; height: 1rem; fill: none; stroke: currentColor; stroke-width: 1.45; stroke-linecap: round; stroke-linejoin: round; }
+.rating-badge { position: relative; display: flex; align-items: baseline; gap: .18rem; padding: .43rem .48rem .34rem; border: 1px solid rgba(0, 240, 255, .3); background: rgba(5, 7, 13, .78); box-shadow: 0 0 18px rgba(0, 240, 255, .09); backdrop-filter: blur(3px); }
 .rating-badge small { position: absolute; left: .48rem; top: .27rem; color: var(--text-secondary); font: 600 .43rem/1 Inter, sans-serif; letter-spacing: .1em; white-space: nowrap; }
 .rating-badge b { margin-top: .42rem; color: var(--neon-cyan); font: 700 1.32rem/.85 Rajdhani, sans-serif; text-shadow: 0 0 12px rgba(0, 240, 255, .65); }
 .rating-badge b::before { content: "★ "; font-size: .6em; vertical-align: .13em; }
@@ -169,7 +172,7 @@ a { color: inherit; }
 .corner-top-left { top: .45rem; left: .45rem; border-top: 1px solid var(--neon-cyan); border-left: 1px solid var(--neon-cyan); }
 .corner-bottom-right { right: .45rem; bottom: .45rem; border-bottom: 1px solid var(--neon-purple); border-right: 1px solid var(--neon-purple); }
 .card-content { padding: .8rem .8rem .85rem; border-top: 1px solid rgba(255,255,255,.035); }
-.game-title { display: -webkit-box; min-height: 2.05em; margin: 0; overflow: hidden; color: var(--text-primary); font: 700 clamp(1.08rem, 2.4vw, 1.35rem)/.95 Rajdhani, sans-serif; letter-spacing: .035em; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2;}
+.game-title { display: -webkit-box; min-height: 2.05em; margin: 0; overflow: hidden; color: var(--text-primary); font: 700 clamp(1.08rem, 2.4vw, 1.35rem)/.95 Rajdhani, sans-serif; letter-spacing: .035em; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
 .gameplay-row { display: flex; align-items: center; justify-content: space-between; gap: .3rem; margin-top: .7rem; min-width: 0; }
 .gameplay-row > span { color: var(--text-dim); font: 600 .55rem/1 Inter, sans-serif; letter-spacing: .1em; }
 .gameplay-badge { max-width: 65%; overflow: hidden; padding: .22rem .32rem; color: #dce9ff; border: 1px solid rgba(138, 92, 255, .4); background: rgba(138, 92, 255, .09); font: 600 .59rem/1 Rajdhani, sans-serif; letter-spacing: .07em; text-align: right; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
@@ -179,6 +182,7 @@ a { color: inherit; }
 .game-card:hover .game-poster { filter: brightness(1.08) contrast(1.06); transform: scale(1.055); }
 .game-card:hover .poster-frame::after { opacity: .65; }
 .game-card:hover .corner { width: 24px; height: 24px; opacity: 1; }
+.game-card:hover .card-id, .game-card:hover.poster-meta { opacity: 0; transform: translateY(-3px); pointer-events: none; }
 .game-card:hover .rating-badge { box-shadow: 0 0 23px rgba(0, 240, 255, .25); }
 .game-card:hover .view-game, .view-game:hover { color: #061116; border-color: var(--neon-cyan); background: var(--neon-cyan); box-shadow: 0 0 17px rgba(0, 240, 255, .38); }
 .game-card:hover .view-game span, .view-game:hover span { transform: translate(2px, -2px); }
@@ -222,7 +226,10 @@ a { color: inherit; }
   .stat-card strong { font-size: 1.45rem; }
   .game-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem; }
   .card-content { padding: .66rem; }
-  .rating-badge { right: .45rem; bottom: .45rem; }
+  .poster-meta { right: .45rem; bottom: .45rem; gap: .18rem; max-width: calc(100% - .9rem); }
+  .platform-badge { width: 1.4rem; min-width: 1.4rem; height: 1.7rem; }
+  .platform-badge svg { width: .9rem; height: .9rem; }
+  .rating-badge { padding-inline: .4rem; }
   .card-id { top: .45rem; left: .45rem; }
 }
 

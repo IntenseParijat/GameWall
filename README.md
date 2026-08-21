@@ -15,6 +15,7 @@ The site reads every game from `games.json`; no games are hard-coded in the fron
   "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/cyberpunk-2077.jpg",
   "rating": 8.5,
   "gameplay": "Completed",
+  "platforms": ["PC", "Console"],
   "url": "https://example.com"
 }
 ```
@@ -22,6 +23,8 @@ The site reads every game from `games.json`; no games are hard-coded in the fron
 - `id` is a stable, unique slug for future updates.
 - `rating` accepts numbers from 0 to 10, including decimals.
 - `gameplay` is free text and is displayed as supplied.
+- `platforms` is an array containing one or more of `PC`, `Mobile`, `Console`, or `Gameboy`.
+- Platform values are rendered as inline SVG icons on each card and can contain multiple platforms.
 - `url` is opened in a new tab from each card.
 
 The sample records are only there to preview the interface. Replace them with the personal collection when ready.
