@@ -3,7 +3,7 @@
     "id": "minecraft",
     "title": "Minecraft (Java)",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/minecraft.jpg",
-    "rating": 8,
+    "rating": 8.5,
     "gameplay": "Veteran",
     "platforms": [
       "PC"
@@ -25,7 +25,7 @@
     "id": "asphalt-nitro",
     "title": "Asphalt Nitro",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/asphalt-nitro.jpg",
-    "rating": 6,
+    "rating": 5.6,
     "gameplay": "Veteran",
     "platforms": [
       "Mobile"
@@ -36,7 +36,7 @@
     "id": "asphalt-8-airborne",
     "title": "Asphalt 8 Airborne",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/asphalt-8-airborne.jpg",
-    "rating": 8,
+    "rating": 7.8,
     "gameplay": "Veteran",
     "platforms": [
       "PC",
@@ -48,7 +48,7 @@
     "id": "asphalt-9-legends",
     "title": "Asphalt 9 Legends",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/asphalt-9-legends.jpg",
-    "rating": 7,
+    "rating": 6.9,
     "gameplay": "Veteran",
     "platforms": [
       "PC",
@@ -60,7 +60,7 @@
     "id": "destiny-2",
     "title": "Destiny 2",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/destiny-2.png",
-    "rating": 8,
+    "rating": 8.1,
     "gameplay": "Veteran",
     "platforms": [
       "PC"
