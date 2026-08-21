@@ -66,5 +66,27 @@
       "PC"
     ],
     "url": "https://www.bungie.net/7/en/Destiny"
+  },
+  {
+    "id": "roblox",
+    "title": "Roblox",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/roblox.jpg",
+    "rating": 3,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.roblox.com/home"
+  },
+  {
+    "id": "gtav",
+    "title": "Grand Theft Auto 5",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/gtav.jpg",
+    "rating": 9.6,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.rockstargames.com/gta-v"
   }
 ]
