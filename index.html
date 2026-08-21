@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#05070d">
+  <meta name="description" content="GameWall — a personal video game archive.">
+  <title>GameWall | Personal Game Archive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+  <div class="background-grid" aria-hidden="true"></div>
+  <div class="background-particles" aria-hidden="true">
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+  </div>
+
+  <div class="loading-screen" id="loading-screen" role="status" aria-live="polite">
+    <div class="loader-mark" aria-hidden="true"><span></span></div>
+    <p class="eyebrow">System boot sequence</p>
+    <h1>INITIALIZING GAMEWALL</h1>
+    <p class="loader-message" id="loader-message">LOADING DATABASE...</p>
+    <div class="loader-track" aria-hidden="true"><span id="loader-bar"></span></div>
+    <p class="loader-percent" id="loader-percent">0%</p>
+  </div>
+
+  <main class="site-shell" id="main-content">
+    <header class="hero" aria-labelledby="page-title">
+      <div class="hero-topline">
+        <span class="system-status"><i></i> Archive online</span>
+        <span class="coordinate">GW // COLLECTION_01</span>
+      </div>
+      <div class="title-lockup">
+        <div class="title-bracket" aria-hidden="true"></div>
+        <div>
+          <p class="eyebrow">// Personal game archive</p>
+          <h1 id="page-title">GAMEWALL</h1>
+          <p class="subtitle">PLAYER DATABASE <span>//</span> SELECTED TITLES</p>
+        </div>
+      </div>
+      <div class="hero-line" aria-hidden="true"><span></span></div>
+    </header>
+
+    <section class="stats" aria-label="Collection statistics">
+      <article class="stat-card">
+        <p>TOTAL GAMES</p>
+        <strong id="total-games">00</strong>
+        <span>ARCHIVED ENTRIES</span>
+      </article>
+      <article class="stat-card">
+        <p>AVERAGE RATING</p>
+        <strong id="average-rating">0.00</strong>
+        <span>PERSONAL SCORE / 10</span>
+      </article>
+      <article class="stat-card">
+        <p>COMPLETED</p>
+        <strong id="completed-games">00</strong>
+        <span>FINISHED CAMPAIGNS</span>
+      </article>
+      <article class="stat-card stat-card-featured">
+        <p>HIGHEST RATED</p>
+        <strong id="highest-rated">—</strong>
+        <span id="highest-rated-detail">WAITING FOR DATA</span>
+      </article>
+    </section>
+
+    <section class="library" aria-labelledby="library-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">// Browse collection</p>
+          <h2 id="library-title">GAME DATABASE</h2>
+        </div>
+        <p class="result-count" id="result-count" aria-live="polite">0 ENTRIES</p>
+      </div>
+
+      <div class="controls-panel">
+        <div class="search-field">
+          <label for="game-search">Search database</label>
+          <input id="game-search" type="search" placeholder="SEARCH GAMES..." autocomplete="off">
+          <span class="search-icon" aria-hidden="true"></span>
+        </div>
+        <div class="sort-field">
+          <label for="sort-games">Sort collection</label>
+          <select id="sort-games">
+            <option value="default">DEFAULT ORDER</option>
+            <option value="rating-desc">RATING: HIGH → LOW</option>
+            <option value="rating-asc">RATING: LOW → HIGH</option>
+            <option value="title-asc">TITLE: A → Z</option>
+            <option value="title-desc">TITLE: Z → A</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="section-divider" aria-hidden="true"><span></span></div>
+      <div class="game-grid" id="game-grid" aria-live="polite"></div>
+      <div class="empty-state" id="empty-state" hidden>
+        <span class="empty-state-icon" aria-hidden="true">⌁</span>
+        <h3 id="empty-title">NO MATCH FOUND</h3>
+        <p id="empty-message">DATABASE RETURNED 0 RESULTS</p>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <span>GAMEWALL / PERSONAL ARCHIVE</span>
+      <span class="footer-status"><i></i> READ-ONLY DATABASE</span>
+    </footer>
+  </main>
+
+  <template id="game-card-template">
+    <article class="game-card">
+      <a class="poster-link" target="_blank" rel="noopener noreferrer">
+        <div class="poster-frame">
+          <img class="game-poster" loading="lazy">
+          <div class="poster-placeholder" hidden>
+            <span>IMAGE SIGNAL LOST</span>
+            <small>POSTER UNAVAILABLE</small>
+          </div>
+          <span class="card-id"></span>
+          <span class="rating-badge"><small>MY RATING</small><b></b><em>/10</em></span>
+          <span class="corner corner-top-left" aria-hidden="true"></span>
+          <span class="corner corner-bottom-right" aria-hidden="true"></span>
+        </div>
+      </a>
+      <div class="card-content">
+        <h3 class="game-title"></h3>
+        <div class="gameplay-row">
+          <span>GAMEPLAY</span>
+          <strong class="gameplay-badge"></strong>
+        </div>
+        <a class="view-game" target="_blank" rel="noopener noreferrer">VIEW GAME <span aria-hidden="true">↗</span></a>
+      </div>
+    </article>
+  </template>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
