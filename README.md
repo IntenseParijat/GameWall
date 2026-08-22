@@ -38,3 +38,10 @@ Store poster files in [`posters/`](posters/). Future entries should generally us
 This project has no build step or backend. Enable GitHub Pages for the repository’s main branch and it will serve `index.html`. The frontend loads `games.json` using a relative path, so it works from the `/GameWall/` GitHub Pages project path and when embedded in a narrow iframe.
 
 The planned Python uploader is not included here; it will be responsible for adding poster files and updating `games.json`.
+
+## Attribution
+
+If you use this project or any substantial part of it, please include the following attribution:
+
+> Game Wall by Parijat Das  
+> https://github.com/IntenseParijat/GameWall
