@@ -469,5 +469,203 @@
       "Mobile"
     ],
     "url": "https://www.fortnite.com/"
+  },
+  {
+    "id": "pragmata-sketchbook-demo",
+    "title": "PRAGMATA Sketchbook - DEMO",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Pragmata-Sketchbook.png",
+    "rating": 7,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/3357650/PRAGMATA/"
+  },
+  {
+    "id": "marvel-rivals",
+    "title": "Marvel Rivals",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/MarvelRivals.jpg",
+    "rating": 3.5,
+    "gameplay": "Hell",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.marvelrivals.com/"
+  },
+  {
+    "id": "control",
+    "title": "Control",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Control.jpg",
+    "rating": 8.7,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.remedygames.com/games/control"
+  },
+  {
+    "id": "naraka-bladepoint",
+    "title": "Naraka: Bladepoint",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Naraka-Bladepoint.webp",
+    "rating": 6.2,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.narakathegame.com/"
+  },
+  {
+    "id": "2xko",
+    "title": "2XKO",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/2XKO.png",
+    "rating": 4,
+    "gameplay": "Beginner",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://2xko.riotgames.com/"
+  },
+  {
+    "id": "the-finals",
+    "title": "The Finals",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TheFinals.png",
+    "rating": 6.8,
+    "gameplay": "Beginner",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.reachthefinals.com/"
+  },
+  {
+    "id": "just-cause-4",
+    "title": "Just Cause 4",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/JustCause4.jpg",
+    "rating": 6.7,
+    "gameplay": "7%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/517630/Just_Cause_4_Reloaded/"
+  },
+  {
+    "id": "dead-island-2",
+    "title": "Dead Island 2",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DeadIsland2.jpg",
+    "rating": 7.8,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.deepsilver.com/games/dead-island-2"
+  },
+  {
+    "id": "pokemmo",
+    "title": "PokeMMO",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PokeMMO.jpg",
+    "rating": 5,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://pokemmo.com/"
+  },
+  {
+    "id": "battlefield-redsec",
+    "title": "Battlefield REDSEC",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Battlefield6-RedSec.jpg",
+    "rating": 4.6,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.ea.com/games/battlefield/redsec"
+  },
+  {
+    "id": "battlefield-v",
+    "title": "Battlefield V",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/BattlefieldV.jpg",
+    "rating": 4.2,
+    "gameplay": "30%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.ea.com/games/battlefield/battlefield-5"
+  },
+  {
+    "id": "marathon-server-slam",
+    "title": "Marathon Server Slam",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/MarathonServerSlam.png",
+    "rating": 4.9,
+    "gameplay": "Beginner",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.marathonthegame.com/"
+  },
+  {
+    "id": "neuron-activation-demo",
+    "title": "Neuron Activation DEMO",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/NeuronActivationDemo.jpg",
+    "rating": 7,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/3978110/Neuron_Activation/"
+  },
+  {
+    "id": "ghostrunner",
+    "title": "Ghostrunner",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Ghostrunner.jpg",
+    "rating": 8.7,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://omlgames.com/en/game/ghostrunner-2/"
+  },
+  {
+    "id": "ghostrunner-2",
+    "title": "Ghostrunner 2",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Ghostrunner2.jpg",
+    "rating": 9.2,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://omlgames.com/en/game/ghostrunner-2-3/"
+  },
+  {
+    "id": "world-of-tanks-blitz",
+    "title": "World of Tanks Blitz",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/WorldofTanks-Blitz.webp",
+    "rating": 5,
+    "gameplay": "Beginner",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://wotblitz.com/"
+  },
+  {
+    "id": "world-of-warships",
+    "title": "World of Warships",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/WorldofWarships.jpg",
+    "rating": 6.5,
+    "gameplay": "Amateur",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://wargaming.net/en/games/wows"
+  },
+  {
+    "id": "world-war-z-aftermath",
+    "title": "World War Z Aftermath",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/WorldWarZ.jpg",
+    "rating": 6.1,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://wwzgame.com/"
   }
 ]
