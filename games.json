@@ -224,5 +224,250 @@
       "PC"
     ],
     "url": "https://annapurnainteractive.com/games/stray"
+  },
+  {
+    "id": "nte",
+    "title": "Neverness To Everness",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/NevernessToEverness.jpg",
+    "rating": 7.5,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://nte.perfectworld.com/"
+  },
+  {
+    "id": "mongil-star-dive",
+    "title": "Mongil: Star Dive",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Mongil-StarDive.png",
+    "rating": 5.6,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://stardive.netmarble.com/"
+  },
+  {
+    "id": "the-crew-motorfest",
+    "title": "The Crew Motorfest",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TheCrewMotorfest.jpg",
+    "rating": 8.6,
+    "gameplay": "Max Verstappen",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.ubisoft.com/en-us/game/the-crew/motorfest"
+  },
+  {
+    "id": "clair-obscur-expedition-33",
+    "title": "Clair Obscur: Expedition 33",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ClairObscur-Expedition33.png",
+    "rating": 8.8,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.expedition33.com/"
+  },
+  {
+    "id": "arknights-endfield",
+    "title": "Arknights: Endfield",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Arknights-Endfield.jpg",
+    "rating": 9.5,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://endfield.gryphline.com/"
+  },
+  {
+    "id": "wwm",
+    "title": "Where Winds Meet",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/WhereWindsMeet.jpg",
+    "rating": 9.3,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.wherewindsmeetgame.com/"
+  },
+  {
+    "id": "dna",
+    "title": "Duet Night Abyss",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DuetNightAbyss.jpeg",
+    "rating": 5.3,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://duetnightabyss.dna-panstudio.com/"
+  },
+  {
+    "id": "phasmophobia",
+    "title": "Phasmophobia",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Phasmophobia.jpg",
+    "rating": 9.2,
+    "gameplay": "Apoc III",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://kineticgames.co.uk/phasmophobia"
+  },
+  {
+    "id": "god-of-war-ragnarok",
+    "title": "God of War: Ragnarok",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/GodofWar-Ragnarok.png",
+    "rating": 9.5,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/2322010/God_of_War_Ragnarok/"
+  },
+  {
+    "id": "ghost-of-tsushima-directors-cut",
+    "title": "Ghost of Tsushima: Director's Cut",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/GhostofTsushima.jpg",
+    "rating": 9.7,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.playstation.com/en-in/games/ghost-of-tsushima/pc/"
+  },
+  {
+    "id": "gris",
+    "title": "GRIS",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/GRIS.jpg",
+    "rating": 9.2,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/683320/GRIS/"
+  },
+  {
+    "id": "csgo",
+    "title": "CSGO (Counter-Strike: Global Offensive)",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CounterStrikeGlobalOffensive.jpg",
+    "rating": 7.4,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/4465480/CounterStrikeGlobal_Offensive/"
+  },
+  {
+    "id": "cs2",
+    "title": "CS2 (Counter Strike 2)",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CounterStrike2.png",
+    "rating": 7.9,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/730/CounterStrike_2/"
+  },
+  {
+    "id": "watch-dogs-2",
+    "title": "Watch Dogs 2",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/WatchDogs2.jpg",
+    "rating": 8.2,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.ubisoft.com/en-us/games/watch-dogs-2"
+  },
+  {
+    "id": "among-us",
+    "title": "Among Us",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/AmongUs.jpg",
+    "rating": 7.9,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://www.innersloth.com/games/among-us/"
+  },
+  {
+    "id": "rocket-league",
+    "title": "Rocket League",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/RocketLeague.jpg",
+    "rating": 6.6,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.rocketleague.com/"
+  },
+  {
+    "id": "rocket-league-sideswipe",
+    "title": "Rocket League Sideswipe",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/RocketLeague-Sideswipe.webp",
+    "rating": 6.8,
+    "gameplay": "Average",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://sideswipe.rocketleague.com/"
+  },
+  {
+    "id": "fh4",
+    "title": "Forza Horizon 4",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ForzaHorizon4.jpg",
+    "rating": 8.3,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/1293830/Forza_Horizon_4/"
+  },
+  {
+    "id": "fh6",
+    "title": "Forza Horizon 6",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ForzaHorizon6.jpg",
+    "rating": 8.5,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://forza.net/forzahorizon6"
+  },
+  {
+    "id": "teardown",
+    "title": "Teardown",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Teardown.jpg",
+    "rating": 8,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://teardowngame.com/"
+  },
+  {
+    "id": "trackmania",
+    "title": "Trackmania",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Trackmania.png",
+    "rating": 4.8,
+    "gameplay": "Beginner",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.trackmania.com/"
+  },
+  {
+    "id": "fortnite",
+    "title": "Fortnite",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Fortnite.jpg",
+    "rating": 5.8,
+    "gameplay": "Beginner",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://www.fortnite.com/"
   }
 ]
