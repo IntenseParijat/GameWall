@@ -667,5 +667,478 @@
       "PC"
     ],
     "url": "https://wwzgame.com/"
+  },
+  {
+    "id": "strinova",
+    "title": "Strinova",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Strinova.webp",
+    "rating": 4.6,
+    "gameplay": "Beginner",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.strinova.com/"
+  },
+  {
+    "id": "fragpunk",
+    "title": "Fragpunk",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Fragpunk.webp",
+    "rating": 4.2,
+    "gameplay": "Beginner",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.fragpunk.com/"
+  },
+  {
+    "id": "once-human",
+    "title": "Once Human",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/OnceHuman.jpg",
+    "rating": 5.1,
+    "gameplay": "Beginner",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.oncehuman.game/"
+  },
+  {
+    "id": "absolute-drift-zen-edition",
+    "title": "Absolute Drift: Zen Edition",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/AbsoluteDrift-ZenEdition.jpeg",
+    "rating": 6.4,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.absolutedrift.com/"
+  },
+  {
+    "id": "tomb-raider-goty-edition",
+    "title": "Tomb Raider: Game of the Year Edition",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TombRaider.png",
+    "rating": 8.3,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.tombraider.com/products/games/tomb-raider-game-of-the-year-edition"
+  },
+  {
+    "id": "rise-of-the-tomb-raider",
+    "title": "Rise of the Tomb Raider: 20 Year Celebration",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/RiseofTheTombRaider.jpg",
+    "rating": 8.2,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.tombraider.com/products/games/rise-of-the-tomb-raider-20-year-celebration"
+  },
+  {
+    "id": "shadow-of-the-tomb-raider",
+    "title": "Shadow of the Tomb Raider: Definitive Edition",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ShadowofTheTombRaider.png",
+    "rating": 8.2,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.tombraider.com/products/games/shadow-of-the-tomb-raider-definitive-edition"
+  },
+  {
+    "id": "ff",
+    "title": "Free Fire",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/FreeFire.jpeg",
+    "rating": 3,
+    "gameplay": "Retired",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://ff.garena.com"
+  },
+  {
+    "id": "ff-max",
+    "title": "Free Fire MAX",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/FreeFireMax.jpg",
+    "rating": 3.7,
+    "gameplay": "Retired",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.dts.freefiremax"
+  },
+  {
+    "id": "codm",
+    "title": "Call of Duty: Mobile",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CallofDutyMobile.jpg",
+    "rating": 7.8,
+    "gameplay": "Legendary",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://www.callofduty.com/mobile"
+  },
+  {
+    "id": "codm-wz",
+    "title": "Call of Duty: Warzone Mobile",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CallofDuty-WarzoneMobile.jpg",
+    "rating": 3.3,
+    "gameplay": "Newbie",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://www.callofduty.com/blog/2024/03/call-of-duty-warzone-mobile-official-live-worldwide-announcement"
+  },
+  {
+    "id": "cod-wz",
+    "title": "Call of Duty: Warzone",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CallofDuty-Warzone.jpg",
+    "rating": 8.5,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.callofduty.com/warzone"
+  },
+  {
+    "id": "pubgm",
+    "title": "PUBG Mobile (Player Unknown's Battleground)",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PUBG-Mobile.jpg",
+    "rating": 7.7,
+    "gameplay": "Crown I",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://www.pubgmobile.com/"
+  },
+  {
+    "id": "pubgm-lite",
+    "title": "PUBG Mobile Lite (Player Unknown's Battleground)",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PUBG-MobileLite.jpg",
+    "rating": 7.5,
+    "gameplay": "Average",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.tencent.igfit"
+  },
+  {
+    "id": "pubg",
+    "title": "PUBG: Battlegrounds (Player Unknown's Battlegrounds PC)",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PUBG-Battlegrounds.png",
+    "rating": 5.7,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://pubg.com/"
+  },
+  {
+    "id": "pubg-new-state",
+    "title": "PUBG: New State (Player Unknown's Battlegrounds)",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PUBG-NewState.jpg",
+    "rating": 6.7,
+    "gameplay": "Average",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://newstate.pubg.com/"
+  },
+  {
+    "id": "hitman",
+    "title": "Hitman",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Hitman.jpg",
+    "rating": 7.3,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://ioi.dk/hitman"
+  },
+  {
+    "id": "hitman-3",
+    "title": "Hitman 3",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Hitman3.jpg",
+    "rating": 7.6,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://ioi.dk/hitman"
+  },
+  {
+    "id": "apex-legends",
+    "title": "Apex Legends",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ApexLegends.jpg",
+    "rating": 4.2,
+    "gameplay": "Average",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://www.ea.com/games/apex-legends/apex-legends"
+  },
+  {
+    "id": "indus-br",
+    "title": "Indus: Battle Royale",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Indus-BattleRoyale.jpg",
+    "rating": 3.1,
+    "gameplay": "Newbie",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://www.indusgame.com/"
+  },
+  {
+    "id": "vaporwave-drift",
+    "title": "Vaporwave Drift",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/VaporwaveDrift.webp",
+    "rating": 6.1,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/1098200/Vaporwave_Drift/"
+  },
+  {
+    "id": "lost-light",
+    "title": "Lost Light",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/LostLight.webp",
+    "rating": 2.9,
+    "gameplay": "Average",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://www.lostlight.game/"
+  },
+  {
+    "id": "sky-children-of-the-light",
+    "title": "Sky: Children of the Light",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Sky-ChildrenofLight.jpg",
+    "rating": 7.6,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://www.thatskygame.com/"
+  },
+  {
+    "id": "shapez",
+    "title": "Shapez",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Shapez.png",
+    "rating": 7.4,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://shapez.io/"
+  },
+  {
+    "id": "epistory-typing-chronicles",
+    "title": "Epistory - Typing Chronicles",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Epistory-TypingChronicles.jpg",
+    "rating": 7.6,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.epistorygame.com/"
+  },
+  {
+    "id": "warpips",
+    "title": "Warpips",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Warpips.jpg",
+    "rating": 6.7,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/1291010/Warpips/"
+  },
+  {
+    "id": "coc",
+    "title": "COC (Clash of Clans)",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ClashofClans.jpg",
+    "rating": 5.9,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://store.supercell.com/clashofclans"
+  },
+  {
+    "id": "doors-paradox",
+    "title": "Doors: Paradox",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DoorsParadox.jpg",
+    "rating": 4.8,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/1622770/Doors_Paradox/"
+  },
+  {
+    "id": "qube-2",
+    "title": "Q.U.B.E. 2",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Q.U.B.E.2.jpg",
+    "rating": 7.9,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/359100/QUBE_2/"
+  },
+  {
+    "id": "lisa-the-joyful",
+    "title": "Lisa: The Joyful",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Lisa-TheJoyful.jpg",
+    "rating": 4.1,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/379310/LISA_The_Joyful/"
+  },
+  {
+    "id": "mudrunner",
+    "title": "MudRunner",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/MudRunner.png",
+    "rating": 7.4,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/675010/MudRunner/"
+  },
+  {
+    "id": "fall-guys",
+    "title": "Fall Guys",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/FallGuys.jpg",
+    "rating": 5.6,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.fallguys.com/"
+  },
+  {
+    "id": "stumble-guys",
+    "title": "Stumble Guys",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/StumbleGuys.jpg",
+    "rating": 5.2,
+    "gameplay": "Average",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://www.stumbleguys.com/"
+  },
+  {
+    "id": "alba-a-wildlife-adventure",
+    "title": "Alba: A Wildlife Adventure",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Alba-AWildlifeAdventure.jpg",
+    "rating": 8.3,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.albawildlife.com/"
+  },
+  {
+    "id": "unrailed",
+    "title": "Unrailed!",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Unrailed.png",
+    "rating": 7.6,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/1016920/Unrailed/"
+  },
+  {
+    "id": "just-die-already",
+    "title": "Just Die Already",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/JustDieAlready.png",
+    "rating": 6.2,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/979070/Just_Die_Already/"
+  },
+  {
+    "id": "happy-wheels",
+    "title": "Happy Wheels",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/HappyWheels.jpeg",
+    "rating": 6.5,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://totaljerkface.com/happy_wheels.tjf"
+  },
+  {
+    "id": "abzu",
+    "title": "ABZÛ",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ABZU.jpg",
+    "rating": 8,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://abzugame.com/"
+  },
+  {
+    "id": "pc-building-simulator",
+    "title": "PC Building Simulator",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PCBuildingSimulator.png",
+    "rating": 7.5,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.pcbuildingsim.com/"
+  },
+  {
+    "id": "the-vanishing-of-ethan-carter",
+    "title": "The Vanishing of Ethan Carter",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TheVanishingofEthanCarter.png",
+    "rating": 8.3,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/258520/The_Vanishing_of_Ethan_Carter/"
+  },
+  {
+    "id": "the-vanishing-of-ethan-carter-redux",
+    "title": "The Vanishing of Ethan Carter Redux",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TheVanishingofEthanCarterRedux.jpg",
+    "rating": 8.4,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/400430/The_Vanishing_of_Ethan_Carter_Redux/"
+  },
+  {
+    "id": "pine",
+    "title": "Pine",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Pine.png",
+    "rating": 5.5,
+    "gameplay": "50%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/1042780/Pine/"
   }
 ]
