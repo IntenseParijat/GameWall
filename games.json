@@ -88,5 +88,141 @@
       "PC"
     ],
     "url": "https://www.rockstargames.com/gta-v"
+  },
+  {
+    "id": "wuwa",
+    "title": "Wuthering Waves",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/WutheringWaves.jpg",
+    "rating": 9,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://wutheringwaves.kurogames.com/"
+  },
+  {
+    "id": "valorant",
+    "title": "Valorant",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Valorant.png",
+    "rating": 6.9,
+    "gameplay": "Unlucky",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://playvalorant.com/"
+  },
+  {
+    "id": "genshin-impact",
+    "title": "Genshin Impact",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/GenshinImpact.jpg",
+    "rating": 7.5,
+    "gameplay": "Adventurer",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://genshin.hoyoverse.com/"
+  },
+  {
+    "id": "hsr",
+    "title": "Honkai: Star Rail",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Honkai-StarRail.jpg",
+    "rating": 5.7,
+    "gameplay": "Beginner",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://hsr.hoyoverse.com/"
+  },
+  {
+    "id": "honkai-impact-3rd",
+    "title": "Honkai Impact 3rd",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/HonkaiImpact3rd.webp",
+    "rating": 5.2,
+    "gameplay": "Beginner",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://honkaiimpact3.hoyoverse.com/"
+  },
+  {
+    "id": "zzz",
+    "title": "Zenless Zone Zero",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ZenlessZoneZero.jpg",
+    "rating": 7.2,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://zenless.hoyoverse.com/"
+  },
+  {
+    "id": "tof",
+    "title": "Tower of Fantasy",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TowerofFantasy.jpg",
+    "rating": 6,
+    "gameplay": "Beginner",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.toweroffantasy-global.com/"
+  },
+  {
+    "id": "dying-light",
+    "title": "Dying Light",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DyingLight.jpg",
+    "rating": 9.8,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://dyinglightgame.com/dying-light-1"
+  },
+  {
+    "id": "dying-light-the-following",
+    "title": "Dying Light: The Following",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DyingLight-TheFollowing.png",
+    "rating": 9.5,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://dyinglightgame.com/dying-light-1"
+  },
+  {
+    "id": "dying-light-2-stay-human",
+    "title": "Dying Light 2: Stay Human",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DyingLight2.jpg",
+    "rating": 9.4,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://dyinglightgame.com/dying-light-2"
+  },
+  {
+    "id": "dying-light-the-beast",
+    "title": "Dying Light: The Beast",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DyingLight-TheBeast.jpg",
+    "rating": 9.7,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://dyinglightgame.com/the-beast"
+  },
+  {
+    "id": "stray",
+    "title": "Stray",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Stray.jpg",
+    "rating": 9.6,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://annapurnainteractive.com/games/stray"
   }
 ]
