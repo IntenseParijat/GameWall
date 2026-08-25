@@ -585,7 +585,7 @@
     "title": "Battlefield V",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/BattlefieldV.jpg",
     "rating": 4.2,
-    "gameplay": "30%",
+    "gameplay": "Refunded",
     "platforms": [
       "PC"
     ],
@@ -1140,5 +1140,479 @@
       "PC"
     ],
     "url": "https://store.steampowered.com/app/1042780/Pine/"
+  },
+  {
+    "id": "john-carpenters-toxic-commando",
+    "title": "John Carpenter's Toxic Commando",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/JohnCarpenter'sToxicCommando.png",
+    "rating": 4.7,
+    "gameplay": "Demo",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.focus-entmt.com/en/games/john-carpenters-toxic-commando"
+  },
+  {
+    "id": "skate",
+    "title": "skate.",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/skate..jpg",
+    "rating": 5.8,
+    "gameplay": "Beginner",
+    "platforms": [
+      "PC",
+      "Console"
+    ],
+    "url": "https://www.ea.com/games/skate"
+  },
+  {
+    "id": "lifeless-planet-premier-edition",
+    "title": "Lifeless Planet: Premier Edition",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/LifelessPlanetPremierEdition.jpg",
+    "rating": 4.9,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.lifelessplanet.com/"
+  },
+  {
+    "id": "rise-of-industry",
+    "title": "Rise of Industry",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/RiseofIndustry.jpg",
+    "rating": 7.2,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.riseofindustry.com/"
+  },
+  {
+    "id": "rage-2",
+    "title": "RAGE 2",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/RAGE2.jpg",
+    "rating": 6,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://bethesda.net/en/game/rage2"
+  },
+  {
+    "id": "horizon-chase-turbo",
+    "title": "Horizon Chase Turbo",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/HorizonChaseTurbo.jpg",
+    "rating": 5.4,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.horizonchase2.com/games/horizon-chase-turbo"
+  },
+  {
+    "id": "infinifactory",
+    "title": "Infinifactory",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Infinifactory.jpg",
+    "rating": 5.1,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.zachtronics.com/infinifactory/"
+  },
+  {
+    "id": "the-forest-quartet",
+    "title": "The Forest Quartet",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TheForestQuartet.jpg",
+    "rating": 8.7,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/1620720/The_Forest_Quartet/"
+  },
+  {
+    "id": "breathedge",
+    "title": "Breathedge",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Breathedge.jpg",
+    "rating": 8.5,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/738520/Breathedge/"
+  },
+  {
+    "id": "thehunter-call-of-the-wild",
+    "title": "theHunter: Call of the Wild",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/theHunter-CalloftheWild.jpg",
+    "rating": 8.3,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://callofthewild.thehunter.com/"
+  },
+  {
+    "id": "redout-enhanced-edition",
+    "title": "Redout: Enhanced Edition",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Redout-EnhancedEdition.png",
+    "rating": 7.5,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/517710/Redout_Enhanced_Edition/"
+  },
+  {
+    "id": "farlight-84",
+    "title": "Farlight 84",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Farlight84.jpg",
+    "rating": 4,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://farlight84.farlightgames.com/"
+  },
+  {
+    "id": "rogue-company",
+    "title": "Rogue Company",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/RogueCompany.jpg",
+    "rating": 5.6,
+    "gameplay": "Beginner",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/872200/Rogue_Company/"
+  },
+  {
+    "id": "never-alone-kisima-ingitchuna",
+    "title": "Never Alone (Kisima Ingitchuna)",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/NeverAlone-KisimaIngitchuna.jpg",
+    "rating": 8.4,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.neveralonegame.com/never-alone"
+  },
+  {
+    "id": "deliver-at-all-costs",
+    "title": "Deliver At All Costs",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DeliverAtAllCosts.jpg",
+    "rating": 4.3,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/1880610/Deliver_At_All_Costs/"
+  },
+  {
+    "id": "heroes-generals-wwii",
+    "title": "Heroes & Generals WWII",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Heroes&GeneralsWWII.jpg",
+    "rating": 3.9,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/227940/Heroes__Generals/"
+  },
+  {
+    "id": "supraland",
+    "title": "Supraland",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Supraland.webp",
+    "rating": 4.1,
+    "gameplay": "Beginner",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/813630/Supraland/"
+  },
+  {
+    "id": "cities-skylines",
+    "title": "Cities: Skylines",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CitiesSkylines.jpg",
+    "rating": 6.3,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.paradoxinteractive.com/games/cities-skylines/"
+  },
+  {
+    "id": "guacamelee-super-turbo-championship-edition",
+    "title": "Guacamelee! Super Turbo Championship Edition",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Guacamelee-SuperTurboChampionshipEdition.jpg",
+    "rating": 4.4,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/275390/Guacamelee_Super_Turbo_Championship_Edition/"
+  },
+  {
+    "id": "idle-champions-of-the-forgotten-realms",
+    "title": "Idle Champions of the Forgotten Realms",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/IdleChampionsoftheForgottenRealms.jpg",
+    "rating": 4.3,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://idlechampions.com/"
+  },
+  {
+    "id": "rennsport",
+    "title": "Rennsport",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Rennsport.png",
+    "rating": 6.6,
+    "gameplay": "Run-off Racer",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.rennsport.gg/"
+  },
+  {
+    "id": "torque-drift-2-demo",
+    "title": "Torque Drift 2 - Demo",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TorqueDrift2-Demo.png",
+    "rating": 6.8,
+    "gameplay": "Mechanic",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.greasemonkeygames.com/games/torque-drift-2"
+  },
+  {
+    "id": "the-hidden-room",
+    "title": "The Hidden Room",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TheHigddenRoom.png",
+    "rating": 4.7,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/1771380/The_Hidden_Room/"
+  },
+  {
+    "id": "century-age-of-ashes",
+    "title": "Century: Age of Ashes",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Century-AgeofAshes.jpg",
+    "rating": 6.1,
+    "gameplay": "Beginner",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://century-age-of-ashes.com/"
+  },
+  {
+    "id": "core",
+    "title": "CORE",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Core.png",
+    "rating": 3.7,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.coregames.com/"
+  },
+  {
+    "id": "adios",
+    "title": "Adios",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Adios.jpg",
+    "rating": 7.3,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/1271400/Adios/"
+  },
+  {
+    "id": "filament",
+    "title": "Filament",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Filament.jpg",
+    "rating": 7.8,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://thinkygames.com/games/filament/"
+  },
+  {
+    "id": "saints-row-boss-factory",
+    "title": "Saints Row Boss Factory",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/SaintsRow-BossFactory.jpg",
+    "rating": 3.8,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.epicgames.com/p/saints-row--boss-factory"
+  },
+  {
+    "id": "encased-a-sci-fi-post-apocalyptic-rpg",
+    "title": "Encased: A Sci-Fi Post-Apocalyptic RPG",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Encased.jpg",
+    "rating": 4.7,
+    "gameplay": "Beginner",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://encasedgame.com/"
+  },
+  {
+    "id": "escape-academy",
+    "title": "Escape Academy",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/EscapeAcademy.jpg",
+    "rating": 7.2,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://escapeacademygame.com/"
+  },
+  {
+    "id": "recipe-for-disaster",
+    "title": "Recipe for Disaster",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/RecipeforDisaster.jpg",
+    "rating": 6.8,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.kasedogames.com/recipefordisaster"
+  },
+  {
+    "id": "kerbal-space-program",
+    "title": "Kerbal Space Program",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/KerbalSpaceProgram.jpg",
+    "rating": 5.6,
+    "gameplay": "Astronaut",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.kerbalspaceprogram.com/"
+  },
+  {
+    "id": "against-all-odds",
+    "title": "Against All Odds",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/AgainstAllOdds.jpg",
+    "rating": 6.2,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/1465560/Against_All_Odds/"
+  },
+  {
+    "id": "relicta",
+    "title": "Relicta",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Relicta.jpg",
+    "rating": 7.1,
+    "gameplay": "50%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/941570/Relicta/"
+  },
+  {
+    "id": "paragon-the-overprime",
+    "title": "Paragon: The Overprime",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Paragon-TheOverprime.jpg",
+    "rating": 6.2,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/1531430/Paragon_The_Overprime/"
+  },
+  {
+    "id": "gigabash",
+    "title": "GigaBash",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/GigaBash.png",
+    "rating": 6.5,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/1546400/GigaBash/"
+  },
+  {
+    "id": "call-of-the-sea",
+    "title": "Call of the Sea",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CalloftheSea.png",
+    "rating": 7.3,
+    "gameplay": "Beginner",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/1042490/Call_of_the_Sea/"
+  },
+  {
+    "id": "dodo-peak",
+    "title": "Dodo Peak",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DodoPeak.png",
+    "rating": 6.7,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.movingpieces.io/dodo-peak"
+  },
+  {
+    "id": "the-bridge",
+    "title": "The Bridge",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TheBridge.png",
+    "rating": 6.8,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/204240/The_Bridge/"
+  },
+  {
+    "id": "aerial-knights-never-yield",
+    "title": "Aerial_Knight's Never Yield",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Aerial_Knight'sNeverYield.jpg",
+    "rating": 7,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.aerialknight.com/never-yield-first-game-press.html"
+  },
+  {
+    "id": "surviving-the-aftermath",
+    "title": "Surviving the Aftermath",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/SurvivingtheAftermath.jpg",
+    "rating": 6.3,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.paradoxinteractive.com/games/surviving-the-aftermath"
+  },
+  {
+    "id": "crsed-cuisine-royale",
+    "title": "CRSED: Cuisine Royale",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CRSED-CusineRoyale.png",
+    "rating": 6.1,
+    "gameplay": "Beginner",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://crsed.net/"
+  },
+  {
+    "id": "city-of-gangsters",
+    "title": "City of Gangsters",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CityofGangsters.jpg",
+    "rating": 5.8,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.kasedogames.com/cityofgangsters"
   }
 ]
