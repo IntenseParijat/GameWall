@@ -198,7 +198,9 @@ function renderPlatforms(container, platforms, gameTitle) {
 function createGameCard(game, position) {
   const card = elements.template.content.cloneNode(true);
   const posterLink = card.querySelector(".poster-link");
+  const posterFrame = card.querySelector(".poster-frame");
   const image = card.querySelector(".game-poster");
+  const posterLoader = card.querySelector(".poster-loader");
   const placeholder = card.querySelector(".poster-placeholder");
   const cardId = card.querySelector(".card-id");
   const platformBadges = card.querySelector(".platform-badges");
@@ -220,20 +222,43 @@ function createGameCard(game, position) {
   viewLink.setAttribute("aria-label", `View ${game.title} in a new tab`);
 
   if (game.image) {
-    image.src = game.image;
+    const imageUrl = game.image.trim();
+    console.log(
+        `[GameWall] Loading poster for "${game.title}":`,
+        imageUrl
+    );
+    posterFrame.style.setProperty(
+        "--poster-bg",
+        `url("${imageUrl}")`
+    );
+    image.classList.add("is-loading");
+    placeholder.hidden = true;
+    posterLoader.classList.remove("is-hidden");
     image.alt = `${game.title} poster`;
     image.addEventListener("load", () => {
-      image.hidden = false;
-      placeholder.hidden = true;
+        console.log(
+            `[GameWall] Poster loaded: ${game.title}`,
+            image.naturalWidth,
+            image.naturalHeight
+        );
+        image.classList.remove("is-loading");
+        placeholder.hidden = true;
+        posterLoader.classList.add("is-hidden");
     }, { once: true });
     image.addEventListener("error", () => {
-      console.error(`GameWall: failed to load poster for "${game.title}"`, game.image);
-      image.hidden = true;
-      placeholder.hidden = false;
+        console.error(
+            `[GameWall] Poster FAILED: ${game.title}`,
+            imageUrl
+        );
+        image.classList.add("is-loading");
+        posterLoader.classList.add("is-hidden");
+        placeholder.hidden = false;
     }, { once: true });
+    image.src = imageUrl;
   } else {
-    image.hidden = true;
-    placeholder.hidden = false;
+      image.classList.add("is-loading");
+      posterLoader.classList.add("is-hidden");
+      placeholder.hidden = false;
   }
 
   if (game.url === "#") {

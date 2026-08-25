@@ -152,9 +152,15 @@ a { color: inherit; }
 .game-card { min-width: 0; height: 100%; display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--border); background: linear-gradient(155deg, rgba(17, 23, 37, .95), rgba(8, 11, 18, .93)); box-shadow: 0 14px 27px rgba(0,0,0,.21); transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .35s ease, box-shadow .35s ease; }
 .poster-link { display: block; text-decoration: none; }
 .poster-frame { position: relative; aspect-ratio: 2 / 2.86; overflow: hidden; background: #0b111d; }
+.poster-backdrop { position: absolute; z-index: 0; inset: -12%; background-image: var(--poster-bg); background-position: center; background-size: cover; background-repeat: no-repeat; filter: blur(18px); transform: scale(1.08); opacity: .58; }
+.poster-loader { position: absolute; z-index: 4; inset: 0; display: grid; place-items: center; align-content: center; gap: .65rem; background: rgba(5, 7, 13, .48); backdrop-filter: blur(3px); color: var(--neon-cyan); pointer-events: none; transition: opacity .3s ease, visibility .3s ease; }
+.poster-loader span { width: 2.6rem; height: 2.6rem; border: 1px solid rgba(0, 240, 255, .25); border-top-color: var(--neon-cyan); border-right-color: var(--neon-purple); border-radius: 50%; box-shadow: 0 0 12px rgba(0, 240, 255, .2); animation: poster-loader-spin .9s linear infinite; }
+.poster-loader small { color: var(--text-secondary); font: 600 .52rem/1 Inter, sans-serif; letter-spacing: .14em; }
+.poster-loader.is-hidden { opacity: 0; visibility: hidden; }
+@keyframes poster-loader-spin { to { transform: rotate(360deg); } }
 .poster-frame::after { position: absolute; z-index: 1; content: ""; inset: 0; pointer-events: none; background: linear-gradient(to bottom, transparent 50%, rgba(5,7,13,.18) 70%, rgba(5,7,13,.8)); transition: opacity .35s ease; }
-.game-poster { width: 100%; height: 100%; display: block; object-fit: cover; transition: transform .5s cubic-bezier(.2,.8,.2,1), filter .4s ease; }
-.game-poster[hidden] { display: none !important; }
+.game-poster { position: relative; z-index: 2; width: 100%; height: 100%; display: block; object-fit: cover; transition: transform .5s cubic-bezier(.2,.8,.2,1), filter .4s ease; }
+.game-poster.is-loading { opacity: 0; }
 .poster-placeholder { position: absolute; z-index: 2; inset: 0; display: grid; align-content: center; justify-items: center; gap: .45rem; padding: 1rem; color: var(--neon-cyan); text-align: center; background: linear-gradient(135deg, #0a1420, #100c21); font: 700 .8rem/1 Rajdhani, sans-serif; letter-spacing: .14em; }
 .poster-placeholder::before { width: 3rem; height: 3rem; margin-bottom: .35rem; content: ""; border: 1px solid var(--neon-cyan); background: repeating-linear-gradient(135deg, transparent 0 5px, rgba(0, 240, 255, .08) 5px 6px); clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
 .poster-placeholder small { color: var(--text-secondary); font: 500 .57rem/1 Inter, sans-serif; letter-spacing: .12em; }
@@ -215,94 +221,11 @@ a { color: inherit; }
 @keyframes section-scan { from { transform: translateX(-120%); } to { transform: translateX(650%); } }
 @keyframes loader-pulse { to { transform: scale(.7) rotate(90deg); filter: hue-rotate(30deg); } }
 
-@media (max-width: 1200px) {
-  .game-grid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 900px) {
-  .game-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 760px) {
-  .game-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .stats {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .controls-panel {
-      grid-template-columns: 1fr;
-  }
-  .coordinate {
-      display: none;
-  }
-}
-
-@media (max-width: 390px) {
-  .site-shell {
-      padding-inline: .75rem;
-  }
-  .stats {
-      gap: .55rem;
-  }
-  .stat-card {
-      padding-inline: .75rem;
-  }
-  .stat-card strong {
-      font-size: 1.45rem;
-  }
-  .game-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: .55rem;
-  }
-  .card-content {
-      padding: .66rem;
-  }
-  .poster-meta {
-      right: .45rem;
-      bottom: .45rem;
-      gap: .18rem;
-      max-width: calc(100% - .9rem);
-  }
-  .platform-badge {
-      width: 1.4rem;
-      min-width: 1.4rem;
-      height: 1.7rem;
-  }
-  .platform-badge svg {
-      width: .9rem;
-      height: .9rem;
-  }
-  .rating-badge {
-      padding-inline: .4rem;
-  }
-  .card-id {
-      top: .45rem;
-      left: .45rem;
-  }
-}
-
-@media (max-width: 390px) {
-  .site-shell { padding-inline: .75rem; }
-  .stats { gap: .55rem; }
-  .stat-card { padding-inline: .75rem; }
-  .stat-card strong { font-size: 1.45rem; }
-  .game-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem; }
-  .card-content { padding: .66rem; }
-  .poster-meta { right: .45rem; bottom: .45rem; gap: .18rem; max-width: calc(100% - .9rem); }
-  .platform-badge { width: 1.4rem; min-width: 1.4rem; height: 1.7rem; }
-  .platform-badge svg { width: .9rem; height: .9rem; }
-  .rating-badge { padding-inline: .4rem; }
-  .card-id { top: .45rem; left: .45rem; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-}
+@media (max-width: 1200px) { .game-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 900px) { .game-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .game-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .controls-panel { grid-template-columns: 1fr; } .coordinate { display: none; } }
+@media (max-width: 390px) { .site-shell { padding-inline: .75rem; } .stats { gap: .55rem; } .stat-card { padding-inline: .75rem; } .stat-card strong { font-size: 1.45rem; } .game-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem; } .card-content { padding: .66rem; } .poster-meta { right: .45rem; bottom: .45rem; gap: .18rem; max-width: calc(100% - .9rem); } .platform-badge { width: 1.4rem; min-width: 1.4rem; height: 1.7rem; } .platform-badge svg { width: .9rem; height: .9rem; } .rating-badge { padding-inline: .4rem; } .card-id { top: .45rem; left: .45rem; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
 
 .footer-links a {
   text-decoration: none;
