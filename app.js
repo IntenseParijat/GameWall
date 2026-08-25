@@ -47,7 +47,8 @@ const elements = {
   resultCount: document.querySelector("#result-count"),
   totalGames: document.querySelector("#total-games"),
   averageRating: document.querySelector("#average-rating"),
-  completedGames: document.querySelector("#completed-games"),
+  databaseUpdate: document.querySelector("#database-update"),
+  databaseUpdateDetail: document.querySelector("#database-update-detail"),
   highestRated: document.querySelector("#highest-rated"),
   highestRatedDetail: document.querySelector("#highest-rated-detail"),
   loadingScreen: document.querySelector("#loading-screen"),
@@ -118,7 +119,16 @@ async function loadGames() {
     if (!Array.isArray(data)) throw new Error("games.json must contain an array of games");
 
     state.games = data.map(normaliseGame);
-    setLoaderProgress(82, "BUILDING COLLECTION...");
+    setLoaderProgress(
+        72,
+        "CHECKING DATABASE TIMESTAMP..."
+    );
+    await loadDatabaseUpdate();
+    setLoaderProgress(
+        82,
+        "BUILDING COLLECTION..."
+    );
+
     updateStatistics();
     renderGames();
     setLoaderProgress(100, "DATABASE READY");
@@ -242,33 +252,116 @@ function formatRating(rating) {
 
 function updateStatistics() {
   const games = state.games;
-  const ratings = games.map((game) => game.rating).filter((rating) => Number.isFinite(rating));
-  const completed = games.filter((game) => isCompleted(game.gameplay));
-  const highest = games.length ? games.reduce((best, game) => game.rating > best.rating ? game : best) : null;
-
-  animateValue(elements.totalGames, games.length, (value) => String(value).padStart(2, "0"));
-  animateValue(elements.completedGames, completed.length, (value) => String(value).padStart(2, "0"));
+  const ratings = games
+      .map((game) => game.rating)
+      .filter((rating) => Number.isFinite(rating));
+  const highest = games.length
+      ? games.reduce(
+          (best, game) =>
+              game.rating > best.rating ? game : best
+      )
+      : null;
   animateValue(
-    elements.averageRating,
-    ratings.length ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length : 0,
-    (value) => value.toFixed(2),
-    650
+      elements.totalGames,
+      games.length,
+      (value) => String(value).padStart(2, "0")
   );
-
-  elements.highestRated.textContent = highest ? highest.title : "—";
+  animateValue(
+      elements.averageRating,
+      ratings.length
+          ? ratings.reduce(
+              (sum, rating) => sum + rating,
+              0
+          ) / ratings.length
+          : 0,
+      (value) => value.toFixed(2),
+      650
+  );
+  elements.highestRated.textContent =
+      highest ? highest.title : "—";
   elements.highestRatedDetail.textContent =
       highest
           ? `MY SCORE ${formatRating(highest.rating)} / 10`
           : "WAITING FOR DATA";
-
   requestAnimationFrame(() => {
-      fitText(elements.highestRated, 0.85, 2.3);
+      fitText(
+          elements.highestRated,
+          0.85,
+          2.3
+      );
   });
 }
 
-function isCompleted(gameplay) {
-  const value = gameplay.trim().toLocaleLowerCase();
-  return value === "completed" || value === "100%";
+async function loadDatabaseUpdate() {
+  const apiUrl =
+      "https://api.github.com/repos/" +
+      "IntenseParijat/GameWall/commits" +
+      "?path=games.json&per_page=1";
+
+  try {
+      const response = await fetch(apiUrl, {
+          cache: "no-store"
+      });
+
+      if (!response.ok) {
+          throw new Error(
+              `GitHub API returned ${response.status}`
+          );
+      }
+
+      const commits = await response.json();
+
+      if (!Array.isArray(commits) || !commits.length) {
+          throw new Error("No games.json commit found");
+      }
+
+      const commit = commits[0];
+      const dateString =
+          commit?.commit?.author?.date ||
+          commit?.commit?.committer?.date;
+
+      if (!dateString) {
+          throw new Error(
+              "GitHub commit timestamp unavailable"
+          );
+      }
+
+      const date = new Date(dateString);
+
+      const dateText = new Intl.DateTimeFormat(
+          "en-GB",
+          {
+              timeZone: "UTC",
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+          }
+      ).format(date).toUpperCase();
+
+      const timeText = new Intl.DateTimeFormat(
+          "en-GB",
+          {
+              timeZone: "UTC",
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: false
+          }
+      ).format(date);
+
+      elements.databaseUpdate.textContent = dateText;
+      elements.databaseUpdateDetail.textContent =
+          `${timeText} UTC - LAST UPDATE TIME`;
+
+  } catch (error) {
+      console.error(
+          "GameWall could not determine the games.json update time:",
+          error
+      );
+
+      elements.databaseUpdate.textContent = "—";
+      elements.databaseUpdateDetail.textContent =
+          "GITHUB TIMESTAMP UNAVAILABLE";
+  }
 }
 
 function animateValue(element, target, formatter, duration = 520) {
