@@ -1,7 +1,7 @@
 const state = {
   games: [],
   query: "",
-  sortMode: "default"
+  sortMode: "rating-desc"
 };
 
 const PLATFORM_ICONS = {
