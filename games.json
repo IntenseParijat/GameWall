@@ -1615,5 +1615,72 @@
       "PC"
     ],
     "url": "https://www.kasedogames.com/cityofgangsters"
+  },
+  {
+    "id": "pinball-fx",
+    "title": "Pinball FX",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PinballFX.jpg",
+    "rating": 7.6,
+    "gameplay": "Maniac",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.pinballfx.com/"
+  },
+  {
+    "id": "the-sims-4",
+    "title": "The Sims 4",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TheSims4.webp",
+    "rating": 1.5,
+    "gameplay": "Uninstall",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.ea.com/en/games/the-sims/the-sims-4"
+  },
+  {
+    "id": "we-become-what-we-behold-fan-made-port",
+    "title": "We Become What We Behold [Fan-Made Port]",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/WeBecomeWhatWeBehold.jpg",
+    "rating": 7.9,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/1103210/We_Become_What_We_Behold_FanMade_Port/"
+  },
+  {
+    "id": "nfs-hot-pursuit",
+    "title": "Need for Speed: Hot Pursuit",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/NeedforSpeed-HotPursuit.png",
+    "rating": 8.1,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.ea.com/en/games/need-for-speed/need-for-speed-hot-pursuit-remastered"
+  },
+  {
+    "id": "nfs-no-limits",
+    "title": "Need for Speed: No Limits",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/NeedforSpeed-NoLimits.png",
+    "rating": 6.3,
+    "gameplay": "Average",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://www.ea.com/games/need-for-speed/need-for-speed-no-limits"
+  },
+  {
+    "id": "nfs-heat",
+    "title": "Need for Speed: Heat (Deluxe Edition)",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/NeedforSpeed-Heat.png",
+    "rating": 8.4,
+    "gameplay": "Playing",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.ea.com/games/need-for-speed/need-for-speed-heat"
   }
 ]
