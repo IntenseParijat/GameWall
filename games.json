@@ -4,7 +4,7 @@
     "title": "Minecraft (Java)",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/minecraft.jpg",
     "rating": 8.5,
-    "gameplay": "Veteran",
+    "gameplay": "Architect",
     "platforms": [
       "PC"
     ],
@@ -37,7 +37,7 @@
     "title": "Roblox",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/roblox.jpg",
     "rating": 3,
-    "gameplay": "Average",
+    "gameplay": "Never Solo",
     "platforms": [
       "PC"
     ],
@@ -58,8 +58,8 @@
     "id": "wuwa",
     "title": "Wuthering Waves",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/WutheringWaves.jpg",
-    "rating": 9,
-    "gameplay": "Expert",
+    "rating": 9.1,
+    "gameplay": "F2P Grinder",
     "platforms": [
       "PC",
       "Mobile"
@@ -105,7 +105,7 @@
     "title": "Honkai Impact 3rd",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/HonkaiImpact3rd.webp",
     "rating": 5.2,
-    "gameplay": "Beginner",
+    "gameplay": "Waifu Haver",
     "platforms": [
       "PC",
       "Mobile"
@@ -117,7 +117,7 @@
     "title": "Zenless Zone Zero",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ZenlessZoneZero.jpg",
     "rating": 7.2,
-    "gameplay": "Veteran",
+    "gameplay": "Stomped by Powercreep",
     "platforms": [
       "PC",
       "Mobile"
@@ -129,7 +129,7 @@
     "title": "Tower of Fantasy",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TowerofFantasy.jpg",
     "rating": 6,
-    "gameplay": "Beginner",
+    "gameplay": "Newbie",
     "platforms": [
       "PC"
     ],
@@ -140,7 +140,7 @@
     "title": "Dying Light",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DyingLight.jpg",
     "rating": 9.8,
-    "gameplay": "Expert",
+    "gameplay": "Brecken's Boss",
     "platforms": [
       "PC"
     ],
@@ -151,7 +151,7 @@
     "title": "Dying Light: The Following",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DyingLight-TheFollowing.png",
     "rating": 9.5,
-    "gameplay": "Expert",
+    "gameplay": "Madness Survivor",
     "platforms": [
       "PC"
     ],
@@ -162,7 +162,7 @@
     "title": "Dying Light 2: Stay Human",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DyingLight2.jpg",
     "rating": 9.4,
-    "gameplay": "Expert",
+    "gameplay": "#SurvivorsFaction",
     "platforms": [
       "PC"
     ],
@@ -173,7 +173,7 @@
     "title": "Dying Light: The Beast",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DyingLight-TheBeast.jpg",
     "rating": 9.7,
-    "gameplay": "100%",
+    "gameplay": "Post-Apocalyptic Critic",
     "platforms": [
       "PC"
     ],
@@ -184,7 +184,7 @@
     "title": "Stray",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Stray.jpg",
     "rating": 9.6,
-    "gameplay": "100%",
+    "gameplay": "Emotionally Attached // 100%",
     "platforms": [
       "PC"
     ],
@@ -195,7 +195,7 @@
     "title": "Neverness To Everness",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/NevernessToEverness.jpg",
     "rating": 7.5,
-    "gameplay": "Veteran",
+    "gameplay": "Boreness Victim",
     "platforms": [
       "PC"
     ],
@@ -206,7 +206,7 @@
     "title": "Mongil: Star Dive",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Mongil-StarDive.png",
     "rating": 5.6,
-    "gameplay": "Average",
+    "gameplay": "Gag Humored",
     "platforms": [
       "PC"
     ],
@@ -228,7 +228,7 @@
     "title": "Clair Obscur: Expedition 33",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ClairObscur-Expedition33.png",
     "rating": 8.8,
-    "gameplay": "100%",
+    "gameplay": "Main Character Energy // 100%",
     "platforms": [
       "PC"
     ],
@@ -239,7 +239,7 @@
     "title": "Arknights: Endfield",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Arknights-Endfield.jpg",
     "rating": 9.5,
-    "gameplay": "Expert",
+    "gameplay": "Fangyi All-rounder",
     "platforms": [
       "PC",
       "Mobile"
@@ -251,7 +251,7 @@
     "title": "Where Winds Meet",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/WhereWindsMeet.jpg",
     "rating": 9.3,
-    "gameplay": "Veteran",
+    "gameplay": "Content Overwhelmed",
     "platforms": [
       "PC"
     ],
@@ -262,7 +262,7 @@
     "title": "Duet Night Abyss",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DuetNightAbyss.jpeg",
     "rating": 5.3,
-    "gameplay": "Average",
+    "gameplay": "Luck-less Commissions",
     "platforms": [
       "PC",
       "Mobile"
@@ -285,7 +285,7 @@
     "title": "God of War: Ragnarok",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/GodofWar-Ragnarok.png",
     "rating": 9.5,
-    "gameplay": "100%",
+    "gameplay": "God-Slayer-ish // 100%",
     "platforms": [
       "PC"
     ],
@@ -296,7 +296,7 @@
     "title": "Ghost of Tsushima: Director's Cut",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/GhostofTsushima.jpg",
     "rating": 9.7,
-    "gameplay": "100%",
+    "gameplay": "Ghost Mode // 100%",
     "platforms": [
       "PC"
     ],
@@ -307,7 +307,7 @@
     "title": "GRIS",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/GRIS.jpg",
     "rating": 9.2,
-    "gameplay": "100%",
+    "gameplay": "Emotional Damage // 100%",
     "platforms": [
       "PC"
     ],
@@ -318,7 +318,7 @@
     "title": "Asphalt Nitro",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/asphalt-nitro.jpg",
     "rating": 5.6,
-    "gameplay": "Nostalgia",
+    "gameplay": "Reminiscing Sense of Speed",
     "platforms": [
       "Mobile"
     ],
@@ -329,7 +329,7 @@
     "title": "Asphalt Xtreme",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/AsphaltXtreme.jpg",
     "rating": 6,
-    "gameplay": "Nostalgia",
+    "gameplay": "Reminiscing Chaos",
     "platforms": [
       "PC",
       "Mobile"
@@ -341,7 +341,7 @@
     "title": "Asphalt 8 Airborne",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/asphalt-8-airborne.jpg",
     "rating": 7.8,
-    "gameplay": "Nostalgia",
+    "gameplay": "Reminiscing Nostalgia",
     "platforms": [
       "PC",
       "Mobile"
@@ -353,7 +353,7 @@
     "title": "Asphalt 9 Legends",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/asphalt-9-legends.jpg",
     "rating": 6.9,
-    "gameplay": "Veteran",
+    "gameplay": "Shockwave Gremlin",
     "platforms": [
       "PC",
       "Mobile"
@@ -365,7 +365,7 @@
     "title": "CSGO (Counter-Strike: Global Offensive)",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CounterStrikeGlobalOffensive.jpg",
     "rating": 7.4,
-    "gameplay": "Average",
+    "gameplay": "Reminiscing",
     "platforms": [
       "PC"
     ],
@@ -376,7 +376,7 @@
     "title": "CS2 (Counter Strike 2)",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CounterStrike2.png",
     "rating": 7.9,
-    "gameplay": "Veteran",
+    "gameplay": "Chill Dept.",
     "platforms": [
       "PC"
     ],
@@ -387,7 +387,7 @@
     "title": "Watch Dogs 2",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/WatchDogs2.jpg",
     "rating": 8.2,
-    "gameplay": "100%",
+    "gameplay": "Detour Specialist // 100%",
     "platforms": [
       "PC"
     ],
@@ -398,7 +398,7 @@
     "title": "Among Us",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/AmongUs.jpg",
     "rating": 7.9,
-    "gameplay": "Expert",
+    "gameplay": "Vent Inspector",
     "platforms": [
       "PC",
       "Mobile"
@@ -410,7 +410,7 @@
     "title": "Rocket League",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/RocketLeague.jpg",
     "rating": 6.6,
-    "gameplay": "Average",
+    "gameplay": "Boost Goblin",
     "platforms": [
       "PC"
     ],
@@ -421,7 +421,7 @@
     "title": "Rocket League Sideswipe",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/RocketLeague-Sideswipe.webp",
     "rating": 6.8,
-    "gameplay": "Average",
+    "gameplay": "Two-Thumb Dribbler",
     "platforms": [
       "Mobile"
     ],
@@ -432,7 +432,7 @@
     "title": "Forza Horizon 4",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ForzaHorizon4.jpg",
     "rating": 8.3,
-    "gameplay": "100%",
+    "gameplay": "Rich Collector // 100%",
     "platforms": [
       "PC"
     ],
@@ -443,7 +443,7 @@
     "title": "Forza Horizon 6",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ForzaHorizon6.jpg",
     "rating": 8.5,
-    "gameplay": "100%",
+    "gameplay": "Auto-Drive Relaxer // 100%",
     "platforms": [
       "PC"
     ],
@@ -454,7 +454,7 @@
     "title": "Teardown",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Teardown.jpg",
     "rating": 8,
-    "gameplay": "Expert",
+    "gameplay": "Pro Demolisher",
     "platforms": [
       "PC"
     ],
@@ -465,7 +465,7 @@
     "title": "Trackmania",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Trackmania.png",
     "rating": 4.8,
-    "gameplay": "Beginner",
+    "gameplay": "Fail Addict",
     "platforms": [
       "PC"
     ],
@@ -476,7 +476,7 @@
     "title": "Fortnite",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Fortnite.jpg",
     "rating": 5.8,
-    "gameplay": "Beginner",
+    "gameplay": "Solo Sniper",
     "platforms": [
       "PC",
       "Mobile"
@@ -488,7 +488,7 @@
     "title": "PRAGMATA Sketchbook - DEMO",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Pragmata-Sketchbook.png",
     "rating": 7,
-    "gameplay": "100%",
+    "gameplay": "Controls Sucker // 100%",
     "platforms": [
       "PC"
     ],
@@ -499,7 +499,7 @@
     "title": "Marvel Rivals",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/MarvelRivals.jpg",
     "rating": 3.5,
-    "gameplay": "Hell",
+    "gameplay": "Lost in Chaos",
     "platforms": [
       "PC"
     ],
@@ -510,7 +510,7 @@
     "title": "Control",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Control.jpg",
     "rating": 8.7,
-    "gameplay": "100%",
+    "gameplay": "Hiss Hunter // 100%",
     "platforms": [
       "PC"
     ],
@@ -521,7 +521,7 @@
     "title": "Naraka: Bladepoint",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Naraka-Bladepoint.webp",
     "rating": 6.2,
-    "gameplay": "Average",
+    "gameplay": "I am Lost // 100%",
     "platforms": [
       "PC"
     ],
@@ -532,7 +532,7 @@
     "title": "2XKO",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/2XKO.png",
     "rating": 4,
-    "gameplay": "Beginner",
+    "gameplay": "Ass Kicked",
     "platforms": [
       "PC"
     ],
@@ -543,7 +543,7 @@
     "title": "The Finals",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TheFinals.png",
     "rating": 6.8,
-    "gameplay": "Beginner",
+    "gameplay": "Exploited by Chinese",
     "platforms": [
       "PC"
     ],
@@ -554,7 +554,7 @@
     "title": "Just Cause 4",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/JustCause4.jpg",
     "rating": 6.7,
-    "gameplay": "7%",
+    "gameplay": "Forgot to Proceed // 1%",
     "platforms": [
       "PC"
     ],
@@ -565,7 +565,7 @@
     "title": "Dead Island 2",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DeadIsland2.jpg",
     "rating": 7.8,
-    "gameplay": "100%",
+    "gameplay": "Humor mismatched // 100%",
     "platforms": [
       "PC"
     ],
@@ -576,7 +576,7 @@
     "title": "PokeMMO",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PokeMMO.jpg",
     "rating": 5,
-    "gameplay": "Average",
+    "gameplay": "Helped by Ex-friend",
     "platforms": [
       "PC"
     ],
@@ -587,7 +587,7 @@
     "title": "Battlefield REDSEC",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Battlefield6-RedSec.jpg",
     "rating": 4.6,
-    "gameplay": "Veteran",
+    "gameplay": "Controller Overwhelmed",
     "platforms": [
       "PC"
     ],
@@ -598,7 +598,7 @@
     "title": "Battlefield V",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/BattlefieldV.jpg",
     "rating": 4.2,
-    "gameplay": "Refunded",
+    "gameplay": "Refunded // 30%",
     "platforms": [
       "PC"
     ],
@@ -609,7 +609,7 @@
     "title": "Marathon Server Slam",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/MarathonServerSlam.png",
     "rating": 4.9,
-    "gameplay": "Beginner",
+    "gameplay": "Dead, Still Extracting",
     "platforms": [
       "PC"
     ],
@@ -620,7 +620,7 @@
     "title": "Neuron Activation DEMO",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/NeuronActivationDemo.jpg",
     "rating": 7,
-    "gameplay": "100%",
+    "gameplay": "Neuron Overclocked // 100%",
     "platforms": [
       "PC"
     ],
@@ -631,7 +631,7 @@
     "title": "Ghostrunner",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Ghostrunner.jpg",
     "rating": 8.7,
-    "gameplay": "100%",
+    "gameplay": "Flexing Moves // 100%",
     "platforms": [
       "PC"
     ],
@@ -642,7 +642,7 @@
     "title": "Ghostrunner 2",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Ghostrunner2.jpg",
     "rating": 9.2,
-    "gameplay": "100%",
+    "gameplay": "Sword Collector // 100%",
     "platforms": [
       "PC"
     ],
@@ -653,7 +653,7 @@
     "title": "World of Tanks Blitz",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/WorldofTanks-Blitz.webp",
     "rating": 5,
-    "gameplay": "Beginner",
+    "gameplay": "Penetrated Tank",
     "platforms": [
       "PC"
     ],
@@ -675,7 +675,7 @@
     "title": "World War Z Aftermath",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/WorldWarZ.jpg",
     "rating": 6.1,
-    "gameplay": "Veteran",
+    "gameplay": "Bullets <<< Zombies // 40%",
     "platforms": [
       "PC"
     ],
@@ -686,7 +686,7 @@
     "title": "Strinova",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Strinova.webp",
     "rating": 4.6,
-    "gameplay": "Beginner",
+    "gameplay": "Certified Wall Licker",
     "platforms": [
       "PC"
     ],
@@ -697,7 +697,7 @@
     "title": "Fragpunk",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Fragpunk.webp",
     "rating": 4.2,
-    "gameplay": "Beginner",
+    "gameplay": "Respawn Regular",
     "platforms": [
       "PC"
     ],
@@ -708,7 +708,7 @@
     "title": "Once Human",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/OnceHuman.jpg",
     "rating": 5.1,
-    "gameplay": "Beginner",
+    "gameplay": "Lost while Travelling",
     "platforms": [
       "PC"
     ],
@@ -719,7 +719,7 @@
     "title": "Absolute Drift: Zen Edition",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/AbsoluteDrift-ZenEdition.jpeg",
     "rating": 6.4,
-    "gameplay": "Average",
+    "gameplay": "Corner Cutter",
     "platforms": [
       "PC"
     ],
@@ -730,7 +730,7 @@
     "title": "Tomb Raider: Game of the Year Edition",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TombRaider.png",
     "rating": 8.3,
-    "gameplay": "100%",
+    "gameplay": "Tomb Sweeper // 100%",
     "platforms": [
       "PC"
     ],
@@ -741,7 +741,7 @@
     "title": "Rise of the Tomb Raider: 20 Year Celebration",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/RiseofTheTombRaider.jpg",
     "rating": 8.2,
-    "gameplay": "100%",
+    "gameplay": "Tomb Veteran // 100%",
     "platforms": [
       "PC"
     ],
@@ -752,7 +752,7 @@
     "title": "Shadow of the Tomb Raider: Definitive Edition",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ShadowofTheTombRaider.png",
     "rating": 8.2,
-    "gameplay": "100%",
+    "gameplay": "Jungle Raider // 100%",
     "platforms": [
       "PC"
     ],
@@ -763,7 +763,7 @@
     "title": "Free Fire",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/FreeFire.jpeg",
     "rating": 3,
-    "gameplay": "Retired",
+    "gameplay": "Retired for Good",
     "platforms": [
       "PC",
       "Mobile"
@@ -775,7 +775,7 @@
     "title": "Free Fire MAX",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/FreeFireMax.jpg",
     "rating": 3.7,
-    "gameplay": "Retired",
+    "gameplay": "Retired for Good",
     "platforms": [
       "PC",
       "Mobile"
@@ -811,7 +811,7 @@
     "title": "Call of Duty: Warzone",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CallofDuty-Warzone.jpg",
     "rating": 8.5,
-    "gameplay": "Expert",
+    "gameplay": "Ping Maxxing Strat. Master",
     "platforms": [
       "PC"
     ],
@@ -822,7 +822,7 @@
     "title": "PUBG Mobile (Player Unknown's Battleground)",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PUBG-Mobile.jpg",
     "rating": 7.7,
-    "gameplay": "Crown I",
+    "gameplay": "Camoflauged Sniper",
     "platforms": [
       "PC",
       "Mobile"
@@ -834,18 +834,30 @@
     "title": "PUBG Mobile Lite (Player Unknown's Battleground)",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PUBG-MobileLite.jpg",
     "rating": 7.5,
-    "gameplay": "Average",
+    "gameplay": "Forced Budget Battler",
     "platforms": [
       "Mobile"
     ],
     "url": "https://play.google.com/store/apps/details?id=com.tencent.igfit"
   },
   {
+    "id": "bgmi",
+    "title": "BGMI (Battlegrounds Mobile India)",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/BGMI.jpg",
+    "rating": 7.7,
+    "gameplay": "Crown I",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://www.battlegroundsmobileindia.com/"
+  },
+  {
     "id": "pubg",
     "title": "PUBG: Battlegrounds (Player Unknown's Battlegrounds PC)",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PUBG-Battlegrounds.png",
     "rating": 5.7,
-    "gameplay": "Average",
+    "gameplay": "Dead Like Snail",
     "platforms": [
       "PC"
     ],
@@ -868,7 +880,7 @@
     "title": "Hitman",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Hitman.jpg",
     "rating": 7.3,
-    "gameplay": "Average",
+    "gameplay": "Stealth Tourist // 100%",
     "platforms": [
       "PC"
     ],
@@ -879,7 +891,7 @@
     "title": "Hitman 3",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Hitman3.jpg",
     "rating": 7.6,
-    "gameplay": "Average",
+    "gameplay": "Clueless Killer // 100%",
     "platforms": [
       "PC"
     ],
@@ -890,7 +902,7 @@
     "title": "Apex Legends",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ApexLegends.jpg",
     "rating": 4.2,
-    "gameplay": "Average",
+    "gameplay": "2nd Stuck",
     "platforms": [
       "PC"
     ],
@@ -901,7 +913,7 @@
     "title": "Apex Legends Mobile",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ApexLegendsMobile.jpg",
     "rating": 4.1,
-    "gameplay": "Beginner",
+    "gameplay": "Finding Crosshair",
     "platforms": [
       "Mobile"
     ],
@@ -912,7 +924,7 @@
     "title": "Indus: Battle Royale",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Indus-BattleRoyale.jpg",
     "rating": 3.1,
-    "gameplay": "Newbie",
+    "gameplay": "Uninstall World Record",
     "platforms": [
       "PC",
       "Mobile"
@@ -924,7 +936,7 @@
     "title": "Vaporwave Drift",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/VaporwaveDrift.webp",
     "rating": 6.1,
-    "gameplay": "Veteran",
+    "gameplay": "Puzzled Racer",
     "platforms": [
       "PC"
     ],
@@ -935,7 +947,7 @@
     "title": "Lost Light",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/LostLight.webp",
     "rating": 2.9,
-    "gameplay": "Average",
+    "gameplay": "Phone Heater",
     "platforms": [
       "Mobile"
     ],
@@ -946,7 +958,7 @@
     "title": "Sky: Children of the Light",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Sky-ChildrenofLight.jpg",
     "rating": 7.6,
-    "gameplay": "Veteran",
+    "gameplay": "Flying with Strangers // 50%",
     "platforms": [
       "PC",
       "Mobile"
@@ -958,7 +970,7 @@
     "title": "Shapez",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Shapez.png",
     "rating": 7.4,
-    "gameplay": "Expert",
+    "gameplay": "Lead Engineer",
     "platforms": [
       "PC"
     ],
@@ -969,7 +981,7 @@
     "title": "Epistory - Typing Chronicles",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Epistory-TypingChronicles.jpg",
     "rating": 7.6,
-    "gameplay": "100%",
+    "gameplay": "Chaos Typist // 100%",
     "platforms": [
       "PC"
     ],
@@ -980,7 +992,7 @@
     "title": "Warpips",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Warpips.jpg",
     "rating": 6.7,
-    "gameplay": "Expert",
+    "gameplay": "Button Masher+",
     "platforms": [
       "PC"
     ],
@@ -991,7 +1003,7 @@
     "title": "COC (Clash of Clans)",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ClashofClans.jpg",
     "rating": 5.9,
-    "gameplay": "Veteran",
+    "gameplay": "Experienced Baby",
     "platforms": [
       "PC",
       "Mobile"
@@ -1014,7 +1026,7 @@
     "title": "Q.U.B.E. 2",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Q.U.B.E.2.jpg",
     "rating": 7.9,
-    "gameplay": "100%",
+    "gameplay": "Mission Accomplished // 100%",
     "platforms": [
       "PC"
     ],
@@ -1025,7 +1037,7 @@
     "title": "Lisa: The Joyful",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Lisa-TheJoyful.jpg",
     "rating": 4.1,
-    "gameplay": "Average",
+    "gameplay": "Cringed to Deletion",
     "platforms": [
       "PC"
     ],
@@ -1036,7 +1048,7 @@
     "title": "MudRunner",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/MudRunner.png",
     "rating": 7.4,
-    "gameplay": "Expert",
+    "gameplay": "Pro Off-roader",
     "platforms": [
       "PC"
     ],
@@ -1047,7 +1059,7 @@
     "title": "Fall Guys",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/FallGuys.jpg",
     "rating": 5.6,
-    "gameplay": "Veteran",
+    "gameplay": "Qualified Somehow",
     "platforms": [
       "PC"
     ],
@@ -1058,7 +1070,7 @@
     "title": "Stumble Guys",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/StumbleGuys.jpg",
     "rating": 5.2,
-    "gameplay": "Average",
+    "gameplay": "Crown Hopeful",
     "platforms": [
       "Mobile"
     ],
@@ -1069,7 +1081,7 @@
     "title": "Alba: A Wildlife Adventure",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Alba-AWildlifeAdventure.jpg",
     "rating": 8.3,
-    "gameplay": "100%",
+    "gameplay": "Encyclopedia Overflow // 100%",
     "platforms": [
       "PC"
     ],
@@ -1080,7 +1092,7 @@
     "title": "Unrailed!",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Unrailed.png",
     "rating": 7.6,
-    "gameplay": "Expert",
+    "gameplay": "Harmony /w Ex-friend",
     "platforms": [
       "PC"
     ],
@@ -1091,7 +1103,7 @@
     "title": "Just Die Already",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/JustDieAlready.png",
     "rating": 6.2,
-    "gameplay": "Veteran",
+    "gameplay": "'Just Die Already'",
     "platforms": [
       "PC"
     ],
@@ -1102,7 +1114,7 @@
     "title": "Happy Wheels",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/HappyWheels.jpeg",
     "rating": 6.5,
-    "gameplay": "Veteran",
+    "gameplay": "Death Enjoyer",
     "platforms": [
       "PC",
       "Mobile"
@@ -1114,7 +1126,7 @@
     "title": "ABZÛ",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ABZU.jpg",
     "rating": 8,
-    "gameplay": "100%",
+    "gameplay": "Ocean Tourist // 100%",
     "platforms": [
       "PC"
     ],
@@ -1125,7 +1137,7 @@
     "title": "PC Building Simulator",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PCBuildingSimulator.png",
     "rating": 7.5,
-    "gameplay": "Average",
+    "gameplay": "RGB Department",
     "platforms": [
       "PC"
     ],
@@ -1136,7 +1148,7 @@
     "title": "The Vanishing of Ethan Carter",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TheVanishingofEthanCarter.png",
     "rating": 8.3,
-    "gameplay": "100%",
+    "gameplay": "Absolute Cinema // 100%",
     "platforms": [
       "PC"
     ],
@@ -1147,7 +1159,7 @@
     "title": "The Vanishing of Ethan Carter Redux",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TheVanishingofEthanCarterRedux.jpg",
     "rating": 8.4,
-    "gameplay": "100%",
+    "gameplay": "Absolute Cinema // 100%",
     "platforms": [
       "PC"
     ],
@@ -1158,7 +1170,7 @@
     "title": "Pine",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Pine.png",
     "rating": 5.5,
-    "gameplay": "50%",
+    "gameplay": "Bored to Deletion // 50%",
     "platforms": [
       "PC"
     ],
@@ -1180,7 +1192,7 @@
     "title": "skate.",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/skate..jpg",
     "rating": 5.8,
-    "gameplay": "Beginner",
+    "gameplay": "Phone as BT. Controller",
     "platforms": [
       "PC",
       "Console"
@@ -1192,7 +1204,7 @@
     "title": "Lifeless Planet: Premier Edition",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/LifelessPlanetPremierEdition.jpg",
     "rating": 4.9,
-    "gameplay": "100%",
+    "gameplay": "Truly Lifeless Wandering // 100%",
     "platforms": [
       "PC"
     ],
@@ -1203,7 +1215,7 @@
     "title": "Rise of Industry",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/RiseofIndustry.jpg",
     "rating": 7.2,
-    "gameplay": "Veteran",
+    "gameplay": "Whimsical",
     "platforms": [
       "PC"
     ],
@@ -1214,7 +1226,7 @@
     "title": "RAGE 2",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/RAGE2.jpg",
     "rating": 6,
-    "gameplay": "Average",
+    "gameplay": "'Please Die'",
     "platforms": [
       "PC"
     ],
@@ -1225,7 +1237,7 @@
     "title": "Horizon Chase Turbo",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/HorizonChaseTurbo.jpg",
     "rating": 5.4,
-    "gameplay": "Average",
+    "gameplay": "Road Chiller",
     "platforms": [
       "PC"
     ],
@@ -1236,7 +1248,7 @@
     "title": "Infinifactory",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Infinifactory.jpg",
     "rating": 5.1,
-    "gameplay": "Average",
+    "gameplay": "Budget Destroyer",
     "platforms": [
       "PC"
     ],
@@ -1247,7 +1259,7 @@
     "title": "The Forest Quartet",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TheForestQuartet.jpg",
     "rating": 8.7,
-    "gameplay": "100%",
+    "gameplay": "Oddly Calming // 100%",
     "platforms": [
       "PC"
     ],
@@ -1258,7 +1270,7 @@
     "title": "Breathedge",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Breathedge.jpg",
     "rating": 8.5,
-    "gameplay": "100%",
+    "gameplay": "Flying & Salvaging // 100%",
     "platforms": [
       "PC"
     ],
@@ -1269,7 +1281,7 @@
     "title": "theHunter: Call of the Wild",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/theHunter-CalloftheWild.jpg",
     "rating": 8.3,
-    "gameplay": "Average",
+    "gameplay": "Accuracy: Intoxicated",
     "platforms": [
       "PC"
     ],
@@ -1280,7 +1292,7 @@
     "title": "Redout: Enhanced Edition",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Redout-EnhancedEdition.png",
     "rating": 7.5,
-    "gameplay": "Average",
+    "gameplay": "Just Average",
     "platforms": [
       "PC"
     ],
@@ -1291,7 +1303,7 @@
     "title": "Farlight 84",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Farlight84.jpg",
     "rating": 4,
-    "gameplay": "Veteran",
+    "gameplay": "Give-me-a-rest!",
     "platforms": [
       "PC"
     ],
@@ -1301,8 +1313,8 @@
     "id": "rogue-company",
     "title": "Rogue Company",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/RogueCompany.jpg",
-    "rating": 5.6,
-    "gameplay": "Beginner",
+    "rating": 5.4,
+    "gameplay": "How am I dying?",
     "platforms": [
       "PC"
     ],
@@ -1313,7 +1325,7 @@
     "title": "Never Alone (Kisima Ingitchuna)",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/NeverAlone-KisimaIngitchuna.jpg",
     "rating": 8.4,
-    "gameplay": "100%",
+    "gameplay": "Satisfying Conclusion // 100%",
     "platforms": [
       "PC"
     ],
@@ -1324,7 +1336,7 @@
     "title": "Deliver At All Costs",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DeliverAtAllCosts.jpg",
     "rating": 4.3,
-    "gameplay": "Veteran",
+    "gameplay": "99% Missing Goods",
     "platforms": [
       "PC"
     ],
@@ -1335,7 +1347,7 @@
     "title": "Heroes & Generals WWII",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Heroes&GeneralsWWII.jpg",
     "rating": 3.9,
-    "gameplay": "Average",
+    "gameplay": "Pretty Average",
     "platforms": [
       "PC"
     ],
@@ -1357,7 +1369,7 @@
     "title": "Cities: Skylines",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CitiesSkylines.jpg",
     "rating": 6.3,
-    "gameplay": "Average",
+    "gameplay": "Choking Economy",
     "platforms": [
       "PC"
     ],
@@ -1368,7 +1380,7 @@
     "title": "Guacamelee! Super Turbo Championship Edition",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Guacamelee-SuperTurboChampionshipEdition.jpg",
     "rating": 4.4,
-    "gameplay": "Average",
+    "gameplay": "Certified Uninstaller",
     "platforms": [
       "PC"
     ],
@@ -1379,7 +1391,7 @@
     "title": "Idle Champions of the Forgotten Realms",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/IdleChampionsoftheForgottenRealms.jpg",
     "rating": 4.3,
-    "gameplay": "Average",
+    "gameplay": "Boring",
     "platforms": [
       "PC"
     ],
@@ -1412,7 +1424,7 @@
     "title": "The Hidden Room",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TheHigddenRoom.png",
     "rating": 4.7,
-    "gameplay": "100%",
+    "gameplay": "Think Tank // 100%",
     "platforms": [
       "PC"
     ],
@@ -1423,7 +1435,7 @@
     "title": "Century: Age of Ashes",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Century-AgeofAshes.jpg",
     "rating": 6.1,
-    "gameplay": "Beginner",
+    "gameplay": "Killed my Dragon",
     "platforms": [
       "PC"
     ],
@@ -1445,7 +1457,7 @@
     "title": "Adios",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Adios.jpg",
     "rating": 7.3,
-    "gameplay": "100%",
+    "gameplay": "FFS. // 100%",
     "platforms": [
       "PC"
     ],
@@ -1456,7 +1468,7 @@
     "title": "Filament",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Filament.jpg",
     "rating": 7.8,
-    "gameplay": "100%",
+    "gameplay": "Ez // 100%",
     "platforms": [
       "PC"
     ],
@@ -1467,7 +1479,7 @@
     "title": "Saints Row Boss Factory",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/SaintsRow-BossFactory.jpg",
     "rating": 3.8,
-    "gameplay": "100%",
+    "gameplay": "'Dress-up Sim' // 100%",
     "platforms": [
       "PC"
     ],
@@ -1478,7 +1490,7 @@
     "title": "Encased: A Sci-Fi Post-Apocalyptic RPG",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Encased.jpg",
     "rating": 4.7,
-    "gameplay": "Beginner",
+    "gameplay": "Bored",
     "platforms": [
       "PC"
     ],
@@ -1489,7 +1501,7 @@
     "title": "Escape Academy",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/EscapeAcademy.jpg",
     "rating": 7.2,
-    "gameplay": "100%",
+    "gameplay": "Graduated Escapee // 100%",
     "platforms": [
       "PC"
     ],
@@ -1500,7 +1512,7 @@
     "title": "Recipe for Disaster",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/RecipeforDisaster.jpg",
     "rating": 6.8,
-    "gameplay": "Average",
+    "gameplay": "Spreadsheet General",
     "platforms": [
       "PC"
     ],
@@ -1522,7 +1534,7 @@
     "title": "Against All Odds",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/AgainstAllOdds.jpg",
     "rating": 6.2,
-    "gameplay": "Veteran",
+    "gameplay": "Odds Against Me",
     "platforms": [
       "PC"
     ],
@@ -1533,7 +1545,7 @@
     "title": "Relicta",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Relicta.jpg",
     "rating": 7.1,
-    "gameplay": "50%",
+    "gameplay": "20% & Deleted",
     "platforms": [
       "PC"
     ],
@@ -1544,7 +1556,7 @@
     "title": "Paragon: The Overprime",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Paragon-TheOverprime.jpg",
     "rating": 6.2,
-    "gameplay": "Average",
+    "gameplay": "Avg.",
     "platforms": [
       "PC"
     ],
@@ -1555,7 +1567,7 @@
     "title": "GigaBash",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/GigaBash.png",
     "rating": 6.5,
-    "gameplay": "Average",
+    "gameplay": "Casual Menace",
     "platforms": [
       "PC"
     ],
@@ -1566,7 +1578,7 @@
     "title": "Call of the Sea",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CalloftheSea.png",
     "rating": 7.3,
-    "gameplay": "Beginner",
+    "gameplay": "Pending Exploration",
     "platforms": [
       "PC"
     ],
@@ -1577,7 +1589,7 @@
     "title": "Dodo Peak",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DodoPeak.png",
     "rating": 6.7,
-    "gameplay": "Average",
+    "gameplay": "Gap-Closing Specialist",
     "platforms": [
       "PC"
     ],
@@ -1588,7 +1600,7 @@
     "title": "The Bridge",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TheBridge.png",
     "rating": 6.8,
-    "gameplay": "Expert",
+    "gameplay": "Big-Brain-ish // 100%",
     "platforms": [
       "PC"
     ],
@@ -1598,8 +1610,8 @@
     "id": "aerial-knights-never-yield",
     "title": "Aerial_Knight's Never Yield",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Aerial_Knight'sNeverYield.jpg",
-    "rating": 7,
-    "gameplay": "100%",
+    "rating": 6.7,
+    "gameplay": "'Stop Tripping'",
     "platforms": [
       "PC"
     ],
@@ -1609,8 +1621,8 @@
     "id": "surviving-the-aftermath",
     "title": "Surviving the Aftermath",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/SurvivingtheAftermath.jpg",
-    "rating": 6.3,
-    "gameplay": "Veteran",
+    "rating": 5.3,
+    "gameplay": "Resource Collecting Empire",
     "platforms": [
       "PC"
     ],
@@ -1621,7 +1633,7 @@
     "title": "CRSED: Cuisine Royale",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CRSED-CusineRoyale.png",
     "rating": 6.1,
-    "gameplay": "Beginner",
+    "gameplay": "'Tastes Like Shit. Perfect'",
     "platforms": [
       "PC"
     ],
@@ -1632,7 +1644,7 @@
     "title": "City of Gangsters",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CityofGangsters.jpg",
     "rating": 5.8,
-    "gameplay": "Average",
+    "gameplay": "Silent Mafia",
     "platforms": [
       "PC"
     ],
@@ -1665,7 +1677,7 @@
     "title": "We Become What We Behold [Fan-Made Port]",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/WeBecomeWhatWeBehold.jpg",
     "rating": 7.9,
-    "gameplay": "Veteran",
+    "gameplay": "Responsible for Downfall",
     "platforms": [
       "PC"
     ],
@@ -1676,7 +1688,7 @@
     "title": "Need for Speed: Hot Pursuit",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/NeedforSpeed-HotPursuit.png",
     "rating": 8.1,
-    "gameplay": "Average",
+    "gameplay": "Pursuit Dodger",
     "platforms": [
       "PC"
     ],
@@ -1687,7 +1699,7 @@
     "title": "Need for Speed: No Limits",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/NeedforSpeed-NoLimits.png",
     "rating": 6.3,
-    "gameplay": "Average",
+    "gameplay": "Drives like Crap",
     "platforms": [
       "PC",
       "Mobile"
@@ -1710,7 +1722,7 @@
     "title": "Vector",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Vector.jpg",
     "rating": 5.3,
-    "gameplay": "Veteran",
+    "gameplay": "Died Parkouring",
     "platforms": [
       "PC",
       "Mobile"
@@ -1722,7 +1734,7 @@
     "title": "Alto's Adventure",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Alto'sAdventure.jpg",
     "rating": 8.4,
-    "gameplay": "Expert",
+    "gameplay": "Relaxing Flips",
     "platforms": [
       "PC",
       "Mobile"
@@ -1734,7 +1746,7 @@
     "title": "Alto's Odyssey",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Alto'sOdyssey.webp",
     "rating": 8.4,
-    "gameplay": "Expert",
+    "gameplay": "Relaxing Sandboarding",
     "platforms": [
       "PC",
       "Mobile"
@@ -1746,7 +1758,7 @@
     "title": "Bomb Squad",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/BombSquad.png",
     "rating": 7.5,
-    "gameplay": "Veteran",
+    "gameplay": "Reminiscing Nostalgia",
     "platforms": [
       "Mobile"
     ],
@@ -1757,7 +1769,7 @@
     "title": "Azur Lane",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/AzurLane.png",
     "rating": 5,
-    "gameplay": "Beginner",
+    "gameplay": "Pulls Were Made",
     "platforms": [
       "Mobile"
     ],
@@ -1768,7 +1780,7 @@
     "title": "CarX Street",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CarXStreet.jpg",
     "rating": 6.6,
-    "gameplay": "Average",
+    "gameplay": "Barrier Broken",
     "platforms": [
       "PC",
       "Mobile"
@@ -1780,7 +1792,7 @@
     "title": "CSR 2",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CSR2.jpg",
     "rating": 5.1,
-    "gameplay": "Veteran",
+    "gameplay": "Pull Addict",
     "platforms": [
       "PC",
       "Mobile"
@@ -1792,7 +1804,7 @@
     "title": "CATS: Crash Arena Turbo Stars",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CATS-CrashArenaTurboStars.webp",
     "rating": 6.4,
-    "gameplay": "Veteran",
+    "gameplay": "Alien Builds",
     "platforms": [
       "PC",
       "Mobile"
@@ -1804,7 +1816,7 @@
     "title": "Dr. Driving",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Dr.Driving.jpg",
     "rating": 6.7,
-    "gameplay": "Veteran",
+    "gameplay": "Classic Nostalgia",
     "platforms": [
       "PC",
       "Mobile"
@@ -1816,7 +1828,7 @@
     "title": "Dr. Driving 2",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Dr.Driving2.png",
     "rating": 6,
-    "gameplay": "Veteran",
+    "gameplay": "Parking in Style",
     "platforms": [
       "PC",
       "Mobile"
@@ -1828,7 +1840,7 @@
     "title": "Grayland (Remastered)",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Grayland-Remastered.png",
     "rating": 7.7,
-    "gameplay": "100%",
+    "gameplay": "Sneaky // 100%",
     "platforms": [
       "PC",
       "Mobile"
@@ -1840,7 +1852,7 @@
     "title": "GT Racing 2: The Real Car Experience",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/GTRacing2.jpg",
     "rating": 6.8,
-    "gameplay": "Average",
+    "gameplay": "No License",
     "platforms": [
       "PC",
       "Mobile"
@@ -1864,7 +1876,7 @@
     "title": "Kick the Buddy: Forever",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/KickTheBuddy.png",
     "rating": 7.2,
-    "gameplay": "Veteran",
+    "gameplay": "Reminiscing",
     "platforms": [
       "PC",
       "Mobile"
@@ -1876,7 +1888,7 @@
     "title": "Level Devil - NOT A Troll Game",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/LevelDevil.jpg",
     "rating": 7,
-    "gameplay": "Average",
+    "gameplay": "Rage-Bait Victim",
     "platforms": [
       "Mobile"
     ],
@@ -1887,7 +1899,7 @@
     "title": "Let's Create! Pottery",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Let'sCreate-Pottery.png",
     "rating": 7.2,
-    "gameplay": "Expert",
+    "gameplay": "Pro Potter",
     "platforms": [
       "Mobile"
     ],
@@ -1898,7 +1910,7 @@
     "title": "Let's Create! Pottery Lite",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Let'sCreate-PotteryLite.png",
     "rating": 6.8,
-    "gameplay": "Expert",
+    "gameplay": "Simple Potter",
     "platforms": [
       "Mobile"
     ],
@@ -1909,7 +1921,7 @@
     "title": "Mini Militia",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/MiniMilitia.png",
     "rating": 5.6,
-    "gameplay": "Average",
+    "gameplay": "Casual Destroyer",
     "platforms": [
       "PC",
       "Mobile"
@@ -1921,7 +1933,7 @@
     "title": "Angry Birds Classic",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/AngryBirds.jpg",
     "rating": 7.5,
-    "gameplay": "Expert",
+    "gameplay": "Classic Nostalgia",
     "platforms": [
       "Mobile"
     ],
@@ -1932,7 +1944,7 @@
     "title": "Angry Birds Seasons",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/AngryBirdsSeasons.jpg",
     "rating": 7.6,
-    "gameplay": "Expert",
+    "gameplay": "Nostalgia",
     "platforms": [
       "Mobile"
     ],
@@ -1943,7 +1955,7 @@
     "title": "Angry Birds Space",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/AngryBirdsSpace.jpeg",
     "rating": 7.8,
-    "gameplay": "Expert",
+    "gameplay": "Gap-Closing Specialist",
     "platforms": [
       "Mobile"
     ],
@@ -1954,7 +1966,7 @@
     "title": "Bad Piggies",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/BadPiggies.jpg",
     "rating": 7.7,
-    "gameplay": "Expert",
+    "gameplay": "Pig Killer",
     "platforms": [
       "PC",
       "Mobile"
@@ -1966,7 +1978,7 @@
     "title": "Angry Birds 2",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/AngryBirds2.png",
     "rating": 7.9,
-    "gameplay": "Expert",
+    "gameplay": "Retry Machine",
     "platforms": [
       "PC",
       "Mobile"
@@ -1978,7 +1990,7 @@
     "title": "Ninja Arashi 2",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/NinjaArashi2.png",
     "rating": 7.1,
-    "gameplay": "100%",
+    "gameplay": "Respawn Enthusiast // 100%",
     "platforms": [
       "PC",
       "Mobile"
@@ -1990,7 +2002,7 @@
     "title": "Shadow Fight 3",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ShadowFight3.jpg",
     "rating": 7.5,
-    "gameplay": "Veteran",
+    "gameplay": "Lobby Menace",
     "platforms": [
       "PC",
       "Mobile"
@@ -2002,7 +2014,7 @@
     "title": "Shadow Fight 4: Arena",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ShadowFight4-Arena.png",
     "rating": 7.7,
-    "gameplay": "Veteran",
+    "gameplay": "Skill Issue",
     "platforms": [
       "PC",
       "Mobile"
@@ -2014,7 +2026,7 @@
     "title": "Paper.io 2",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Paper.io2.png",
     "rating": 6.4,
-    "gameplay": "Expert",
+    "gameplay": "Casual Nostalgia",
     "platforms": [
       "PC",
       "Mobile"
@@ -2026,7 +2038,7 @@
     "title": "Plague Inc. Evolved",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PlagueINC.Evolved.jpg",
     "rating": 7.5,
-    "gameplay": "Expert",
+    "gameplay": "I caused COVID-19",
     "platforms": [
       "PC"
     ],
@@ -2037,7 +2049,7 @@
     "title": "Plague Inc.",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PlagueINC.png",
     "rating": 7.5,
-    "gameplay": "Expert",
+    "gameplay": "Pro Villain",
     "platforms": [
       "Mobile"
     ],
@@ -2048,7 +2060,7 @@
     "title": "RAID: Shadow Legends",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/RAID-ShadowLegends.jpg",
     "rating": 2.9,
-    "gameplay": "Uninstall",
+    "gameplay": "Must Uninstall",
     "platforms": [
       "PC",
       "Mobile"
@@ -2060,7 +2072,7 @@
     "title": "Tom Clancy's Rainbow Six Mobile",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TomClancy's-RainbowSixMobile.webp",
     "rating": 6.4,
-    "gameplay": "Average",
+    "gameplay": "Not Smooth",
     "platforms": [
       "Mobile"
     ],
@@ -2071,7 +2083,7 @@
     "title": "Real Racing 3",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/RealRacing3.jpg",
     "rating": 6.8,
-    "gameplay": "Average",
+    "gameplay": "Nostalgia",
     "platforms": [
       "PC",
       "Mobile"
@@ -2083,7 +2095,7 @@
     "title": "Solo Leveling: ARISE",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/SoloLeveling-Arise.png",
     "rating": 6,
-    "gameplay": "Expert",
+    "gameplay": "Gacha Victim",
     "platforms": [
       "PC",
       "Mobile"
@@ -2095,7 +2107,7 @@
     "title": "Smash Hit",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/SmashHit.png",
     "rating": 7,
-    "gameplay": "Expert",
+    "gameplay": "Ran Out of Balls",
     "platforms": [
       "PC",
       "Mobile"
@@ -2107,7 +2119,7 @@
     "title": "Standoff 2",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Standoff2.jpg",
     "rating": 5.4,
-    "gameplay": "Veteran",
+    "gameplay": "Checklist Deleted",
     "platforms": [
       "PC",
       "Mobile"
@@ -2119,7 +2131,7 @@
     "title": "Subway Surfers",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/SubwaySurfers.jpg",
     "rating": 6,
-    "gameplay": "Veteran",
+    "gameplay": "Nostalgia",
     "platforms": [
       "PC",
       "Mobile"
@@ -2131,7 +2143,7 @@
     "title": "Temple Run",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TempleRun.jpg",
     "rating": 7.1,
-    "gameplay": "Expert",
+    "gameplay": "Reminiscing Nostalgia",
     "platforms": [
       "Mobile"
     ],
@@ -2142,7 +2154,7 @@
     "title": "Temple Run 2",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TempleRun2.jpg",
     "rating": 7.3,
-    "gameplay": "Expert",
+    "gameplay": "Reminiscing",
     "platforms": [
       "PC",
       "Mobile"
@@ -2154,7 +2166,7 @@
     "title": "Tower of God: NEW WORLD",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TowerofGod-NewWorld.jpg",
     "rating": 4.7,
-    "gameplay": "Average",
+    "gameplay": "Meh",
     "platforms": [
       "Mobile"
     ],
@@ -2165,7 +2177,7 @@
     "title": "The Ghost",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TheGhost.jpg",
     "rating": 7,
-    "gameplay": "Veteran",
+    "gameplay": "Monster Bait",
     "platforms": [
       "PC",
       "Mobile"
@@ -2177,7 +2189,7 @@
     "title": "Tentacle Wars",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TentacleWars.jpg",
     "rating": 7.4,
-    "gameplay": "Expert",
+    "gameplay": "Professional",
     "platforms": [
       "Mobile"
     ],
@@ -2199,8 +2211,8 @@
     "id": "traffic-racer",
     "title": "Traffic Racer",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TrafficRacer.png",
-    "rating": 8.8,
-    "gameplay": "Expert",
+    "rating": 8,
+    "gameplay": "Reminiscing",
     "platforms": [
       "PC",
       "Mobile"
@@ -2212,7 +2224,7 @@
     "title": "Traffic Rider",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TrafficRider.png",
     "rating": 6.7,
-    "gameplay": "Veteran",
+    "gameplay": "Moped Crasher",
     "platforms": [
       "PC",
       "Mobile"
@@ -2224,7 +2236,7 @@
     "title": "Wings on Fire",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/WingsonFire.png",
     "rating": 6.2,
-    "gameplay": "Veteran",
+    "gameplay": "Classic Nostalgia",
     "platforms": [
       "Mobile"
     ],
@@ -2235,7 +2247,7 @@
     "title": "Trench Assault",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TrenchAssault.jpg",
     "rating": 7.4,
-    "gameplay": "Expert",
+    "gameplay": "Nostalgia",
     "platforms": [
       "PC",
       "Mobile"
@@ -2247,7 +2259,7 @@
     "title": "War Robots",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/WarRobots.jpg",
     "rating": 6.3,
-    "gameplay": "Expert",
+    "gameplay": "Obliterator",
     "platforms": [
       "PC",
       "Mobile"
@@ -2270,7 +2282,7 @@
     "title": "Bhop Pro",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/BhopPro.jpg",
     "rating": 6.5,
-    "gameplay": "Veteran",
+    "gameplay": "Bunny Hopping",
     "platforms": [
       "PC",
       "Mobile"
@@ -2282,7 +2294,7 @@
     "title": "Alien Invasion: RPG Idle Space",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/AlienInvasion-RPGIdleSpace.png",
     "rating": 4.8,
-    "gameplay": "Veteran",
+    "gameplay": "Creepy Crawlies",
     "platforms": [
       "Mobile"
     ],
@@ -2293,7 +2305,7 @@
     "title": "sand:box",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/sand-box.png",
     "rating": 6.5,
-    "gameplay": "Expert",
+    "gameplay": "Pixel Chaos",
     "platforms": [
       "Mobile"
     ],
@@ -2304,7 +2316,7 @@
     "title": "Powder Game",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PowderGame.png",
     "rating": 6.9,
-    "gameplay": "Expert",
+    "gameplay": "Reminiscing Chaos",
     "platforms": [
       "PC",
       "Mobile"
@@ -2316,7 +2328,7 @@
     "title": "Evertech Sandbox",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/EvertechSandbox.png",
     "rating": 6.7,
-    "gameplay": "Expert",
+    "gameplay": "Engineer",
     "platforms": [
       "PC",
       "Mobile"
@@ -2328,7 +2340,7 @@
     "title": "Golf Battle",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/GolfBattle.jpg",
     "rating": 7.1,
-    "gameplay": "Expert",
+    "gameplay": "Benchwarmer+",
     "platforms": [
       "Mobile"
     ],
@@ -2351,7 +2363,7 @@
     "title": "Chain Reaction Neo",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ChainReactionNeo.png",
     "rating": 6.5,
-    "gameplay": "Veteran",
+    "gameplay": "Expert",
     "platforms": [
       "Mobile"
     ],
@@ -2362,7 +2374,7 @@
     "title": "diep.io",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/diep.io.webp",
     "rating": 7,
-    "gameplay": "Expert",
+    "gameplay": "Memory Lane",
     "platforms": [
       "PC",
       "Mobile"
@@ -2374,7 +2386,7 @@
     "title": "It Takes Two - Friend's Pass",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ItTakesTwo.jpg",
     "rating": 8.4,
-    "gameplay": "100%",
+    "gameplay": "Fun // 100% Demo",
     "platforms": [
       "PC"
     ],
@@ -2385,7 +2397,7 @@
     "title": "Fruit Ninja",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/FruitNinja.jpg",
     "rating": 7.4,
-    "gameplay": "Veteran",
+    "gameplay": "Professional Swiper",
     "platforms": [
       "Mobile"
     ],
@@ -2396,7 +2408,7 @@
     "title": "Purble Place",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PurblePlace.jpg",
     "rating": 5,
-    "gameplay": "Average",
+    "gameplay": "Windows 7",
     "platforms": [
       "PC"
     ],
@@ -2407,7 +2419,7 @@
     "title": "Hill Climb Racing",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/HillClimbRacing.jpg",
     "rating": 8,
-    "gameplay": "Expert",
+    "gameplay": "Classic Nostalgia",
     "platforms": [
       "PC",
       "Mobile"
@@ -2419,7 +2431,7 @@
     "title": "Hill Climb Racing 2",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/HillClimbRacing2.jpg",
     "rating": 8.1,
-    "gameplay": "Expert",
+    "gameplay": "Memory Lane",
     "platforms": [
       "PC",
       "Mobile"
@@ -2431,7 +2443,7 @@
     "title": "Beach Buggy Racing",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/BeachBuggyRacing.jpg",
     "rating": 6.5,
-    "gameplay": "Veteran",
+    "gameplay": "Corner Cutter",
     "platforms": [
       "Mobile"
     ],
@@ -2442,7 +2454,7 @@
     "title": "Beach Buggy Racing 2",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/BeachBuggyRacing2.jpg",
     "rating": 7,
-    "gameplay": "Expert",
+    "gameplay": "Speed Demon",
     "platforms": [
       "Mobile"
     ],
@@ -2453,7 +2465,7 @@
     "title": "My Talking Tom",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/MyTalkingTom.jpg",
     "rating": 6.8,
-    "gameplay": "Nostalgia",
+    "gameplay": "Reminiscing",
     "platforms": [
       "Mobile"
     ],
@@ -2464,7 +2476,7 @@
     "title": "Keyboard Warrior",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/KeyboardWarrior.jpg",
     "rating": 7.7,
-    "gameplay": "Veteran",
+    "gameplay": "Chair Racer",
     "platforms": [
       "PC"
     ],
@@ -2475,7 +2487,7 @@
     "title": "Whiteout Survival",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/WhiteoutSurvival.jpg",
     "rating": 4.5,
-    "gameplay": "Phone-2-Furnace",
+    "gameplay": "Phone to Furnace",
     "platforms": [
       "Mobile"
     ],
@@ -2486,7 +2498,7 @@
     "title": "Flaming Core",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/FlamingCore.jpg",
     "rating": 7.1,
-    "gameplay": "100%",
+    "gameplay": "Campaign Cleared // 100%",
     "platforms": [
       "Mobile"
     ],
@@ -2508,7 +2520,7 @@
     "title": "Agar.io",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Agar.io.jpg",
     "rating": 6.2,
-    "gameplay": "Veteran",
+    "gameplay": "Not My Final Form",
     "platforms": [
       "PC",
       "Mobile"
@@ -2520,7 +2532,7 @@
     "title": "Head Ball 2",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/HeadBall2.webp",
     "rating": 6,
-    "gameplay": "Nostalgia",
+    "gameplay": "Reminiscing Chaos",
     "platforms": [
       "Mobile"
     ],
@@ -2531,7 +2543,7 @@
     "title": "Carrom Pool: Disc Game",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CarromPool-DiscGame.jpg",
     "rating": 6.2,
-    "gameplay": "Nostalgia",
+    "gameplay": "Stat Sheet Gamer",
     "platforms": [
       "Mobile"
     ],
@@ -2542,7 +2554,7 @@
     "title": "Super Mario Bros.",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/SuperMarioBros..jpg",
     "rating": 5.6,
-    "gameplay": "Nostalgia",
+    "gameplay": "Classic Nostalgia",
     "platforms": [
       "Console"
     ],
@@ -2553,7 +2565,7 @@
     "title": "Duck Hunt",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DuckHunt.jpg",
     "rating": 5.1,
-    "gameplay": "Nostalgia",
+    "gameplay": "Reminiscing Shooting",
     "platforms": [
       "Console"
     ],
@@ -2586,7 +2598,7 @@
     "title": "Hot Slide",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/HotSlide.png",
     "rating": 6.4,
-    "gameplay": "Veteran",
+    "gameplay": "Slide Veteran",
     "platforms": [
       "Mobile"
     ],
@@ -2597,7 +2609,7 @@
     "title": "Hybrid Animals",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/HybridAnimals.jpg",
     "rating": 6.5,
-    "gameplay": "Average",
+    "gameplay": "Creator of Aliens",
     "platforms": [
       "Mobile"
     ],
@@ -2619,7 +2631,7 @@
     "title": "Make More! - Idle Manager",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/MakeMore-IdleManager.png",
     "rating": 4.4,
-    "gameplay": "Uninstall",
+    "gameplay": "Uninstalled 1Hr Later",
     "platforms": [
       "Mobile"
     ],
@@ -2630,7 +2642,7 @@
     "title": "Modern Sniper",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ModernSniper.png",
     "rating": 5.1,
-    "gameplay": "Nostalgia",
+    "gameplay": "Reminiscing",
     "platforms": [
       "Mobile"
     ],
@@ -2641,7 +2653,7 @@
     "title": "Sniper 3D",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Sniper3D.png",
     "rating": 5.7,
-    "gameplay": "Nostalgia",
+    "gameplay": "Reminiscing Headshots",
     "platforms": [
       "Mobile"
     ],
@@ -2652,7 +2664,7 @@
     "title": "Nobodies: Murder Cleaner",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Nobodies-MurderCleaner.jpg",
     "rating": 4.8,
-    "gameplay": "Average",
+    "gameplay": "Caught by Guard",
     "platforms": [
       "PC",
       "Mobile"
@@ -2664,7 +2676,7 @@
     "title": "Pirate Code - PVP Sea Battles",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PirateCode-PVPSeaBattles.png",
     "rating": 6.7,
-    "gameplay": "Nostalgia",
+    "gameplay": "Reminiscing Adventure",
     "platforms": [
       "Mobile"
     ],
@@ -2675,7 +2687,7 @@
     "title": "RACE: Rocket Arena Car Extreme",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/RACE-RocketArenaCarExtreme.jpeg",
     "rating": 6.7,
-    "gameplay": "Veteran",
+    "gameplay": "Extreme Madness",
     "platforms": [
       "Mobile"
     ],
@@ -2686,7 +2698,7 @@
     "title": "Snufkin: Melody of Moominvalley",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Snufkin-MelodyofMoominvalley.png",
     "rating": 7.4,
-    "gameplay": "100%",
+    "gameplay": "No Side Quest Left Behind",
     "platforms": [
       "Mobile"
     ],
@@ -2697,7 +2709,7 @@
     "title": "SPHAZE",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/SPHAZE-ScifiPuzzleGame.webp",
     "rating": 6.5,
-    "gameplay": "100%",
+    "gameplay": "Trailblazer",
     "platforms": [
       "Mobile"
     ],
@@ -2708,7 +2720,7 @@
     "title": "TerraGenesis: Landfall",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TerraGenesisLandfall.webp",
     "rating": 6.3,
-    "gameplay": "Average",
+    "gameplay": "Manager",
     "platforms": [
       "Mobile"
     ],
@@ -2719,7 +2731,7 @@
     "title": "Clash Royale",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ClashRoyale.jpg",
     "rating": 7.1,
-    "gameplay": "Veteran",
+    "gameplay": "'Good Cards Please'",
     "platforms": [
       "PC",
       "Mobile"
@@ -2742,7 +2754,7 @@
     "title": "Chess.com",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Chess.com.jpg",
     "rating": 7,
-    "gameplay": "Average",
+    "gameplay": "Checkmate Victim",
     "platforms": [
       "PC"
     ],
@@ -2764,7 +2776,7 @@
     "title": "Hungry Shark Evolution",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/HungrySharkEvolution.jpg",
     "rating": 6.9,
-    "gameplay": "Veteran",
+    "gameplay": "Still Hungry",
     "platforms": [
       "PC",
       "Mobile"
@@ -2787,7 +2799,7 @@
     "title": "slither.io",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/slither.io.jpg",
     "rating": 6,
-    "gameplay": "Veteran",
+    "gameplay": "Eating Vomit",
     "platforms": [
       "PC",
       "Mobile"
@@ -2799,7 +2811,7 @@
     "title": "Cube Escape Collection",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CubeEscapeCollection.jpg",
     "rating": 6.5,
-    "gameplay": "100%",
+    "gameplay": "Escaped // 100%",
     "platforms": [
       "Mobile"
     ],
@@ -2810,7 +2822,7 @@
     "title": "Cube Escape: Paradox",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CubeEscape-Paradox.png",
     "rating": 6.7,
-    "gameplay": "100%",
+    "gameplay": "Escaped // 100%",
     "platforms": [
       "Mobile"
     ],
@@ -2821,7 +2833,7 @@
     "title": "Cube Escape: The Lake",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CubeEscape-TheLake.webp",
     "rating": 6.8,
-    "gameplay": "100%",
+    "gameplay": "Escaped // 100%",
     "platforms": [
       "Mobile"
     ],
@@ -2832,7 +2844,7 @@
     "title": "Cube Escape: Birthday",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CubeEscape-Birthday.jpg",
     "rating": 6.3,
-    "gameplay": "100%",
+    "gameplay": "Escaped // 100%",
     "platforms": [
       "Mobile"
     ],
@@ -2843,7 +2855,7 @@
     "title": "Cube Escape: The Cave",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CubeEscape-TheCave.jpg",
     "rating": 7,
-    "gameplay": "100%",
+    "gameplay": "Escaped // 100%",
     "platforms": [
       "Mobile"
     ],
@@ -2854,7 +2866,7 @@
     "title": "Cell to Singularity: Evolution",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CelltoSingularity-Evolution.jpg",
     "rating": 7.2,
-    "gameplay": "Expert",
+    "gameplay": "Scientist or God",
     "platforms": [
       "Mobile"
     ],
@@ -2865,7 +2877,7 @@
     "title": "Cut the Rope",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CuttheRope.jpg",
     "rating": 6.9,
-    "gameplay": "100%",
+    "gameplay": "Nostalgia // 100%",
     "platforms": [
       "Mobile"
     ],
@@ -2876,7 +2888,7 @@
     "title": "Jetpack Joyride",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/JetpackJoyride.jpg",
     "rating": 6.2,
-    "gameplay": "Veteran",
+    "gameplay": "Joyriding",
     "platforms": [
       "Mobile"
     ],
@@ -2887,7 +2899,7 @@
     "title": "FRAG Pro Shooter",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/FRAGProShooter.jpg",
     "rating": 4.9,
-    "gameplay": "Average",
+    "gameplay": "Respawn Regular",
     "platforms": [
       "PC",
       "Mobile"
@@ -2899,7 +2911,7 @@
     "title": "Mekorama",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Mekorama.png",
     "rating": 7.2,
-    "gameplay": "100% & Nostalgia",
+    "gameplay": "Reminiscing // 100%",
     "platforms": [
       "Mobile"
     ],
@@ -2910,7 +2922,7 @@
     "title": "Odd Bot Out",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/OddBotOut.webp",
     "rating": 7.1,
-    "gameplay": "100% & Nostalgia",
+    "gameplay": "Reminiscing // 100%",
     "platforms": [
       "Mobile"
     ],
@@ -2921,7 +2933,7 @@
     "title": "Spectre Divide",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/SpectreDivide.jpg",
     "rating": 4.3,
-    "gameplay": "Average",
+    "gameplay": "Uninstall",
     "platforms": [
       "PC"
     ],
@@ -2932,7 +2944,7 @@
     "title": "Blood Strike",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/BloodStrike.webp",
     "rating": 5,
-    "gameplay": "Average",
+    "gameplay": "Bullet Sponge",
     "platforms": [
       "PC"
     ],
@@ -2943,7 +2955,7 @@
     "title": "Planet of Lana",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PlanetofLana.jpg",
     "rating": 9.1,
-    "gameplay": "100%",
+    "gameplay": "Saved Village // 100%",
     "platforms": [
       "PC"
     ],
@@ -2965,7 +2977,7 @@
     "title": "Unravel",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Unravel.jpg",
     "rating": 8.3,
-    "gameplay": "100%",
+    "gameplay": "Unravelled // 100%",
     "platforms": [
       "PC"
     ],

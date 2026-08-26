@@ -321,7 +321,8 @@ async function loadDatabaseUpdate() {
   const apiUrl =
       "https://api.github.com/repos/" +
       "IntenseParijat/GameWall/commits" +
-      "?path=games.json&per_page=1";
+      "?path=games.json&per_page=1" +
+      "&_=" + Date.now();
 
   try {
       const response = await fetch(apiUrl, {
