@@ -22,41 +22,6 @@
     "url": "https://play.google.com/store/apps/details?id=com.mojang.minecraftpe"
   },
   {
-    "id": "asphalt-nitro",
-    "title": "Asphalt Nitro",
-    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/asphalt-nitro.jpg",
-    "rating": 5.6,
-    "gameplay": "Veteran",
-    "platforms": [
-      "Mobile"
-    ],
-    "url": "https://mkt-web.gameloft.com/en/game/asphalt-nitro-mobile"
-  },
-  {
-    "id": "asphalt-8-airborne",
-    "title": "Asphalt 8 Airborne",
-    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/asphalt-8-airborne.jpg",
-    "rating": 7.8,
-    "gameplay": "Veteran",
-    "platforms": [
-      "PC",
-      "Mobile"
-    ],
-    "url": "https://www.gameloft.com/game/asphalt-8"
-  },
-  {
-    "id": "asphalt-9-legends",
-    "title": "Asphalt 9 Legends",
-    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/asphalt-9-legends.jpg",
-    "rating": 6.9,
-    "gameplay": "Veteran",
-    "platforms": [
-      "PC",
-      "Mobile"
-    ],
-    "url": "https://asphaltlegends.com/"
-  },
-  {
     "id": "destiny-2",
     "title": "Destiny 2",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/destiny-2.png",
@@ -105,8 +70,8 @@
     "id": "valorant",
     "title": "Valorant",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Valorant.png",
-    "rating": 6.9,
-    "gameplay": "Unlucky",
+    "rating": 3,
+    "gameplay": "Ultra Unlucky",
     "platforms": [
       "PC"
     ],
@@ -347,6 +312,53 @@
       "PC"
     ],
     "url": "https://store.steampowered.com/app/683320/GRIS/"
+  },
+  {
+    "id": "asphalt-nitro",
+    "title": "Asphalt Nitro",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/asphalt-nitro.jpg",
+    "rating": 5.6,
+    "gameplay": "Nostalgia",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://mkt-web.gameloft.com/en/game/asphalt-nitro-mobile"
+  },
+  {
+    "id": "asphalt-xtreme",
+    "title": "Asphalt Xtreme",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/AsphaltXtreme.jpg",
+    "rating": 6,
+    "gameplay": "Nostalgia",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.netflix.NGP.AsphaltXtreme"
+  },
+  {
+    "id": "asphalt-8-airborne",
+    "title": "Asphalt 8 Airborne",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/asphalt-8-airborne.jpg",
+    "rating": 7.8,
+    "gameplay": "Nostalgia",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://www.gameloft.com/game/asphalt-8"
+  },
+  {
+    "id": "asphalt-9-legends",
+    "title": "Asphalt 9 Legends",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/asphalt-9-legends.jpg",
+    "rating": 6.9,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://asphaltlegends.com/"
   },
   {
     "id": "csgo",
@@ -880,10 +892,20 @@
     "rating": 4.2,
     "gameplay": "Average",
     "platforms": [
-      "PC",
-      "Mobile"
+      "PC"
     ],
     "url": "https://www.ea.com/games/apex-legends/apex-legends"
+  },
+  {
+    "id": "apex-legends-mobile",
+    "title": "Apex Legends Mobile",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ApexLegendsMobile.jpg",
+    "rating": 4.1,
+    "gameplay": "Beginner",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.ea.gp.apexlegendsmobilefps"
   },
   {
     "id": "indus-br",
@@ -1682,5 +1704,1282 @@
       "PC"
     ],
     "url": "https://www.ea.com/games/need-for-speed/need-for-speed-heat"
+  },
+  {
+    "id": "vector",
+    "title": "Vector",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Vector.jpg",
+    "rating": 5.3,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://nekki.com/vector/"
+  },
+  {
+    "id": "altos-adventure",
+    "title": "Alto's Adventure",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Alto'sAdventure.jpg",
+    "rating": 8.4,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://altosadventure.com/"
+  },
+  {
+    "id": "altos-odyssey",
+    "title": "Alto's Odyssey",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Alto'sOdyssey.webp",
+    "rating": 8.4,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://www.altosodyssey.com/"
+  },
+  {
+    "id": "bomb-squad",
+    "title": "Bomb Squad",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/BombSquad.png",
+    "rating": 7.5,
+    "gameplay": "Veteran",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://www.froemling.net/apps/bombsquad"
+  },
+  {
+    "id": "azur-lane",
+    "title": "Azur Lane",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/AzurLane.png",
+    "rating": 5,
+    "gameplay": "Beginner",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://azurlane.yo-star.com/"
+  },
+  {
+    "id": "carx-street",
+    "title": "CarX Street",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CarXStreet.jpg",
+    "rating": 6.6,
+    "gameplay": "Average",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.carxtech.sr"
+  },
+  {
+    "id": "csr-2",
+    "title": "CSR 2",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CSR2.jpg",
+    "rating": 5.1,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://www.csr-racing.com/"
+  },
+  {
+    "id": "cats-crash-arena-turbo-stars",
+    "title": "CATS: Crash Arena Turbo Stars",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CATS-CrashArenaTurboStars.webp",
+    "rating": 6.4,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://www.catsthegame.com/"
+  },
+  {
+    "id": "dr-driving",
+    "title": "Dr. Driving",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Dr.Driving.jpg",
+    "rating": 6.7,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.ansangha.drdriving"
+  },
+  {
+    "id": "dr-driving-2",
+    "title": "Dr. Driving 2",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Dr.Driving2.png",
+    "rating": 6,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.ansangha.drjb"
+  },
+  {
+    "id": "grayland-remastered",
+    "title": "Grayland (Remastered)",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Grayland-Remastered.png",
+    "rating": 7.7,
+    "gameplay": "100%",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://www.1der-ent.com/grayland"
+  },
+  {
+    "id": "gt-racing-2-the-real-car-experience",
+    "title": "GT Racing 2: The Real Car Experience",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/GTRacing2.jpg",
+    "rating": 6.8,
+    "gameplay": "Average",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://www.gameloft.com/newsroom/gameloft-announces-the-official-launch-of-gt-racing-3062"
+  },
+  {
+    "id": "hills-of-steel",
+    "title": "Hills of Steel",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/HillsofSteel.jpg",
+    "rating": 7,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.superplusgames.hosandroid"
+  },
+  {
+    "id": "kick-the-buddy-forever",
+    "title": "Kick the Buddy: Forever",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/KickTheBuddy.png",
+    "rating": 7.2,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.playgendary.ktb2"
+  },
+  {
+    "id": "level-devil-not-a-troll-game",
+    "title": "Level Devil - NOT A Troll Game",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/LevelDevil.jpg",
+    "rating": 7,
+    "gameplay": "Average",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.unept.leveldevil"
+  },
+  {
+    "id": "lets-create-pottery",
+    "title": "Let's Create! Pottery",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Let'sCreate-Pottery.png",
+    "rating": 7.2,
+    "gameplay": "Expert",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://www.idreams.pl/en/our-products/show/product/21-Lets-Create-Pottery"
+  },
+  {
+    "id": "lets-create-pottery-lite",
+    "title": "Let's Create! Pottery Lite",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Let'sCreate-PotteryLite.png",
+    "rating": 6.8,
+    "gameplay": "Expert",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=pl.idreams.potterylite"
+  },
+  {
+    "id": "mini-militia",
+    "title": "Mini Militia",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/MiniMilitia.png",
+    "rating": 5.6,
+    "gameplay": "Average",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.appsomniacs.da2"
+  },
+  {
+    "id": "angry-birds-classic",
+    "title": "Angry Birds Classic",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/AngryBirds.jpg",
+    "rating": 7.5,
+    "gameplay": "Expert",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://www.angrybirds.com/explore/hall-of-games/#year-2009"
+  },
+  {
+    "id": "angry-birds-seasons",
+    "title": "Angry Birds Seasons",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/AngryBirdsSeasons.jpg",
+    "rating": 7.6,
+    "gameplay": "Expert",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://www.angrybirds.com/explore/hall-of-games/#year-2010"
+  },
+  {
+    "id": "angry-birds-space",
+    "title": "Angry Birds Space",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/AngryBirdsSpace.jpeg",
+    "rating": 7.8,
+    "gameplay": "Expert",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://www.angrybirds.com/explore/hall-of-games/#year-2012"
+  },
+  {
+    "id": "bad-piggies",
+    "title": "Bad Piggies",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/BadPiggies.jpg",
+    "rating": 7.7,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://www.angrybirds.com/explore/hall-of-games/#year-2012"
+  },
+  {
+    "id": "angry-birds-2",
+    "title": "Angry Birds 2",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/AngryBirds2.png",
+    "rating": 7.9,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://www.angrybirds.com/games/angry-birds-2/"
+  },
+  {
+    "id": "ninja-arashi-2",
+    "title": "Ninja Arashi 2",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/NinjaArashi2.png",
+    "rating": 7.1,
+    "gameplay": "100%",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.blackpanther.ninjaarashi2"
+  },
+  {
+    "id": "shadow-fight-3",
+    "title": "Shadow Fight 3",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ShadowFight3.jpg",
+    "rating": 7.5,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://shadowfight3.com/"
+  },
+  {
+    "id": "shadow-fight-4-arena",
+    "title": "Shadow Fight 4: Arena",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ShadowFight4-Arena.png",
+    "rating": 7.7,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://shadowfight.com/"
+  },
+  {
+    "id": "paperio-2",
+    "title": "Paper.io 2",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Paper.io2.png",
+    "rating": 6.4,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=io.voodoo.paper2"
+  },
+  {
+    "id": "plague-inc-evolved",
+    "title": "Plague Inc. Evolved",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PlagueINC.Evolved.jpg",
+    "rating": 7.5,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.ndemiccreations.com/en/25-plague-inc-evolved"
+  },
+  {
+    "id": "plague-inc",
+    "title": "Plague Inc.",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PlagueINC.png",
+    "rating": 7.5,
+    "gameplay": "Expert",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://www.ndemiccreations.com/en/22-plague-inc"
+  },
+  {
+    "id": "raid-shadow-legends",
+    "title": "RAID: Shadow Legends",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/RAID-ShadowLegends.jpg",
+    "rating": 2.9,
+    "gameplay": "Uninstall",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://raidshadowlegends.com/"
+  },
+  {
+    "id": "tom-clancys-rainbow-six-mobile",
+    "title": "Tom Clancy's Rainbow Six Mobile",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TomClancy's-RainbowSixMobile.webp",
+    "rating": 6.4,
+    "gameplay": "Average",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://www.ubisoft.com/en-gb/game/rainbow-six/mobile"
+  },
+  {
+    "id": "real-racing-3",
+    "title": "Real Racing 3",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/RealRacing3.jpg",
+    "rating": 6.8,
+    "gameplay": "Average",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://www.ea.com/games/real-racing/real-racing-3"
+  },
+  {
+    "id": "solo-leveling-arise",
+    "title": "Solo Leveling: ARISE",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/SoloLeveling-Arise.png",
+    "rating": 6,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://sololeveling.netmarble.com/"
+  },
+  {
+    "id": "smash-hit",
+    "title": "Smash Hit",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/SmashHit.png",
+    "rating": 7,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.mediocre.smashhit"
+  },
+  {
+    "id": "standoff-2",
+    "title": "Standoff 2",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Standoff2.jpg",
+    "rating": 5.4,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://install.standoff2.com/"
+  },
+  {
+    "id": "subway-surfers",
+    "title": "Subway Surfers",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/SubwaySurfers.jpg",
+    "rating": 6,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://subwaysurfers.com/"
+  },
+  {
+    "id": "temple-run",
+    "title": "Temple Run",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TempleRun.jpg",
+    "rating": 7.1,
+    "gameplay": "Expert",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.imangi.templerun"
+  },
+  {
+    "id": "temple-run-2",
+    "title": "Temple Run 2",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TempleRun2.jpg",
+    "rating": 7.3,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.imangi.templerun2"
+  },
+  {
+    "id": "tower-of-god-new-world",
+    "title": "Tower of God: NEW WORLD",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TowerofGod-NewWorld.jpg",
+    "rating": 4.7,
+    "gameplay": "Average",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://towerofgod.netmarble.com/"
+  },
+  {
+    "id": "the-ghost",
+    "title": "The Ghost",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TheGhost.jpg",
+    "rating": 7,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://theghostgame.com/"
+  },
+  {
+    "id": "tentacle-wars",
+    "title": "Tentacle Wars",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TentacleWars.jpg",
+    "rating": 7.4,
+    "gameplay": "Expert",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://www.fdg-entertainment.com/games/tentacle-wars/"
+  },
+  {
+    "id": "tank-stars",
+    "title": "Tank Stars",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TankStars.jpg",
+    "rating": 6.8,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.playgendary.tanks"
+  },
+  {
+    "id": "traffic-racer",
+    "title": "Traffic Racer",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TrafficRacer.png",
+    "rating": 8.8,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.skgames.trafficracer"
+  },
+  {
+    "id": "traffic-rider",
+    "title": "Traffic Rider",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TrafficRider.png",
+    "rating": 6.7,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.skgames.trafficrider"
+  },
+  {
+    "id": "wings-on-fire",
+    "title": "Wings on Fire",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/WingsonFire.png",
+    "rating": 6.2,
+    "gameplay": "Veteran",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.skgames.wingsonfiregame"
+  },
+  {
+    "id": "trench-assault",
+    "title": "Trench Assault",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TrenchAssault.jpg",
+    "rating": 7.4,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.companyname.TrenchAssault"
+  },
+  {
+    "id": "war-robots",
+    "title": "War Robots",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/WarRobots.jpg",
+    "rating": 6.3,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://warrobots.com/"
+  },
+  {
+    "id": "zooba-zoo-battle-arena",
+    "title": "Zooba: Zoo Battle Arena",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Zooba-ZooBattleArena.webp",
+    "rating": 5.1,
+    "gameplay": "Average",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://wildlifestudios.com/games/zooba/"
+  },
+  {
+    "id": "bhop-pro",
+    "title": "Bhop Pro",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/BhopPro.jpg",
+    "rating": 6.5,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://bhoppro.com/"
+  },
+  {
+    "id": "alien-invasion-rpg-idle-space",
+    "title": "Alien Invasion: RPG Idle Space",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/AlienInvasion-RPGIdleSpace.png",
+    "rating": 4.8,
+    "gameplay": "Veteran",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.multicastgames.venomSurvive"
+  },
+  {
+    "id": "sand-box",
+    "title": "sand:box",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/sand-box.png",
+    "rating": 6.5,
+    "gameplay": "Expert",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=smellymoo.sand"
+  },
+  {
+    "id": "powder-game",
+    "title": "Powder Game",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PowderGame.png",
+    "rating": 6.9,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://dan-ball.jp/en/mobile/dustviewer/"
+  },
+  {
+    "id": "evertech-sandbox",
+    "title": "Evertech Sandbox",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/EvertechSandbox.png",
+    "rating": 6.7,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://vitsum.itch.io/evertech-sandbox"
+  },
+  {
+    "id": "golf-battle",
+    "title": "Golf Battle",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/GolfBattle.jpg",
+    "rating": 7.1,
+    "gameplay": "Expert",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://www.miniclip.com/games/golf-battle"
+  },
+  {
+    "id": "8-ball-pool",
+    "title": "8 Ball Pool",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/8BallPool.jpg",
+    "rating": 7.2,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://8ballpool.com/game"
+  },
+  {
+    "id": "chain-reaction-neo",
+    "title": "Chain Reaction Neo",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ChainReactionNeo.png",
+    "rating": 6.5,
+    "gameplay": "Veteran",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.rtv.cr_neo"
+  },
+  {
+    "id": "diepio",
+    "title": "diep.io",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/diep.io.webp",
+    "rating": 7,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.miniclip.diep.io"
+  },
+  {
+    "id": "it-takes-two-friends-pass",
+    "title": "It Takes Two - Friend's Pass",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ItTakesTwo.jpg",
+    "rating": 8.4,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.ea.com/games/it-takes-two/it-takes-two"
+  },
+  {
+    "id": "fruit-ninja",
+    "title": "Fruit Ninja",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/FruitNinja.jpg",
+    "rating": 7.4,
+    "gameplay": "Veteran",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.halfbrick.fruitninjafree"
+  },
+  {
+    "id": "purble-place",
+    "title": "Purble Place",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PurblePlace.jpg",
+    "rating": 5,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://en.wikipedia.org/wiki/Purble_Place"
+  },
+  {
+    "id": "hill-climb-racing",
+    "title": "Hill Climb Racing",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/HillClimbRacing.jpg",
+    "rating": 8,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://fingersoft.com/games/hill-climb-racing/"
+  },
+  {
+    "id": "hill-climb-racing-2",
+    "title": "Hill Climb Racing 2",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/HillClimbRacing2.jpg",
+    "rating": 8.1,
+    "gameplay": "Expert",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://fingersoft.com/games/hill-climb-racing-2/"
+  },
+  {
+    "id": "beach-buggy-racing",
+    "title": "Beach Buggy Racing",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/BeachBuggyRacing.jpg",
+    "rating": 6.5,
+    "gameplay": "Veteran",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://www.vectorunit.com/beach-buggy-racing"
+  },
+  {
+    "id": "beach-buggy-racing-2",
+    "title": "Beach Buggy Racing 2",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/BeachBuggyRacing2.jpg",
+    "rating": 7,
+    "gameplay": "Expert",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://www.vectorunit.com/beach-buggy-racing-2"
+  },
+  {
+    "id": "my-talking-tom",
+    "title": "My Talking Tom",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/MyTalkingTom.jpg",
+    "rating": 6.8,
+    "gameplay": "Nostalgia",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.outfit7.mytalkingtomfree"
+  },
+  {
+    "id": "keyboard-warrior",
+    "title": "Keyboard Warrior",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/KeyboardWarrior.jpg",
+    "rating": 7.7,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/2071050/Keyboard_Warrior/"
+  },
+  {
+    "id": "whiteout-survival",
+    "title": "Whiteout Survival",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/WhiteoutSurvival.jpg",
+    "rating": 4.5,
+    "gameplay": "Phone-2-Furnace",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://whiteoutsurvival.centurygames.com/"
+  },
+  {
+    "id": "flaming-core",
+    "title": "Flaming Core",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/FlamingCore.jpg",
+    "rating": 7.1,
+    "gameplay": "100%",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.habby.flamingcore"
+  },
+  {
+    "id": "drifto",
+    "title": "Drifto",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Drifto.png",
+    "rating": 6.9,
+    "gameplay": "Pro Drifter",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.UnluckyDuck.Drifto"
+  },
+  {
+    "id": "agario",
+    "title": "Agar.io",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Agar.io.jpg",
+    "rating": 6.2,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://miniclip.com/games/agario"
+  },
+  {
+    "id": "head-ball-2",
+    "title": "Head Ball 2",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/HeadBall2.webp",
+    "rating": 6,
+    "gameplay": "Nostalgia",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://miniclip.com/games/head-ball-2"
+  },
+  {
+    "id": "carrom-pool-disc-game",
+    "title": "Carrom Pool: Disc Game",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CarromPool-DiscGame.jpg",
+    "rating": 6.2,
+    "gameplay": "Nostalgia",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://miniclip.com/games/carrom"
+  },
+  {
+    "id": "super-mario-bros",
+    "title": "Super Mario Bros.",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/SuperMarioBros..jpg",
+    "rating": 5.6,
+    "gameplay": "Nostalgia",
+    "platforms": [
+      "Console"
+    ],
+    "url": "https://mario.nintendo.com/history/"
+  },
+  {
+    "id": "duck-hunt",
+    "title": "Duck Hunt",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DuckHunt.jpg",
+    "rating": 5.1,
+    "gameplay": "Nostalgia",
+    "platforms": [
+      "Console"
+    ],
+    "url": "https://www.nintendo.com/en-gb/Games/NES/Duck-Hunt-946955.html"
+  },
+  {
+    "id": "eve-online",
+    "title": "EVE Online",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/EVEOnline.png",
+    "rating": 6.5,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.eveonline.com/"
+  },
+  {
+    "id": "homescapes",
+    "title": "Homescapes",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Homescapes.jpg",
+    "rating": 4.1,
+    "gameplay": "Uninstall",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://playrix.com/games/homescapes"
+  },
+  {
+    "id": "hot-slide",
+    "title": "Hot Slide",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/HotSlide.png",
+    "rating": 6.4,
+    "gameplay": "Veteran",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.tapcheer.hotslide"
+  },
+  {
+    "id": "hybrid-animals",
+    "title": "Hybrid Animals",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/HybridAnimals.jpg",
+    "rating": 6.5,
+    "gameplay": "Average",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.abstractsoft.hybridanimals"
+  },
+  {
+    "id": "infinity-clan",
+    "title": "Infinity Clan",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/InfinityClan.jpg",
+    "rating": 3.9,
+    "gameplay": "Uninstall",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://cw.topgamesinc.com/"
+  },
+  {
+    "id": "make-more-idle-manager",
+    "title": "Make More! - Idle Manager",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/MakeMore-IdleManager.png",
+    "rating": 4.4,
+    "gameplay": "Uninstall",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.fingersoft.makemore"
+  },
+  {
+    "id": "modern-sniper",
+    "title": "Modern Sniper",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ModernSniper.png",
+    "rating": 5.1,
+    "gameplay": "Nostalgia",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.xs.armysniper"
+  },
+  {
+    "id": "sniper-3d",
+    "title": "Sniper 3D",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Sniper3D.png",
+    "rating": 5.7,
+    "gameplay": "Nostalgia",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.fungames.sniper3d"
+  },
+  {
+    "id": "nobodies-murder-cleaner",
+    "title": "Nobodies: Murder Cleaner",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Nobodies-MurderCleaner.jpg",
+    "rating": 4.8,
+    "gameplay": "Average",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.blyts.nobodies"
+  },
+  {
+    "id": "pirate-code-pvp-sea-battles",
+    "title": "Pirate Code - PVP Sea Battles",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PirateCode-PVPSeaBattles.png",
+    "rating": 6.7,
+    "gameplay": "Nostalgia",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.happyfish.piratecode"
+  },
+  {
+    "id": "race-rocket-arena-car-extreme",
+    "title": "RACE: Rocket Arena Car Extreme",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/RACE-RocketArenaCarExtreme.jpeg",
+    "rating": 6.7,
+    "gameplay": "Veteran",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.smokoko.race"
+  },
+  {
+    "id": "snufkin-melody-of-moominvalley",
+    "title": "Snufkin: Melody of Moominvalley",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Snufkin-MelodyofMoominvalley.png",
+    "rating": 7.4,
+    "gameplay": "100%",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://new.snufkin.game/"
+  },
+  {
+    "id": "sphaze",
+    "title": "SPHAZE",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/SPHAZE-ScifiPuzzleGame.webp",
+    "rating": 6.5,
+    "gameplay": "100%",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://subpixels.pl/projects/sphaze/"
+  },
+  {
+    "id": "terragenesis-landfall",
+    "title": "TerraGenesis: Landfall",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TerraGenesisLandfall.webp",
+    "rating": 6.3,
+    "gameplay": "Average",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.alexanderwinn.landfall"
+  },
+  {
+    "id": "clash-royale",
+    "title": "Clash Royale",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ClashRoyale.jpg",
+    "rating": 7.1,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://supercell.com/en/games/clashroyale/"
+  },
+  {
+    "id": "brawl-stars",
+    "title": "Brawl Stars",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/BrawlStars.jpg",
+    "rating": 6.4,
+    "gameplay": "Average",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://store.supercell.com/brawlstars"
+  },
+  {
+    "id": "chess-com",
+    "title": "Chess.com",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Chess.com.jpg",
+    "rating": 7,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.chess.com/"
+  },
+  {
+    "id": "hocus",
+    "title": "hocus.",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/hocus..png",
+    "rating": 7.3,
+    "gameplay": "Expert",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://www.gamebra.in/"
+  },
+  {
+    "id": "hungry-shark-evolution",
+    "title": "Hungry Shark Evolution",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/HungrySharkEvolution.jpg",
+    "rating": 6.9,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://www.ubisoft.com/en-gb/game/hungry-shark/evolution"
+  },
+  {
+    "id": "moba-legends-5v5",
+    "title": "Moba Legends: 5v5!",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/MobaLegends.webp",
+    "rating": 3.2,
+    "gameplay": "Uninstall",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.mobiin.gp"
+  },
+  {
+    "id": "slitherio",
+    "title": "slither.io",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/slither.io.jpg",
+    "rating": 6,
+    "gameplay": "Veteran",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=air.com.hypah.io.slither"
+  },
+  {
+    "id": "cube-escape-collection",
+    "title": "Cube Escape Collection",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CubeEscapeCollection.jpg",
+    "rating": 6.5,
+    "gameplay": "100%",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://www.rustylake.com/room-escape-games/cube-escape-collection.html"
+  },
+  {
+    "id": "cube-escape-paradox",
+    "title": "Cube Escape: Paradox",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CubeEscape-Paradox.png",
+    "rating": 6.7,
+    "gameplay": "100%",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://www.rustylake.com/room-escape-games/cube-escape-paradox.html"
+  },
+  {
+    "id": "cube-escape-the-lake",
+    "title": "Cube Escape: The Lake",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CubeEscape-TheLake.webp",
+    "rating": 6.8,
+    "gameplay": "100%",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://www.rustylake.com/room-escape-games/cube-escape-the-lake.html"
+  },
+  {
+    "id": "cube-escape-birthday",
+    "title": "Cube Escape: Birthday",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CubeEscape-Birthday.jpg",
+    "rating": 6.3,
+    "gameplay": "100%",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://www.rustylake.com/room-escape-games/cube-escape-birthday.html"
+  },
+  {
+    "id": "cube-escape-the-cave",
+    "title": "Cube Escape: The Cave",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CubeEscape-TheCave.jpg",
+    "rating": 7,
+    "gameplay": "100%",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://www.rustylake.com/room-escape-games/cube-escape-the-cave.html"
+  },
+  {
+    "id": "cell-to-singularity-evolution",
+    "title": "Cell to Singularity: Evolution",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CelltoSingularity-Evolution.jpg",
+    "rating": 7.2,
+    "gameplay": "Expert",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://celltosingularity.com/"
+  },
+  {
+    "id": "cut-the-rope",
+    "title": "Cut the Rope",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CuttheRope.jpg",
+    "rating": 6.9,
+    "gameplay": "100%",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://www.zeptolab.com/franchise/cut-the-rope"
+  },
+  {
+    "id": "jetpack-joyride",
+    "title": "Jetpack Joyride",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/JetpackJoyride.jpg",
+    "rating": 6.2,
+    "gameplay": "Veteran",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.halfbrick.jetpackjoyride"
+  },
+  {
+    "id": "frag-pro-shooter",
+    "title": "FRAG Pro Shooter",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/FRAGProShooter.jpg",
+    "rating": 4.9,
+    "gameplay": "Average",
+    "platforms": [
+      "PC",
+      "Mobile"
+    ],
+    "url": "https://www.fragthegame.com/"
+  },
+  {
+    "id": "mekorama",
+    "title": "Mekorama",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Mekorama.png",
+    "rating": 7.2,
+    "gameplay": "100% & Nostalgia",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://www.mekorama.com/"
+  },
+  {
+    "id": "odd-bot-out",
+    "title": "Odd Bot Out",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/OddBotOut.webp",
+    "rating": 7.1,
+    "gameplay": "100% & Nostalgia",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://www.oddbotout.com/"
+  },
+  {
+    "id": "spectre-divide",
+    "title": "Spectre Divide",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/SpectreDivide.jpg",
+    "rating": 4.3,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/2641470/Spectre_Divide/"
+  },
+  {
+    "id": "blood-strike",
+    "title": "Blood Strike",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/BloodStrike.webp",
+    "rating": 5,
+    "gameplay": "Average",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.blood-strike.com/"
+  },
+  {
+    "id": "planet-of-lana",
+    "title": "Planet of Lana",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/PlanetofLana.jpg",
+    "rating": 9.1,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.planetoflana.com/pol1"
+  },
+  {
+    "id": "prologue-go-wayback",
+    "title": "Prologue: Go Wayback!",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Prologue-GoWayback.png",
+    "rating": 7,
+    "gameplay": "Playing",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://playerunknownproductions.net/projects/go-wayback"
+  },
+  {
+    "id": "unravel",
+    "title": "Unravel",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Unravel.jpg",
+    "rating": 8.3,
+    "gameplay": "100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.ea.com/games/unravel/unravel"
+  },
+  {
+    "id": "unravel-two",
+    "title": "Unravel Two",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/UnravelTwo.jpg",
+    "rating": 8,
+    "gameplay": "Playing",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.ea.com/games/unravel/unravel-two"
   }
 ]
