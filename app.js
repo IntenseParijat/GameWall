@@ -120,13 +120,13 @@ async function loadGames() {
 
     state.games = data.map(normaliseGame);
     setLoaderProgress(
-        72,
-        "CHECKING DATABASE TIMESTAMP..."
+      72,
+      "CHECKING DATABASE TIMESTAMP..."
     );
     await loadDatabaseUpdate();
     setLoaderProgress(
-        82,
-        "BUILDING COLLECTION..."
+      82,
+      "BUILDING COLLECTION..."
     );
 
     updateStatistics();
@@ -195,6 +195,58 @@ function renderPlatforms(container, platforms, gameTitle) {
   container.hidden = platforms.length === 0;
 }
 
+function setupGameplayMarquee(textElement) {
+  if (!textElement) return;
+
+  const track = textElement.parentElement;
+  const badge = track?.parentElement;
+
+  if (!track || !badge) return;
+
+  track.classList.remove("is-scrolling");
+  track.style.removeProperty("--gameplay-duration");
+
+  textElement.removeAttribute("data-text");
+
+  const textWidth = textElement.scrollWidth;
+
+  const styles = getComputedStyle(badge);
+
+  const availableWidth =
+    badge.clientWidth -
+    parseFloat(styles.paddingLeft) -
+    parseFloat(styles.paddingRight);
+
+  if (textWidth <= availableWidth + 1) {
+    return;
+  }
+
+  textElement.setAttribute(
+    "data-text",
+    textElement.textContent
+  );
+
+  const gap = 40;
+  const distance = textWidth + gap;
+
+  const duration = Math.max(
+    5,
+    distance / 28
+  );
+
+  track.style.setProperty(
+    "--gameplay-distance",
+    `${distance}px`
+  );
+
+  track.style.setProperty(
+    "--gameplay-duration",
+    `${duration}s`
+  );
+
+  track.classList.add("is-scrolling");
+}
+
 function createGameCard(game, position) {
   const card = elements.template.content.cloneNode(true);
   const posterLink = card.querySelector(".poster-link");
@@ -206,7 +258,7 @@ function createGameCard(game, position) {
   const platformBadges = card.querySelector(".platform-badges");
   const rating = card.querySelector(".rating-badge b");
   const title = card.querySelector(".game-title");
-  const gameplay = card.querySelector(".gameplay-badge");
+  const gameplay = card.querySelector(".gameplay-text");
   const viewLink = card.querySelector(".view-game");
 
   const identifier = `GW-${String(position + 1).padStart(3, "0")}`;
@@ -214,8 +266,12 @@ function createGameCard(game, position) {
   renderPlatforms(platformBadges, game.platforms, game.title);
   rating.textContent = formatRating(game.rating);
   title.textContent = game.title;
-  requestAnimationFrame(() => {fitText(title, 0.85, 1.35);});
+  requestAnimationFrame(() => { fitText(title, 0.85, 1.35); });
   gameplay.textContent = game.gameplay;
+  requestAnimationFrame(() => {
+    setupGameplayMarquee(gameplay);
+    observeGameplayBadge(gameplay);
+  });
   posterLink.href = game.url;
   posterLink.setAttribute("aria-label", `Open ${game.title} in a new tab`);
   viewLink.href = game.url;
@@ -224,41 +280,41 @@ function createGameCard(game, position) {
   if (game.image) {
     const imageUrl = game.image.trim();
     console.log(
-        `[GameWall] Loading poster for "${game.title}":`,
-        imageUrl
+      `[GameWall] Loading poster for "${game.title}":`,
+      imageUrl
     );
     posterFrame.style.setProperty(
-        "--poster-bg",
-        `url("${imageUrl}")`
+      "--poster-bg",
+      `url("${imageUrl}")`
     );
     image.classList.add("is-loading");
     placeholder.hidden = true;
     posterLoader.classList.remove("is-hidden");
     image.alt = `${game.title} poster`;
     image.addEventListener("load", () => {
-        console.log(
-            `[GameWall] Poster loaded: ${game.title}`,
-            image.naturalWidth,
-            image.naturalHeight
-        );
-        image.classList.remove("is-loading");
-        placeholder.hidden = true;
-        posterLoader.classList.add("is-hidden");
+      console.log(
+        `[GameWall] Poster loaded: ${game.title}`,
+        image.naturalWidth,
+        image.naturalHeight
+      );
+      image.classList.remove("is-loading");
+      placeholder.hidden = true;
+      posterLoader.classList.add("is-hidden");
     }, { once: true });
     image.addEventListener("error", () => {
-        console.error(
-            `[GameWall] Poster FAILED: ${game.title}`,
-            imageUrl
-        );
-        image.classList.add("is-loading");
-        posterLoader.classList.add("is-hidden");
-        placeholder.hidden = false;
-    }, { once: true });
-    image.src = imageUrl;
-  } else {
+      console.error(
+        `[GameWall] Poster FAILED: ${game.title}`,
+        imageUrl
+      );
       image.classList.add("is-loading");
       posterLoader.classList.add("is-hidden");
       placeholder.hidden = false;
+    }, { once: true });
+    image.src = imageUrl;
+  } else {
+    image.classList.add("is-loading");
+    posterLoader.classList.add("is-hidden");
+    placeholder.hidden = false;
   }
 
   if (game.url === "#") {
@@ -278,115 +334,115 @@ function formatRating(rating) {
 function updateStatistics() {
   const games = state.games;
   const ratings = games
-      .map((game) => game.rating)
-      .filter((rating) => Number.isFinite(rating));
+    .map((game) => game.rating)
+    .filter((rating) => Number.isFinite(rating));
   const highest = games.length
-      ? games.reduce(
-          (best, game) =>
-              game.rating > best.rating ? game : best
-      )
-      : null;
+    ? games.reduce(
+      (best, game) =>
+        game.rating > best.rating ? game : best
+    )
+    : null;
   animateValue(
-      elements.totalGames,
-      games.length,
-      (value) => String(value).padStart(2, "0")
+    elements.totalGames,
+    games.length,
+    (value) => String(value).padStart(2, "0")
   );
   animateValue(
-      elements.averageRating,
-      ratings.length
-          ? ratings.reduce(
-              (sum, rating) => sum + rating,
-              0
-          ) / ratings.length
-          : 0,
-      (value) => value.toFixed(2),
-      650
+    elements.averageRating,
+    ratings.length
+      ? ratings.reduce(
+        (sum, rating) => sum + rating,
+        0
+      ) / ratings.length
+      : 0,
+    (value) => value.toFixed(2),
+    650
   );
   elements.highestRated.textContent =
-      highest ? highest.title : "—";
+    highest ? highest.title : "—";
   elements.highestRatedDetail.textContent =
-      highest
-          ? `MY SCORE ${formatRating(highest.rating)} / 10`
-          : "WAITING FOR DATA";
+    highest
+      ? `MY SCORE ${formatRating(highest.rating)} / 10`
+      : "WAITING FOR DATA";
   requestAnimationFrame(() => {
-      fitText(
-          elements.highestRated,
-          0.85,
-          2.3
-      );
+    fitText(
+      elements.highestRated,
+      0.85,
+      2.3
+    );
   });
 }
 
 async function loadDatabaseUpdate() {
   const apiUrl =
-      "https://api.github.com/repos/" +
-      "IntenseParijat/GameWall/commits" +
-      "?path=games.json&per_page=1" +
-      "&_=" + Date.now();
+    "https://api.github.com/repos/" +
+    "IntenseParijat/GameWall/commits" +
+    "?path=games.json&per_page=1" +
+    "&_=" + Date.now();
 
   try {
-      const response = await fetch(apiUrl, {
-          cache: "no-store"
-      });
+    const response = await fetch(apiUrl, {
+      cache: "no-store"
+    });
 
-      if (!response.ok) {
-          throw new Error(
-              `GitHub API returned ${response.status}`
-          );
+    if (!response.ok) {
+      throw new Error(
+        `GitHub API returned ${response.status}`
+      );
+    }
+
+    const commits = await response.json();
+
+    if (!Array.isArray(commits) || !commits.length) {
+      throw new Error("No games.json commit found");
+    }
+
+    const commit = commits[0];
+    const dateString =
+      commit?.commit?.author?.date ||
+      commit?.commit?.committer?.date;
+
+    if (!dateString) {
+      throw new Error(
+        "GitHub commit timestamp unavailable"
+      );
+    }
+
+    const date = new Date(dateString);
+
+    const dateText = new Intl.DateTimeFormat(
+      "en-GB",
+      {
+        timeZone: "UTC",
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
       }
+    ).format(date).toUpperCase();
 
-      const commits = await response.json();
-
-      if (!Array.isArray(commits) || !commits.length) {
-          throw new Error("No games.json commit found");
+    const timeText = new Intl.DateTimeFormat(
+      "en-GB",
+      {
+        timeZone: "UTC",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
       }
+    ).format(date);
 
-      const commit = commits[0];
-      const dateString =
-          commit?.commit?.author?.date ||
-          commit?.commit?.committer?.date;
-
-      if (!dateString) {
-          throw new Error(
-              "GitHub commit timestamp unavailable"
-          );
-      }
-
-      const date = new Date(dateString);
-
-      const dateText = new Intl.DateTimeFormat(
-          "en-GB",
-          {
-              timeZone: "UTC",
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-          }
-      ).format(date).toUpperCase();
-
-      const timeText = new Intl.DateTimeFormat(
-          "en-GB",
-          {
-              timeZone: "UTC",
-              hour: "2-digit",
-              minute: "2-digit",
-              hour12: false
-          }
-      ).format(date);
-
-      elements.databaseUpdate.textContent = dateText;
-      elements.databaseUpdateDetail.textContent =
-          `${timeText} UTC - LAST UPDATE TIME`;
+    elements.databaseUpdate.textContent = dateText;
+    elements.databaseUpdateDetail.textContent =
+      `${timeText} UTC - LAST UPDATE TIME`;
 
   } catch (error) {
-      console.error(
-          "GameWall could not determine the games.json update time:",
-          error
-      );
+    console.error(
+      "GameWall could not determine the games.json update time:",
+      error
+    );
 
-      elements.databaseUpdate.textContent = "—";
-      elements.databaseUpdateDetail.textContent =
-          "GITHUB TIMESTAMP UNAVAILABLE";
+    elements.databaseUpdate.textContent = "—";
+    elements.databaseUpdateDetail.textContent =
+      "GITHUB TIMESTAMP UNAVAILABLE";
   }
 }
 
@@ -434,14 +490,31 @@ function fitText(element, minSize, maxSize) {
   const maxHeight = element.clientHeight;
   let size = maxSize;
   while (
-      (
-          element.scrollWidth > element.clientWidth ||
-          element.scrollHeight > maxHeight
-      ) &&
-      size > minSize
+    (
+      element.scrollWidth > element.clientWidth ||
+      element.scrollHeight > maxHeight
+    ) &&
+    size > minSize
   ) {
-      size -= 0.025;
-      element.style.fontSize = `${size}rem`;
+    size -= 0.025;
+    element.style.fontSize = `${size}rem`;
+  }
+}
+
+const gameplayObserver =
+  new ResizeObserver(() => {
+    document
+      .querySelectorAll(".gameplay-text")
+      .forEach((textElement) => {
+        setupGameplayMarquee(textElement);
+      });
+  });
+
+function observeGameplayBadge(textElement) {
+  const badge = textElement?.parentElement?.parentElement;
+
+  if (badge) {
+    gameplayObserver.observe(badge);
   }
 }
 
