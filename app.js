@@ -172,6 +172,37 @@ function normalizePlatforms(value) {
   )];
 }
 
+function getPosterUrl(originalUrl) {
+  if (!originalUrl) return "";
+
+  if (!window.matchMedia("(max-width: 700px)").matches) {
+    return originalUrl;
+  }
+
+  try {
+    const url = new URL(originalUrl);
+
+    const filename = url.pathname.split("/").pop();
+    if (!filename) return originalUrl;
+
+    const dot = filename.lastIndexOf(".");
+    if (dot === -1) return originalUrl;
+
+    const baseName = filename.slice(0, dot);
+
+    url.pathname =
+      url.pathname.slice(
+        0,
+        url.pathname.lastIndexOf("/") + 1
+      ) +
+      `${baseName}_small.jpg`;
+
+    return url.toString();
+  } catch {
+    return originalUrl;
+  }
+}
+
 function normaliseGame(game, index) {
   const rating = Number(game.rating);
   return {
@@ -417,7 +448,7 @@ function createGameCard(game, position) {
   viewLink.setAttribute("aria-label", `View ${game.title} in a new tab`);
 
   if (game.image) {
-    const imageUrl = game.image.trim();
+    const imageUrl = getPosterUrl(game.image.trim());
     console.log(
       `[GameWall] Loading poster for "${game.title}":`,
       imageUrl
