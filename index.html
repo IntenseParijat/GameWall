@@ -22,12 +22,13 @@
   <div class="background-particles" aria-hidden="true">
     <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
   </div>
+  <canvas class="background-canvas" id="background-canvas" aria-hidden="true"></canvas>
 
   <div class="loading-screen" id="loading-screen" role="status" aria-live="polite">
     <div class="loader-mark" aria-hidden="true"><span></span></div>
     <p class="eyebrow">System boot sequence</p>
-    <h1>INITIALIZING GAME WALL</h1>
-    <p class="loader-message" id="loader-message">LOADING DATABASE...</p>
+    <h1 class="scramble-text" data-scramble>INITIALIZING GAME WALL</h1>
+    <p class="loader-message scramble-text" id="loader-message" data-scramble>LOADING DATABASE...</p>
     <div class="loader-track" aria-hidden="true"><span id="loader-bar"></span></div>
     <p class="loader-percent" id="loader-percent">0%</p>
   </div>
@@ -42,8 +43,8 @@
         <div class="title-bracket" aria-hidden="true"></div>
         <div>
           <p class="eyebrow">// Parijat's Personal game archive</p>
-          <h1 id="page-title">GAME WALL</h1>
-          <p class="subtitle">PLAYER DATABASE <span>//</span> SELECTED TITLES</p>
+          <h1 id="page-title" class="glitch" data-text="GAME WALL">GAME WALL</h1>
+          <p class="subtitle">PLAYER DATABASE <span>//</span> LIFETIME TITLES</p>
         </div>
       </div>
       <div class="hero-line" aria-hidden="true"><span></span></div>
@@ -201,7 +202,10 @@
         </div>
       </a>
       <div class="card-content">
-        <h3 class="game-title"></h3>
+        <h3 class="game-title-curtain">
+          <span class="game-title"></span>
+          <span class="game-title-curtain-bar" aria-hidden="true"></span>
+        </h3>
         <div class="gameplay-row">
           <span>GAMEPLAY</span>
           <strong class="gameplay-badge">

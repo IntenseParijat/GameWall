@@ -57,11 +57,99 @@ const elements = {
   loaderMessage: document.querySelector("#loader-message")
 };
 
+const scrambleTimers = new WeakMap();
+const SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&*+-/<>[]{}01";
+
+function scrambleText(element, target, options = {}) {
+  if (!element) return Promise.resolve();
+
+  const text = String(target ?? "");
+
+  const previousTimer = scrambleTimers.get(element);
+  if (previousTimer?.cancel) previousTimer.cancel();
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    element.setAttribute("aria-label", text);
+    element.textContent = text;
+    return Promise.resolve();
+  }
+
+  const intervalMs = options.interval ?? 40;
+  const revealEvery = options.revealEvery ?? 3;
+
+  element.setAttribute("aria-label", text);
+
+  let revealed = 0;
+  let frame = 0;
+  let timer = null;
+  let resolvePromise;
+
+  const promise = new Promise((resolve) => {
+    resolvePromise = resolve;
+  });
+
+  const render = () => {
+    let output = "";
+
+    for (let i = 0; i < text.length; i++) {
+      if (text[i] === " ") {
+        output += "\u00A0";
+        continue;
+      }
+
+      output += i < revealed
+        ? text[i]
+        : SCRAMBLE_CHARS[
+        Math.floor(
+          Math.random() * SCRAMBLE_CHARS.length
+        )
+        ];
+    }
+
+    element.textContent = output;
+  };
+
+  render();
+
+  const finish = () => {
+    if (timer) clearInterval(timer);
+
+    scrambleTimers.delete(element);
+    element.textContent = text;
+    resolvePromise();
+  };
+
+  timer = setInterval(() => {
+    frame++;
+
+    if (frame % revealEvery === 0) {
+      revealed++;
+    }
+
+    render();
+
+    if (revealed > text.length) {
+      finish();
+    }
+  }, intervalMs);
+
+  scrambleTimers.set(element, {
+    cancel: finish
+  });
+
+  return promise;
+}
+
 function setLoaderProgress(value, message) {
   const progress = Math.max(0, Math.min(100, Math.round(value)));
   elements.loaderBar.style.width = `${progress}%`;
   elements.loaderPercent.textContent = `${progress}%`;
-  if (message) elements.loaderMessage.textContent = message;
+
+  if (message) {
+    return scrambleText(elements.loaderMessage, message);
+  }
+
+  return Promise.resolve();
 }
 
 function hideLoading() {
@@ -131,12 +219,20 @@ async function loadGames() {
 
     updateStatistics();
     renderGames();
-    setLoaderProgress(100, "DATABASE READY");
+    await setLoaderProgress(100, "DATABASE READY");
+
+    // Let the final scramble finish and remain readable for one second.
+    await new Promise((resolve) => window.setTimeout(resolve, 1000));
+
+    hideLoading();
   } catch (error) {
     console.error("GameWall could not load games.json:", error);
     showError();
-    setLoaderProgress(100, "DATABASE UNAVAILABLE");
-  } finally {
+
+    await setLoaderProgress(100, "DATABASE UNAVAILABLE");
+
+    await new Promise((resolve) => window.setTimeout(resolve, 1000));
+
     hideLoading();
   }
 }
@@ -247,8 +343,46 @@ function setupGameplayMarquee(textElement) {
   track.classList.add("is-scrolling");
 }
 
+const gameTitleObserver = new IntersectionObserver((entries, observer) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+
+    const curtain = entry.target;
+    const titleElement = curtain.querySelector(".game-title");
+
+    if (!titleElement) return;
+
+    observer.unobserve(curtain);
+
+    requestAnimationFrame(() => {
+      fitText(titleElement, 0.85, 1.35);
+
+      requestAnimationFrame(() => {
+        curtain.classList.add("is-revealed");
+      });
+    });
+  });
+}, {
+  threshold: 0.15,
+  rootMargin: "0px 0px -5% 0px"
+});
+
+function observeGameTitle(curtainElement) {
+  if (curtainElement) gameTitleObserver.observe(curtainElement);
+}
+
 function createGameCard(game, position) {
   const card = elements.template.content.cloneNode(true);
+  const cardElement = card.querySelector(".game-card");
+  const staggerIndex = Math.min(position, 19);
+  cardElement.style.setProperty(
+    "--card-delay",
+    `${staggerIndex * 35}ms`
+  );
+  cardElement.classList.add("is-entering");
+  cardElement.addEventListener("animationend", () => {
+    cardElement.classList.remove("is-entering");
+  }, { once: true });
   const posterLink = card.querySelector(".poster-link");
   const posterFrame = card.querySelector(".poster-frame");
   const image = card.querySelector(".game-poster");
@@ -257,6 +391,7 @@ function createGameCard(game, position) {
   const cardId = card.querySelector(".card-id");
   const platformBadges = card.querySelector(".platform-badges");
   const rating = card.querySelector(".rating-badge b");
+  const titleCurtain = card.querySelector(".game-title-curtain");
   const title = card.querySelector(".game-title");
   const gameplay = card.querySelector(".gameplay-text");
   const viewLink = card.querySelector(".view-game");
@@ -266,7 +401,11 @@ function createGameCard(game, position) {
   renderPlatforms(platformBadges, game.platforms, game.title);
   rating.textContent = formatRating(game.rating);
   title.textContent = game.title;
-  requestAnimationFrame(() => { fitText(title, 0.85, 1.35); });
+  title.setAttribute("aria-label", game.title);
+  requestAnimationFrame(() => {
+    fitText(title, 0.85, 1.35);
+    observeGameTitle(titleCurtain);
+  });
   gameplay.textContent = game.gameplay;
   requestAnimationFrame(() => {
     setupGameplayMarquee(gameplay);
@@ -527,5 +666,336 @@ elements.sort.addEventListener("change", (event) => {
   state.sortMode = event.target.value;
   renderGames();
 });
+
+function initBackgroundCanvas() {
+  const canvas = document.querySelector("#background-canvas");
+  if (!canvas) return;
+
+  const context = canvas.getContext("2d", {
+    alpha: true,
+    desynchronized: true
+  });
+
+  if (!context) return;
+
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  const state = {
+    width: 0,
+    height: 0,
+    dpr: 1,
+    nodes: [],
+    circuits: [],
+    raf: 0,
+    lastTime: 0,
+    visible: true
+  };
+
+  const clamp = (value, min, max) =>
+    Math.max(min, Math.min(max, value));
+
+  function makeNode(index) {
+    const angle = Math.random() * Math.PI * 2;
+
+    return {
+      x: Math.random() * state.width,
+      y: Math.random() * state.height,
+      radius: Math.random() < .85 ? 1 : 1.5,
+      vx: Math.cos(angle) * (.7 + Math.random() * .8),
+      vy: Math.sin(angle) * (.7 + Math.random() * .8),
+      phase: Math.random() * Math.PI * 2,
+      pulse: .35 + Math.random() * .65,
+      hue: index % 5 === 0 ? "purple" : "cyan"
+    };
+  }
+
+  function makeCircuit() {
+    const startX = Math.random() * state.width;
+    const startY = Math.random() * state.height;
+    const horizontal = 70 + Math.random() * 170;
+    const vertical = 40 + Math.random() * 120;
+    const direction = Math.random() < .5 ? 1 : -1;
+    const bend = Math.random() < .5 ? 1 : -1;
+
+    return {
+      points: [
+        { x: startX, y: startY },
+        { x: clamp(startX + horizontal * direction, 0, state.width), y: startY },
+        { x: clamp(startX + horizontal * direction, 0, state.width), y: clamp(startY + vertical * bend, 0, state.height) }
+      ],
+      phase: Math.random() * Math.PI * 2,
+      speed: .05 + Math.random() * .08,
+      color: Math.random() < .5 ? "cyan" : "purple"
+    };
+  }
+
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+
+    state.width = Math.max(1, rect.width);
+    state.height = Math.max(1, rect.height);
+    state.dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+
+    canvas.width = Math.round(state.width * state.dpr);
+    canvas.height = Math.round(state.height * state.dpr);
+
+    context.setTransform(
+      state.dpr,
+      0,
+      0,
+      state.dpr,
+      0,
+      0
+    );
+
+    const area = state.width * state.height;
+    const mobile = state.width <= 760;
+
+    const desiredNodes = mobile
+      ? clamp(Math.round(area / 36000), 18, 30)
+      : clamp(Math.round(area / 24000), 30, 72);
+
+    while (state.nodes.length < desiredNodes) {
+      state.nodes.push(makeNode(state.nodes.length));
+    }
+
+    if (state.nodes.length > desiredNodes) {
+      state.nodes.length = desiredNodes;
+    }
+
+    const desiredCircuits = mobile ? 5 : 11;
+
+    while (state.circuits.length < desiredCircuits) {
+      state.circuits.push(makeCircuit());
+    }
+
+    if (state.circuits.length > desiredCircuits) {
+      state.circuits.length = desiredCircuits;
+    }
+
+    for (const node of state.nodes) {
+      node.x = clamp(node.x, 0, state.width);
+      node.y = clamp(node.y, 0, state.height);
+    }
+  }
+
+  function color(kind, alpha) {
+    return kind === "purple"
+      ? `rgba(138, 92, 255, ${alpha})`
+      : `rgba(0, 240, 255, ${alpha})`;
+  }
+
+  function drawCircuit(circuit, time) {
+    const glow = .12 + (
+      Math.sin(time * circuit.speed + circuit.phase) + 1
+    ) * .025;
+
+    context.beginPath();
+    context.moveTo(
+      circuit.points[0].x,
+      circuit.points[0].y
+    );
+
+    for (let i = 1; i < circuit.points.length; i++) {
+      context.lineTo(
+        circuit.points[i].x,
+        circuit.points[i].y
+      );
+    }
+
+    context.strokeStyle = color(circuit.color, .055);
+    context.lineWidth = 1;
+    context.stroke();
+
+    // Small travelling pulse along the 3-point circuit.
+    const p = (
+      (time * circuit.speed + circuit.phase / (Math.PI * 2)) % 1 + 1
+    ) % 1;
+
+    let a;
+    let b;
+    let local;
+
+    if (p < .5) {
+      a = circuit.points[0];
+      b = circuit.points[1];
+      local = p * 2;
+    } else {
+      a = circuit.points[1];
+      b = circuit.points[2];
+      local = (p - .5) * 2;
+    }
+
+    const px = a.x + (b.x - a.x) * local;
+    const py = a.y + (b.y - a.y) * local;
+
+    context.beginPath();
+    context.arc(
+      px,
+      py,
+      1.2,
+      0,
+      Math.PI * 2
+    );
+    context.fillStyle = color(
+      circuit.color,
+      glow
+    );
+    context.shadowBlur = 9;
+    context.shadowColor = color(
+      circuit.color,
+      .5
+    );
+    context.fill();
+    context.shadowBlur = 0;
+  }
+
+  function render(time) {
+    if (!state.visible) {
+      state.raf = requestAnimationFrame(render);
+      return;
+    }
+
+    const seconds = time * .001;
+
+    context.clearRect(
+      0,
+      0,
+      state.width,
+      state.height
+    );
+
+    // Subtle upper technical field.
+    const gradient = context.createRadialGradient(
+      state.width * .5,
+      state.height * .18,
+      0,
+      state.width * .5,
+      state.height * .18,
+      state.width * .62
+    );
+
+    gradient.addColorStop(
+      0,
+      "rgba(0, 240, 255, .025)"
+    );
+    gradient.addColorStop(
+      .5,
+      "rgba(138, 92, 255, .010)"
+    );
+    gradient.addColorStop(
+      1,
+      "rgba(5, 7, 13, 0)"
+    );
+
+    context.fillStyle = gradient;
+    context.fillRect(
+      0,
+      0,
+      state.width,
+      state.height
+    );
+
+    for (const circuit of state.circuits) {
+      drawCircuit(circuit, seconds);
+    }
+
+    const maxDistance =
+      state.width <= 760 ? 105 : 135;
+
+    for (let i = 0; i < state.nodes.length; i++) {
+      const node = state.nodes[i];
+
+      if (!reduceMotion) {
+        node.x += node.vx * .015;
+        node.y += node.vy * .015;
+
+        if (node.x < -20) node.x = state.width + 20;
+        if (node.x > state.width + 20) node.x = -20;
+        if (node.y < -20) node.y = state.height + 20;
+        if (node.y > state.height + 20) node.y = -20;
+      }
+
+      const pulse =
+        .22 +
+        (
+          Math.sin(seconds * .7 + node.phase) + 1
+        ) * .06;
+
+      for (let j = i + 1; j < state.nodes.length; j++) {
+        const other = state.nodes[j];
+        const dx = node.x - other.x;
+        const dy = node.y - other.y;
+        const distance = Math.hypot(dx, dy);
+
+        if (distance > maxDistance) continue;
+
+        const opacity =
+          (1 - distance / maxDistance) * .045;
+
+        context.beginPath();
+        context.moveTo(node.x, node.y);
+        context.lineTo(other.x, other.y);
+        context.strokeStyle = color(
+          node.hue,
+          opacity
+        );
+        context.lineWidth = .55;
+        context.stroke();
+      }
+
+      context.beginPath();
+      context.arc(
+        node.x,
+        node.y,
+        node.radius,
+        0,
+        Math.PI * 2
+      );
+      context.fillStyle = color(
+        node.hue,
+        pulse * node.pulse
+      );
+      context.fill();
+    }
+
+    state.raf = requestAnimationFrame(render);
+  }
+
+  const visibilityObserver = new IntersectionObserver(
+    (entries) => {
+      state.visible = entries[0]?.isIntersecting !== false;
+    },
+    { threshold: 0 }
+  );
+
+  visibilityObserver.observe(canvas);
+
+  window.addEventListener(
+    "resize",
+    resize,
+    { passive: true }
+  );
+
+  resize();
+
+  if (reduceMotion) {
+    render(0);
+    cancelAnimationFrame(state.raf);
+    return;
+  }
+
+  state.raf = requestAnimationFrame(render);
+}
+
+
+initBackgroundCanvas();
+
+scrambleText(
+  document.querySelector(".loading-screen h1"),
+  "INITIALIZING GAME WALL"
+);
 
 loadGames();
