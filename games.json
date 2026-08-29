@@ -3059,5 +3059,16 @@
       "PC"
     ],
     "url": "https://www.gameloft.com/game/war-planet-online-global-conquest"
+  },
+  {
+    "id": "tyr-playtest",
+    "title": "TYR - Playtest",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TYR-Playtest.jpg",
+    "rating": 7,
+    "gameplay": "Getting Blasted",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.playtyr.com/"
   }
 ]
