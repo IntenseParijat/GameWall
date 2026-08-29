@@ -2993,5 +2993,27 @@
       "PC"
     ],
     "url": "https://www.ea.com/games/unravel/unravel-two"
+  },
+  {
+    "id": "cod-mw4-beta",
+    "title": "Call of Duty: Modern Warfare 4 Beta",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CallofDuty-ModernWarfare4-Beta.png",
+    "rating": 8.1,
+    "gameplay": "Beta Campaign // 100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.callofduty.com/modernwarfare4/beta"
+  },
+  {
+    "id": "norush-tower-edition",
+    "title": "NoRush! - Tower Edition",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/NoRush-TowerEdition.png",
+    "rating": 4.2,
+    "gameplay": "Instant Gameover",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/3297160/NoRush/"
   }
 ]
