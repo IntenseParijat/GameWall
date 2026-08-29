@@ -3015,5 +3015,49 @@
       "PC"
     ],
     "url": "https://store.steampowered.com/app/3297160/NoRush/"
+  },
+  {
+    "id": "candy-crush-saga",
+    "title": "Candy Crush Saga",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CandyCrushSaga.jpg",
+    "rating": 5.5,
+    "gameplay": "Reminiscing",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://candycrush.com/"
+  },
+  {
+    "id": "microsoft-solitaire-collection",
+    "title": "Microsoft Solitaire Collection",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/MicrosoftSolitaireCollection.png",
+    "rating": 5.2,
+    "gameplay": "Novice",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.microsoftcasualgames.com/solitaire"
+  },
+  {
+    "id": "paradise-island-2",
+    "title": "Paradise Island 2",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ParadiseIsland2.png",
+    "rating": 5.7,
+    "gameplay": "Reminiscing",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.game-insight.com/en/games/paradise-island-2"
+  },
+  {
+    "id": "war-planet-online-global-conquest",
+    "title": "War Planet Online: Global Conquest",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/WarPlanetOnline-GlobalConquest.jpg",
+    "rating": 5.8,
+    "gameplay": "Retired Veteran",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.gameloft.com/game/war-planet-online-global-conquest"
   }
 ]
