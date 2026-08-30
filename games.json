@@ -2977,11 +2977,22 @@
     "title": "Unravel",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Unravel.jpg",
     "rating": 8.3,
-    "gameplay": "Unravelled // 100%",
+    "gameplay": "Unravelled Story // 100%",
     "platforms": [
       "PC"
     ],
     "url": "https://www.ea.com/games/unravel/unravel"
+  },
+  {
+    "id": "unravel-two",
+    "title": "Unravel Two",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/UnravelTwo.jpg",
+    "rating": 8.5,
+    "gameplay": "Unravelling Adventure // 100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.ea.com/games/unravel/unravel-two"
   },
   {
     "id": "unravel-two",
