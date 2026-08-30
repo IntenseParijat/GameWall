@@ -2995,17 +2995,6 @@
     "url": "https://www.ea.com/games/unravel/unravel-two"
   },
   {
-    "id": "unravel-two",
-    "title": "Unravel Two",
-    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/UnravelTwo.jpg",
-    "rating": 8,
-    "gameplay": "Playing",
-    "platforms": [
-      "PC"
-    ],
-    "url": "https://www.ea.com/games/unravel/unravel-two"
-  },
-  {
     "id": "cod-mw4-beta",
     "title": "Call of Duty: Modern Warfare 4 Beta",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CallofDuty-ModernWarfare4-Beta.png",
