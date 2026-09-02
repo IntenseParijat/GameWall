@@ -3070,5 +3070,16 @@
       "PC"
     ],
     "url": "https://www.playtyr.com/"
+  },
+  {
+    "id": "gunship-battle-helicopter-3d",
+    "title": "GUNSHIP BATTLE: Helicopter 3D",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/GunshipBattle-Helicopter3D.png",
+    "rating": 5.6,
+    "gameplay": "Blurry Memories",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.theonegames.gunshipbattle"
   }
 ]
