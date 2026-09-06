@@ -3081,5 +3081,16 @@
       "Mobile"
     ],
     "url": "https://play.google.com/store/apps/details?id=com.theonegames.gunshipbattle"
+  },
+  {
+    "id": "tom-clancys-the-division-resurgence",
+    "title": "Tom Clancy's The Division Resurgence",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TomClancy'sTheDivisionResurgence.png",
+    "rating": 5.1,
+    "gameplay": "Sniper Expert // Liberty and Justice for All",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.ubisoft.com/en-gb/game/the-division/resurgence#6Q4BAYofeRBepptV7jEqPO"
   }
 ]
