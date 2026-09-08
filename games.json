@@ -3092,5 +3092,16 @@
       "PC"
     ],
     "url": "https://www.ubisoft.com/en-gb/game/the-division/resurgence#6Q4BAYofeRBepptV7jEqPO"
+  },
+  {
+    "id": "caravan-sandwitch",
+    "title": "Caravan SandWitch",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CaravanSandWitch.png",
+    "rating": 8.8,
+    "gameplay": "All Achievements // 100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://caravansandwitch.com/"
   }
 ]
