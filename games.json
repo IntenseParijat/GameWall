@@ -3103,5 +3103,16 @@
       "PC"
     ],
     "url": "https://caravansandwitch.com/"
+  },
+  {
+    "id": "asgsg",
+    "title": "A Simple Garbage Sorting Game",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ASimpleGarbageSortingGame.jpg",
+    "rating": 7.9,
+    "gameplay": "All Achievements // 100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/3384180/A_Simple_Garbage_Sorting_Game/"
   }
 ]
