@@ -3114,5 +3114,16 @@
       "PC"
     ],
     "url": "https://store.steampowered.com/app/3384180/A_Simple_Garbage_Sorting_Game/"
+  },
+  {
+    "id": "viewfinder",
+    "title": "Viewfinder",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Viewfinder.jpg",
+    "rating": 8.9,
+    "gameplay": "#JusticeforCait // 100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://thunderfulgames.com/games/viewfinder/"
   }
 ]
