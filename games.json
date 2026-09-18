@@ -3125,5 +3125,16 @@
       "PC"
     ],
     "url": "https://thunderfulgames.com/games/viewfinder/"
+  },
+  {
+    "id": "vtm-bloodlines2",
+    "title": "Vampire: The Masquerade – Bloodlines 2",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/VampireTheMasquerade%E2%80%93Bloodlines2.png",
+    "rating": 7.2,
+    "gameplay": "The Streets Incarnadine // 100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.paradoxinteractive.com/games/vampire-the-masquerade-bloodlines-2/about"
   }
 ]
