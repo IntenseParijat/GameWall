@@ -58,7 +58,7 @@
     "id": "wuwa",
     "title": "Wuthering Waves",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/WutheringWaves.jpg",
-    "rating": 9.1,
+    "rating": 9.4,
     "gameplay": "F2P Grinder",
     "platforms": [
       "PC",
@@ -238,7 +238,7 @@
     "id": "arknights-endfield",
     "title": "Arknights: Endfield",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Arknights-Endfield.jpg",
-    "rating": 9.5,
+    "rating": 9.3,
     "gameplay": "Fangyi All-rounder",
     "platforms": [
       "PC",
@@ -306,7 +306,7 @@
     "id": "gris",
     "title": "GRIS",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/GRIS.jpg",
-    "rating": 9.2,
+    "rating": 9,
     "gameplay": "Emotional Damage // 100%",
     "platforms": [
       "PC"
@@ -631,7 +631,7 @@
     "title": "Ghostrunner",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Ghostrunner.jpg",
     "rating": 8.7,
-    "gameplay": "Flexing Moves // 100%",
+    "gameplay": "'My Name is Jack.' // 100%",
     "platforms": [
       "PC"
     ],
@@ -642,7 +642,7 @@
     "title": "Ghostrunner 2",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Ghostrunner2.jpg",
     "rating": 9.2,
-    "gameplay": "Sword Collector // 100%",
+    "gameplay": "'I listen to my own.' // 100%",
     "platforms": [
       "PC"
     ],
@@ -947,7 +947,7 @@
     "title": "Lost Light",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/LostLight.webp",
     "rating": 2.9,
-    "gameplay": "Phone Heater",
+    "gameplay": "Phone er",
     "platforms": [
       "Mobile"
     ],
@@ -1710,8 +1710,8 @@
     "id": "nfs-heat",
     "title": "Need for Speed: Heat (Deluxe Edition)",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/NeedforSpeed-Heat.png",
-    "rating": 8.4,
-    "gameplay": "Playing",
+    "rating": 6.7,
+    "gameplay": "Fustrated to Uninstall",
     "platforms": [
       "PC"
     ],
@@ -2965,8 +2965,8 @@
     "id": "prologue-go-wayback",
     "title": "Prologue: Go Wayback!",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Prologue-GoWayback.png",
-    "rating": 7,
-    "gameplay": "Playing",
+    "rating": 7.3,
+    "gameplay": "Hypothermia Specialist",
     "platforms": [
       "PC"
     ],
@@ -2977,7 +2977,7 @@
     "title": "Unravel",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Unravel.jpg",
     "rating": 8.3,
-    "gameplay": "Unravelled // 100%",
+    "gameplay": "Unravelled Story // 100%",
     "platforms": [
       "PC"
     ],
@@ -2987,11 +2987,154 @@
     "id": "unravel-two",
     "title": "Unravel Two",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/UnravelTwo.jpg",
-    "rating": 8,
-    "gameplay": "Playing",
+    "rating": 8.5,
+    "gameplay": "Unravelling Adventure // 100%",
     "platforms": [
       "PC"
     ],
     "url": "https://www.ea.com/games/unravel/unravel-two"
+  },
+  {
+    "id": "cod-mw4-beta",
+    "title": "Call of Duty: Modern Warfare 4 Beta",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CallofDuty-ModernWarfare4-Beta.png",
+    "rating": 8.1,
+    "gameplay": "Beta Campaign // 100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.callofduty.com/modernwarfare4/beta"
+  },
+  {
+    "id": "norush-tower-edition",
+    "title": "NoRush! - Tower Edition",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/NoRush-TowerEdition.png",
+    "rating": 4.2,
+    "gameplay": "Instant Gameover",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/3297160/NoRush/"
+  },
+  {
+    "id": "candy-crush-saga",
+    "title": "Candy Crush Saga",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CandyCrushSaga.jpg",
+    "rating": 5.5,
+    "gameplay": "Reminiscing",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://candycrush.com/"
+  },
+  {
+    "id": "microsoft-solitaire-collection",
+    "title": "Microsoft Solitaire Collection",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/MicrosoftSolitaireCollection.png",
+    "rating": 5.2,
+    "gameplay": "Novice",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.microsoftcasualgames.com/solitaire"
+  },
+  {
+    "id": "paradise-island-2",
+    "title": "Paradise Island 2",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ParadiseIsland2.png",
+    "rating": 5.7,
+    "gameplay": "Reminiscing",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.game-insight.com/en/games/paradise-island-2"
+  },
+  {
+    "id": "war-planet-online-global-conquest",
+    "title": "War Planet Online: Global Conquest",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/WarPlanetOnline-GlobalConquest.jpg",
+    "rating": 5.8,
+    "gameplay": "Retired Veteran",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.gameloft.com/game/war-planet-online-global-conquest"
+  },
+  {
+    "id": "tyr-playtest",
+    "title": "TYR - Playtest",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TYR-Playtest.jpg",
+    "rating": 7,
+    "gameplay": "Getting Blasted",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.playtyr.com/"
+  },
+  {
+    "id": "gunship-battle-helicopter-3d",
+    "title": "GUNSHIP BATTLE: Helicopter 3D",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/GunshipBattle-Helicopter3D.png",
+    "rating": 5.6,
+    "gameplay": "Blurry Memories",
+    "platforms": [
+      "Mobile"
+    ],
+    "url": "https://play.google.com/store/apps/details?id=com.theonegames.gunshipbattle"
+  },
+  {
+    "id": "tom-clancys-the-division-resurgence",
+    "title": "Tom Clancy's The Division Resurgence",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TomClancy'sTheDivisionResurgence.png",
+    "rating": 5.1,
+    "gameplay": "Sniper Expert // Liberty and Justice for All",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.ubisoft.com/en-gb/game/the-division/resurgence#6Q4BAYofeRBepptV7jEqPO"
+  },
+  {
+    "id": "caravan-sandwitch",
+    "title": "Caravan SandWitch",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/CaravanSandWitch.png",
+    "rating": 9.1,
+    "gameplay": "All Achievements // 100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://caravansandwitch.com/"
+  },
+  {
+    "id": "asgsg",
+    "title": "A Simple Garbage Sorting Game",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ASimpleGarbageSortingGame.jpg",
+    "rating": 7.9,
+    "gameplay": "All Achievements // 100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://store.steampowered.com/app/3384180/A_Simple_Garbage_Sorting_Game/"
+  },
+  {
+    "id": "viewfinder",
+    "title": "Viewfinder",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Viewfinder.jpg",
+    "rating": 9,
+    "gameplay": "#JusticeforCait // 100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://thunderfulgames.com/games/viewfinder/"
+  },
+  {
+    "id": "vtm-bloodlines2",
+    "title": "Vampire: The Masquerade – Bloodlines 2",
+    "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/VampireTheMasquerade%E2%80%93Bloodlines2.png",
+    "rating": 7.2,
+    "gameplay": "The Streets Incarnadine // 100%",
+    "platforms": [
+      "PC"
+    ],
+    "url": "https://www.paradoxinteractive.com/games/vampire-the-masquerade-bloodlines-2/about"
   }
 ]
