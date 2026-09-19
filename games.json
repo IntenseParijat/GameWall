@@ -8,7 +8,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.minecraft.net/"
+    "url": "https://www.minecraft.net/",
+    "description": "",
+    "abbreviations": "MC, sandbox, survival, creative, adventure, single player, singleplayer, multiplayer"
   },
   {
     "id": "minecraftpe",
@@ -19,7 +21,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.mojang.minecraftpe"
+    "url": "https://play.google.com/store/apps/details?id=com.mojang.minecraftpe",
+    "description": "",
+    "abbreviations": "MCPE, MC PE, Minecraft Pocket Edition, Minecraft Mobile, sandbox, survival, creative, adventure, single player, singleplayer, multiplayer"
   },
   {
     "id": "destiny-2",
@@ -30,7 +34,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.bungie.net/7/en/Destiny"
+    "url": "https://www.bungie.net/7/en/Destiny",
+    "description": "",
+    "abbreviations": "action, fps, first person shooter, looter shooter, RPG, role playing game, online, multiplayer, co-op, coop, cooperative"
   },
   {
     "id": "roblox",
@@ -41,18 +47,22 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.roblox.com/home"
+    "url": "https://www.roblox.com/home",
+    "description": "Roblox Test",
+    "abbreviations": "sandbox, platform, adventure, simulation, multiplayer, single player, singleplayer, user generated, UGC"
   },
   {
     "id": "gtav",
     "title": "Grand Theft Auto 5",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/gtav.jpg",
     "rating": 9.6,
-    "gameplay": "Expert",
+    "gameplay": "Expert // 100%",
     "platforms": [
       "PC"
     ],
-    "url": "https://www.rockstargames.com/gta-v"
+    "url": "https://www.rockstargames.com/gta-v",
+    "description": "",
+    "abbreviations": "GTA 5, GTA V, GTAV, GTA5, GTA, open world, action, adventure, actionadventure, action adventure, action-adventure, openworld, single player, singleplayer, multiplayer, tps, third person shooter, story"
   },
   {
     "id": "wuwa",
@@ -64,7 +74,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://wutheringwaves.kurogames.com/"
+    "url": "https://wutheringwaves.kurogames.com/",
+    "description": "",
+    "abbreviations": "wuwa, gacha, action, RPG, role playing game, action RPG, open world, openworld, single player, singleplayer"
   },
   {
     "id": "valorant",
@@ -75,7 +87,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://playvalorant.com/"
+    "url": "https://playvalorant.com/",
+    "description": "",
+    "abbreviations": "fps, first person shooter, tactical shooter, hero shooter, competitive, multiplayer, team-based, online"
   },
   {
     "id": "genshin-impact",
@@ -87,7 +101,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://genshin.hoyoverse.com/"
+    "url": "https://genshin.hoyoverse.com/",
+    "description": "",
+    "abbreviations": "action, RPG, role playing game, action RPG, open world, openworld, gacha, adventure, single player, singleplayer, story"
   },
   {
     "id": "hsr",
@@ -98,7 +114,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://hsr.hoyoverse.com/"
+    "url": "https://hsr.hoyoverse.com/",
+    "description": "",
+    "abbreviations": "hsr, turn based, turn-based, turnbased, RPG, role playing game, JRPG, Japanese role playing game, gacha, strategy, single player, singleplayer, story"
   },
   {
     "id": "honkai-impact-3rd",
@@ -110,7 +128,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://honkaiimpact3.hoyoverse.com/"
+    "url": "https://honkaiimpact3.hoyoverse.com/",
+    "description": "",
+    "abbreviations": "hi3, action, RPG, role playing game, action RPG, gacha, hack and slash, single player, singleplayer, story"
   },
   {
     "id": "zzz",
@@ -122,7 +142,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://zenless.hoyoverse.com/"
+    "url": "https://zenless.hoyoverse.com/",
+    "description": "",
+    "abbreviations": "zzz, action, RPG, role playing game, action RPG, gacha, hack and slash, single player, singleplayer, story"
   },
   {
     "id": "tof",
@@ -133,51 +155,61 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.toweroffantasy-global.com/"
+    "url": "https://www.toweroffantasy-global.com/",
+    "description": "",
+    "abbreviations": "tof, action, RPG, role playing game, MMORPG, massively multiplayer online RPG, open world, openworld, gacha, multiplayer, single player, singleplayer"
   },
   {
     "id": "dying-light",
     "title": "Dying Light",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DyingLight.jpg",
     "rating": 9.8,
-    "gameplay": "Brecken's Boss",
+    "gameplay": "Brecken's Boss // 100%",
     "platforms": [
       "PC"
     ],
-    "url": "https://dyinglightgame.com/dying-light-1"
+    "url": "https://dyinglightgame.com/dying-light-1",
+    "description": "",
+    "abbreviations": "dl, action, adventure, actionadventure, action adventure, action-adventure, survival horror, horror, open world, openworld, FPS, first person shooter, zombie, single player, singleplayer, multiplayer, co-op, coop, cooperative, story"
   },
   {
     "id": "dying-light-the-following",
     "title": "Dying Light: The Following",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DyingLight-TheFollowing.png",
     "rating": 9.5,
-    "gameplay": "Madness Survivor",
+    "gameplay": "Madness Survivor // 100%",
     "platforms": [
       "PC"
     ],
-    "url": "https://dyinglightgame.com/dying-light-1"
+    "url": "https://dyinglightgame.com/dying-light-1",
+    "description": "",
+    "abbreviations": "dl, dlc, action, adventure, actionadventure, action adventure, action-adventure, survival horror, horror, open world, openworld, FPS, first person shooter, zombie, single player, singleplayer, multiplayer, co-op, coop, cooperative, story"
   },
   {
     "id": "dying-light-2-stay-human",
     "title": "Dying Light 2: Stay Human",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DyingLight2.jpg",
     "rating": 9.4,
-    "gameplay": "#SurvivorsFaction",
+    "gameplay": "#SurvivorsFaction // 100%",
     "platforms": [
       "PC"
     ],
-    "url": "https://dyinglightgame.com/dying-light-2"
+    "url": "https://dyinglightgame.com/dying-light-2",
+    "description": "",
+    "abbreviations": "dl2, action, adventure, actionadventure, action adventure, action-adventure, survival horror, horror, open world, openworld, FPS, first person shooter, zombie, RPG, role playing game, single player, singleplayer, multiplayer, co-op, coop, cooperative, story"
   },
   {
     "id": "dying-light-the-beast",
     "title": "Dying Light: The Beast",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DyingLight-TheBeast.jpg",
     "rating": 9.7,
-    "gameplay": "Post-Apocalyptic Critic",
+    "gameplay": "Post-Apocalyptic Critic // 100%",
     "platforms": [
       "PC"
     ],
-    "url": "https://dyinglightgame.com/the-beast"
+    "url": "https://dyinglightgame.com/the-beast",
+    "description": "",
+    "abbreviations": "dl the beast, action, adventure, actionadventure, action adventure, action-adventure, survival horror, horror, open world, openworld, FPS, first person shooter, zombie, single player, singleplayer, multiplayer, co-op, coop, cooperative, story"
   },
   {
     "id": "stray",
@@ -188,7 +220,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://annapurnainteractive.com/games/stray"
+    "url": "https://annapurnainteractive.com/games/stray",
+    "description": "",
+    "abbreviations": "adventure, action, puzzle, narrative, story, single player, singleplayer, third person, exploration"
   },
   {
     "id": "nte",
@@ -199,7 +233,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://nte.perfectworld.com/"
+    "url": "https://nte.perfectworld.com/",
+    "description": "",
+    "abbreviations": "nte, action, RPG, role playing game, action RPG, open world, openworld, gacha, adventure, single player, singleplayer, story"
   },
   {
     "id": "mongil-star-dive",
@@ -210,18 +246,22 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://stardive.netmarble.com/"
+    "url": "https://stardive.netmarble.com/",
+    "description": "",
+    "abbreviations": "action, RPG, role playing game, action RPG, gacha, adventure, single player, singleplayer"
   },
   {
     "id": "the-crew-motorfest",
     "title": "The Crew Motorfest",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TheCrewMotorfest.jpg",
     "rating": 8.6,
-    "gameplay": "Max Verstappen",
+    "gameplay": "Max Verstappen // 100%",
     "platforms": [
       "PC"
     ],
-    "url": "https://www.ubisoft.com/en-us/game/the-crew/motorfest"
+    "url": "https://www.ubisoft.com/en-us/game/the-crew/motorfest",
+    "description": "",
+    "abbreviations": "tcm, racing, open world, openworld, arcade racing, driving, multiplayer, single player, singleplayer"
   },
   {
     "id": "clair-obscur-expedition-33",
@@ -232,7 +272,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.expedition33.com/"
+    "url": "https://www.expedition33.com/",
+    "description": "",
+    "abbreviations": "RPG, role playing game, turn based, turn-based, turnbased, JRPG, Japanese role playing game, story, single player, singleplayer, adventure"
   },
   {
     "id": "arknights-endfield",
@@ -244,7 +286,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://endfield.gryphline.com/"
+    "url": "https://endfield.gryphline.com/",
+    "description": "",
+    "abbreviations": "ak endfield, RPG, role playing game, action RPG, strategy, gacha, open world, openworld, single player, singleplayer, story"
   },
   {
     "id": "wwm",
@@ -255,7 +299,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.wherewindsmeetgame.com/"
+    "url": "https://www.wherewindsmeetgame.com/",
+    "description": "",
+    "abbreviations": "wwm, action, RPG, role playing game, open world, openworld, martial arts, adventure, single player, singleplayer, multiplayer, story"
   },
   {
     "id": "dna",
@@ -267,7 +313,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://duetnightabyss.dna-panstudio.com/"
+    "url": "https://duetnightabyss.dna-panstudio.com/",
+    "description": "",
+    "abbreviations": "dna, action, RPG, role playing game, action RPG, gacha, adventure, single player, singleplayer, story"
   },
   {
     "id": "phasmophobia",
@@ -278,7 +326,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://kineticgames.co.uk/phasmophobia"
+    "url": "https://kineticgames.co.uk/phasmophobia",
+    "description": "",
+    "abbreviations": "horror, survival horror, co-op, coop, cooperative, multiplayer, investigation, psychological horror"
   },
   {
     "id": "god-of-war-ragnarok",
@@ -289,7 +339,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/2322010/God_of_War_Ragnarok/"
+    "url": "https://store.steampowered.com/app/2322010/God_of_War_Ragnarok/",
+    "description": "",
+    "abbreviations": "GOW Ragnarok, GOW:R, action, adventure, actionadventure, action adventure, action-adventure, action RPG, RPG, role playing game, hack and slash, third person, TPS, third person shooter, single player, singleplayer, story"
   },
   {
     "id": "ghost-of-tsushima-directors-cut",
@@ -300,7 +352,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.playstation.com/en-in/games/ghost-of-tsushima/pc/"
+    "url": "https://www.playstation.com/en-in/games/ghost-of-tsushima/pc/",
+    "description": "",
+    "abbreviations": "action, adventure, open world, openworld, stealth, samurai, TPS, third person shooter, third person, actionadventure, action adventure, action-adventure, single player, singleplayer, story"
   },
   {
     "id": "gris",
@@ -311,7 +365,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/683320/GRIS/"
+    "url": "https://store.steampowered.com/app/683320/GRIS/",
+    "description": "",
+    "abbreviations": "platformer, adventure, puzzle, indie, narrative, story, single player, singleplayer"
   },
   {
     "id": "asphalt-nitro",
@@ -322,7 +378,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://mkt-web.gameloft.com/en/game/asphalt-nitro-mobile"
+    "url": "https://mkt-web.gameloft.com/en/game/asphalt-nitro-mobile",
+    "description": "",
+    "abbreviations": "racing, arcade racing, driving, single player, singleplayer, multiplayer"
   },
   {
     "id": "asphalt-xtreme",
@@ -334,7 +392,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.netflix.NGP.AsphaltXtreme"
+    "url": "https://play.google.com/store/apps/details?id=com.netflix.NGP.AsphaltXtreme",
+    "description": "",
+    "abbreviations": "racing, off-road, arcade racing, driving, single player, singleplayer, multiplayer"
   },
   {
     "id": "asphalt-8-airborne",
@@ -346,7 +406,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://www.gameloft.com/game/asphalt-8"
+    "url": "https://www.gameloft.com/game/asphalt-8",
+    "description": "",
+    "abbreviations": "racing, arcade racing, driving, single player, singleplayer, multiplayer"
   },
   {
     "id": "asphalt-9-legends",
@@ -358,7 +420,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://asphaltlegends.com/"
+    "url": "https://asphaltlegends.com/",
+    "description": "",
+    "abbreviations": "racing, arcade racing, driving, single player, singleplayer, multiplayer"
   },
   {
     "id": "csgo",
@@ -369,7 +433,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/4465480/CounterStrikeGlobal_Offensive/"
+    "url": "https://store.steampowered.com/app/4465480/CounterStrikeGlobal_Offensive/",
+    "description": "",
+    "abbreviations": "CSGO, CS:GO, FPS, first person shooter, tactical shooter, competitive, multiplayer, team-based, online"
   },
   {
     "id": "cs2",
@@ -380,7 +446,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/730/CounterStrike_2/"
+    "url": "https://store.steampowered.com/app/730/CounterStrike_2/",
+    "description": "",
+    "abbreviations": "CS2, CS 2, FPS, first person shooter, tactical shooter, competitive, multiplayer, team-based, online"
   },
   {
     "id": "watch-dogs-2",
@@ -391,7 +459,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.ubisoft.com/en-us/games/watch-dogs-2"
+    "url": "https://www.ubisoft.com/en-us/games/watch-dogs-2",
+    "description": "",
+    "abbreviations": "action, adventure, open world, openworld, stealth, TPS, third person shooter, third person, single player, singleplayer, multiplayer, story"
   },
   {
     "id": "among-us",
@@ -403,7 +473,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://www.innersloth.com/games/among-us/"
+    "url": "https://www.innersloth.com/games/among-us/",
+    "description": "",
+    "abbreviations": "social deduction, party, multiplayer, online, co-op, coop, cooperative, casual"
   },
   {
     "id": "rocket-league",
@@ -414,7 +486,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.rocketleague.com/"
+    "url": "https://www.rocketleague.com/",
+    "description": "",
+    "abbreviations": "sports, racing, arcade, multiplayer, competitive, online, football, soccer"
   },
   {
     "id": "rocket-league-sideswipe",
@@ -425,7 +499,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://sideswipe.rocketleague.com/"
+    "url": "https://sideswipe.rocketleague.com/",
+    "description": "",
+    "abbreviations": "sports, racing, arcade, multiplayer, competitive, online, football, soccer"
   },
   {
     "id": "fh4",
@@ -436,7 +512,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/1293830/Forza_Horizon_4/"
+    "url": "https://store.steampowered.com/app/1293830/Forza_Horizon_4/",
+    "description": "",
+    "abbreviations": "racing, open world, openworld, driving, simulation, single player, singleplayer, multiplayer, online"
   },
   {
     "id": "fh6",
@@ -447,7 +525,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://forza.net/forzahorizon6"
+    "url": "https://forza.net/forzahorizon6",
+    "description": "",
+    "abbreviations": "racing, open world, openworld, driving, simulation, single player, singleplayer, multiplayer, online"
   },
   {
     "id": "teardown",
@@ -458,7 +538,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://teardowngame.com/"
+    "url": "https://teardowngame.com/",
+    "description": "",
+    "abbreviations": "action, sandbox, heist, destruction, FPS, first person shooter, puzzle, single player, singleplayer, multiplayer"
   },
   {
     "id": "trackmania",
@@ -469,7 +551,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.trackmania.com/"
+    "url": "https://www.trackmania.com/",
+    "description": "",
+    "abbreviations": "racing, arcade racing, time trial, competitive, multiplayer, single player, singleplayer"
   },
   {
     "id": "fortnite",
@@ -481,7 +565,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://www.fortnite.com/"
+    "url": "https://www.fortnite.com/",
+    "description": "",
+    "abbreviations": "battle royale, TPS, third person shooter, shooter, building, survival, multiplayer, online, single player, singleplayer, sandbox"
   },
   {
     "id": "pragmata-sketchbook-demo",
@@ -492,7 +578,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/3357650/PRAGMATA/"
+    "url": "https://store.steampowered.com/app/3357650/PRAGMATA/",
+    "description": "",
+    "abbreviations": "action, adventure, sci-fi, puzzle, single player, singleplayer, story, demo"
   },
   {
     "id": "marvel-rivals",
@@ -503,7 +591,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.marvelrivals.com/"
+    "url": "https://www.marvelrivals.com/",
+    "description": "",
+    "abbreviations": "hero shooter, TPS, third person shooter, action, multiplayer, competitive, online, team-based"
   },
   {
     "id": "control",
@@ -514,18 +604,22 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.remedygames.com/games/control"
+    "url": "https://www.remedygames.com/games/control",
+    "description": "",
+    "abbreviations": "action, adventure, TPS, third person shooter, third person, shooter, supernatural, single player, singleplayer, story"
   },
   {
     "id": "naraka-bladepoint",
     "title": "Naraka: Bladepoint",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Naraka-Bladepoint.webp",
     "rating": 6.2,
-    "gameplay": "I am Lost // 100%",
+    "gameplay": "I am Lost",
     "platforms": [
       "PC"
     ],
-    "url": "https://www.narakathegame.com/"
+    "url": "https://www.narakathegame.com/",
+    "description": "",
+    "abbreviations": "battle royale, action, melee, martial arts, multiplayer, competitive, online, TPS, third person shooter, third person"
   },
   {
     "id": "2xko",
@@ -536,18 +630,22 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://2xko.riotgames.com/"
+    "url": "https://2xko.riotgames.com/",
+    "description": "",
+    "abbreviations": "fighting, action, competitive, multiplayer, online, 2D fighting"
   },
   {
     "id": "the-finals",
     "title": "The Finals",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/TheFinals.png",
     "rating": 6.8,
-    "gameplay": "Exploited by Chinese",
+    "gameplay": "Killed by Chinese Players",
     "platforms": [
       "PC"
     ],
-    "url": "https://www.reachthefinals.com/"
+    "url": "https://www.reachthefinals.com/",
+    "description": "",
+    "abbreviations": "FPS, first person shooter, hero shooter, shooter, multiplayer, competitive, online, team-based"
   },
   {
     "id": "just-cause-4",
@@ -558,7 +656,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/517630/Just_Cause_4_Reloaded/"
+    "url": "https://store.steampowered.com/app/517630/Just_Cause_4_Reloaded/",
+    "description": "",
+    "abbreviations": "action, adventure, open world, openworld, TPS, third person shooter, third person, sandbox, shooter, single player, singleplayer, story"
   },
   {
     "id": "dead-island-2",
@@ -569,7 +669,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.deepsilver.com/games/dead-island-2"
+    "url": "https://www.deepsilver.com/games/dead-island-2",
+    "description": "",
+    "abbreviations": "action, horror, survival horror, zombie, FPS, first person shooter, RPG, role playing game, co-op, coop, cooperative, multiplayer, single player, singleplayer, story"
   },
   {
     "id": "pokemmo",
@@ -580,7 +682,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://pokemmo.com/"
+    "url": "https://pokemmo.com/",
+    "description": "",
+    "abbreviations": "MMORPG, massively multiplayer online RPG, RPG, role playing game, adventure, online, multiplayer, single player, singleplayer"
   },
   {
     "id": "battlefield-redsec",
@@ -591,7 +695,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.ea.com/games/battlefield/redsec"
+    "url": "https://www.ea.com/games/battlefield/redsec",
+    "description": "",
+    "abbreviations": "FPS, first person shooter, battle royale, shooter, multiplayer, online, team-based"
   },
   {
     "id": "battlefield-v",
@@ -602,7 +708,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.ea.com/games/battlefield/battlefield-5"
+    "url": "https://www.ea.com/games/battlefield/battlefield-5",
+    "description": "",
+    "abbreviations": "FPS, first person shooter, shooter, war, multiplayer, online, single player, singleplayer, story"
   },
   {
     "id": "marathon-server-slam",
@@ -613,7 +721,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.marathonthegame.com/"
+    "url": "https://www.marathonthegame.com/",
+    "description": "",
+    "abbreviations": "FPS, first person shooter, extraction shooter, sci-fi, multiplayer, online, competitive"
   },
   {
     "id": "neuron-activation-demo",
@@ -624,7 +734,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/3978110/Neuron_Activation/"
+    "url": "https://store.steampowered.com/app/3978110/Neuron_Activation/",
+    "description": "",
+    "abbreviations": "platformer, puzzle, indie, single player, singleplayer, demo"
   },
   {
     "id": "ghostrunner",
@@ -635,7 +747,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://omlgames.com/en/game/ghostrunner-2/"
+    "url": "https://omlgames.com/en/game/ghostrunner-2/",
+    "description": "",
+    "abbreviations": "action, platformer, FPS, first person shooter, cyberpunk, single player, singleplayer, story"
   },
   {
     "id": "ghostrunner-2",
@@ -646,7 +760,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://omlgames.com/en/game/ghostrunner-2-3/"
+    "url": "https://omlgames.com/en/game/ghostrunner-2-3/",
+    "description": "",
+    "abbreviations": "action, platformer, FPS, first person shooter, cyberpunk, single player, singleplayer, story"
   },
   {
     "id": "world-of-tanks-blitz",
@@ -657,7 +773,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://wotblitz.com/"
+    "url": "https://wotblitz.com/",
+    "description": "",
+    "abbreviations": "wot blitz, action, tank, simulation, multiplayer, competitive, online"
   },
   {
     "id": "world-of-warships",
@@ -668,7 +786,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://wargaming.net/en/games/wows"
+    "url": "https://wargaming.net/en/games/wows",
+    "description": "",
+    "abbreviations": "wow, action, naval, simulation, strategy, multiplayer, competitive, online"
   },
   {
     "id": "world-war-z-aftermath",
@@ -679,7 +799,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://wwzgame.com/"
+    "url": "https://wwzgame.com/",
+    "description": "",
+    "abbreviations": "wwz, action, FPS, first person shooter, zombie, co-op, coop, cooperative, multiplayer, single player, singleplayer, story"
   },
   {
     "id": "strinova",
@@ -690,7 +812,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.strinova.com/"
+    "url": "https://www.strinova.com/",
+    "description": "",
+    "abbreviations": "TPS, third person shooter, hero shooter, tactical shooter, multiplayer, competitive, online, team-based"
   },
   {
     "id": "fragpunk",
@@ -701,7 +825,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.fragpunk.com/"
+    "url": "https://www.fragpunk.com/",
+    "description": "",
+    "abbreviations": "FPS, first person shooter, hero shooter, tactical shooter, multiplayer, competitive, online"
   },
   {
     "id": "once-human",
@@ -712,7 +838,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.oncehuman.game/"
+    "url": "https://www.oncehuman.game/",
+    "description": "",
+    "abbreviations": "survival, open world, openworld, action RPG, RPG, role playing game, crafting, multiplayer, online, single player, singleplayer"
   },
   {
     "id": "absolute-drift-zen-edition",
@@ -723,7 +851,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.absolutedrift.com/"
+    "url": "https://www.absolutedrift.com/",
+    "description": "",
+    "abbreviations": "racing, arcade racing, driving, simulation, single player, singleplayer, time trial"
   },
   {
     "id": "tomb-raider-goty-edition",
@@ -734,7 +864,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.tombraider.com/products/games/tomb-raider-game-of-the-year-edition"
+    "url": "https://www.tombraider.com/products/games/tomb-raider-game-of-the-year-edition",
+    "description": "",
+    "abbreviations": "action, adventure, actionadventure, action adventure, action-adventure, TPS, third person shooter, third person, shooter, exploration, puzzle, survival, single player, singleplayer, story"
   },
   {
     "id": "rise-of-the-tomb-raider",
@@ -745,7 +877,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.tombraider.com/products/games/rise-of-the-tomb-raider-20-year-celebration"
+    "url": "https://www.tombraider.com/products/games/rise-of-the-tomb-raider-20-year-celebration",
+    "description": "",
+    "abbreviations": "action, adventure, actionadventure, action adventure, action-adventure, TPS, third person shooter, third person, shooter, exploration, puzzle, survival, single player, singleplayer, story"
   },
   {
     "id": "shadow-of-the-tomb-raider",
@@ -756,7 +890,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.tombraider.com/products/games/shadow-of-the-tomb-raider-definitive-edition"
+    "url": "https://www.tombraider.com/products/games/shadow-of-the-tomb-raider-definitive-edition",
+    "description": "",
+    "abbreviations": "action, adventure, actionadventure, action adventure, action-adventure, TPS, third person shooter, third person, shooter, stealth, exploration, puzzle, survival, single player, singleplayer, story"
   },
   {
     "id": "ff",
@@ -768,7 +904,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://ff.garena.com"
+    "url": "https://ff.garena.com",
+    "description": "",
+    "abbreviations": "ff, battle royale, TPS, third person shooter, shooter, survival, multiplayer, online"
   },
   {
     "id": "ff-max",
@@ -780,7 +918,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.dts.freefiremax"
+    "url": "https://play.google.com/store/apps/details?id=com.dts.freefiremax",
+    "description": "",
+    "abbreviations": "ffmax, battle royale, TPS, third person shooter, shooter, survival, multiplayer, online"
   },
   {
     "id": "codm",
@@ -792,7 +932,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://www.callofduty.com/mobile"
+    "url": "https://www.callofduty.com/mobile",
+    "description": "",
+    "abbreviations": "CODM, COD Mobile, CODMobile, callofduty, FPS, first person shooter, TPS, third person shooter, shooter, battle royale, multiplayer, online, competitive, single player, singleplayer"
   },
   {
     "id": "codm-wz",
@@ -804,7 +946,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://www.callofduty.com/blog/2024/03/call-of-duty-warzone-mobile-official-live-worldwide-announcement"
+    "url": "https://www.callofduty.com/blog/2024/03/call-of-duty-warzone-mobile-official-live-worldwide-announcement",
+    "description": "",
+    "abbreviations": "COD WZM, WZM, CODWZM, callofduty, FPS, first person shooter, TPS, third person shooter, battle royale, shooter, multiplayer, online"
   },
   {
     "id": "cod-wz",
@@ -815,7 +959,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.callofduty.com/warzone"
+    "url": "https://www.callofduty.com/warzone",
+    "description": "",
+    "abbreviations": "COD WZ, CODWZ, callofduty, FPS, first person shooter, TPS, third person shooter, battle royale, shooter, multiplayer, online"
   },
   {
     "id": "pubgm",
@@ -827,7 +973,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://www.pubgmobile.com/"
+    "url": "https://www.pubgmobile.com/",
+    "description": "",
+    "abbreviations": "pubg, pubgmobile, battle royale, TPS, third person shooter, FPS, first person shooter, shooter, survival, multiplayer, online"
   },
   {
     "id": "pubgm-lite",
@@ -838,7 +986,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.tencent.igfit"
+    "url": "https://play.google.com/store/apps/details?id=com.tencent.igfit",
+    "description": "",
+    "abbreviations": "pubg, pubgmobilelite, pubgmlite, pubgm lite, pubg lite, pubglite, battle royale, TPS, third person shooter, FPS, first person shooter, shooter, survival, multiplayer, online"
   },
   {
     "id": "bgmi",
@@ -850,7 +1000,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://www.battlegroundsmobileindia.com/"
+    "url": "https://www.battlegroundsmobileindia.com/",
+    "description": "",
+    "abbreviations": "pubg, pubgmobile, battle royale, TPS, third person shooter, FPS, first person shooter, shooter, survival, multiplayer, online"
   },
   {
     "id": "pubg",
@@ -861,7 +1013,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://pubg.com/"
+    "url": "https://pubg.com/",
+    "description": "",
+    "abbreviations": "battle royale, TPS, third person shooter, FPS, first person shooter, shooter, survival, multiplayer, online"
   },
   {
     "id": "pubg-new-state",
@@ -873,7 +1027,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://newstate.pubg.com/"
+    "url": "https://newstate.pubg.com/",
+    "description": "",
+    "abbreviations": "pubg, pubgmobile, pubgnewstate, pubg new state, pubg newstate, battle royale, TPS, third person shooter, FPS, first person shooter, shooter, survival, multiplayer, online"
   },
   {
     "id": "hitman",
@@ -884,7 +1040,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://ioi.dk/hitman"
+    "url": "https://ioi.dk/hitman",
+    "description": "",
+    "abbreviations": "agent 47, agent47, stealth, action, adventure, TPS, third person shooter, third person, assassination, single player, singleplayer, story"
   },
   {
     "id": "hitman-3",
@@ -895,7 +1053,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://ioi.dk/hitman"
+    "url": "https://ioi.dk/hitman",
+    "description": "",
+    "abbreviations": "agent 47, agent47, hitmaniii, hitman iii, stealth, action, adventure, TPS, third person shooter, third person, assassination, single player, singleplayer, story"
   },
   {
     "id": "apex-legends",
@@ -906,7 +1066,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.ea.com/games/apex-legends/apex-legends"
+    "url": "https://www.ea.com/games/apex-legends/apex-legends",
+    "description": "",
+    "abbreviations": "battle royale, hero shooter, FPS, first person shooter, shooter, multiplayer, online, competitive, team-based"
   },
   {
     "id": "apex-legends-mobile",
@@ -917,7 +1079,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.ea.gp.apexlegendsmobilefps"
+    "url": "https://play.google.com/store/apps/details?id=com.ea.gp.apexlegendsmobilefps",
+    "description": "",
+    "abbreviations": "battle royale, hero shooter, FPS, first person shooter, shooter, multiplayer, online, competitive, team-based"
   },
   {
     "id": "indus-br",
@@ -929,29 +1093,35 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://www.indusgame.com/"
+    "url": "https://www.indusgame.com/",
+    "description": "",
+    "abbreviations": "primerush, prime rush, battle royale, TPS, third person shooter, shooter, multiplayer, online, Indian game"
   },
   {
     "id": "vaporwave-drift",
     "title": "Vaporwave Drift",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/VaporwaveDrift.webp",
     "rating": 6.1,
-    "gameplay": "Puzzled Racer",
+    "gameplay": "Hallucinating and Lost",
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/1098200/Vaporwave_Drift/"
+    "url": "https://store.steampowered.com/app/1098200/Vaporwave_Drift/",
+    "description": "",
+    "abbreviations": "racing, arcade racing, driving, indie, single player, singleplayer"
   },
   {
     "id": "lost-light",
     "title": "Lost Light",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/LostLight.webp",
     "rating": 2.9,
-    "gameplay": "Phone er",
+    "gameplay": "Phone Heater",
     "platforms": [
       "Mobile"
     ],
-    "url": "https://www.lostlight.game/"
+    "url": "https://www.lostlight.game/",
+    "description": "",
+    "abbreviations": "extraction shooter, FPS, first person shooter, survival, shooter, multiplayer, online"
   },
   {
     "id": "sky-children-of-the-light",
@@ -963,7 +1133,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://www.thatskygame.com/"
+    "url": "https://www.thatskygame.com/",
+    "description": "",
+    "abbreviations": "adventure, social, exploration, MMO, massively multiplayer online, multiplayer, co-op, coop, cooperative, single player, singleplayer, story"
   },
   {
     "id": "shapez",
@@ -974,7 +1146,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://shapez.io/"
+    "url": "https://shapez.io/",
+    "description": "",
+    "abbreviations": "factory, automation, puzzle, strategy, simulation, single player, singleplayer"
   },
   {
     "id": "epistory-typing-chronicles",
@@ -985,7 +1159,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.epistorygame.com/"
+    "url": "https://www.epistorygame.com/",
+    "description": "",
+    "abbreviations": "typing, adventure, puzzle, action, single player, singleplayer, story"
   },
   {
     "id": "warpips",
@@ -996,11 +1172,13 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/1291010/Warpips/"
+    "url": "https://store.steampowered.com/app/1291010/Warpips/",
+    "description": "",
+    "abbreviations": "strategy, tactical, turn based, turn-based, turnbased, single player, singleplayer, multiplayer"
   },
   {
     "id": "coc",
-    "title": "COC (Clash of Clans)",
+    "title": "Clash of Clans",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/ClashofClans.jpg",
     "rating": 5.9,
     "gameplay": "Experienced Baby",
@@ -1008,18 +1186,22 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://store.supercell.com/clashofclans"
+    "url": "https://store.supercell.com/clashofclans",
+    "description": "",
+    "abbreviations": "COC, strategy, mobile strategy, base building, management, multiplayer, online"
   },
   {
     "id": "doors-paradox",
     "title": "Doors: Paradox",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/DoorsParadox.jpg",
     "rating": 4.8,
-    "gameplay": "100%",
+    "gameplay": "Speedrunner // 100%",
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/1622770/Doors_Paradox/"
+    "url": "https://store.steampowered.com/app/1622770/Doors_Paradox/",
+    "description": "",
+    "abbreviations": "puzzle, adventure, escape room, point and click, single player, singleplayer"
   },
   {
     "id": "qube-2",
@@ -1030,7 +1212,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/359100/QUBE_2/"
+    "url": "https://store.steampowered.com/app/359100/QUBE_2/",
+    "description": "",
+    "abbreviations": "qube 2, qube2, puzzle, FPS, first person shooter, first person, adventure, single player, singleplayer, story"
   },
   {
     "id": "lisa-the-joyful",
@@ -1041,7 +1225,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/379310/LISA_The_Joyful/"
+    "url": "https://store.steampowered.com/app/379310/LISA_The_Joyful/",
+    "description": "",
+    "abbreviations": "RPG, role playing game, JRPG, Japanese role playing game, turn based, turn-based, turnbased, adventure, story, single player, singleplayer"
   },
   {
     "id": "mudrunner",
@@ -1052,7 +1238,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/675010/MudRunner/"
+    "url": "https://store.steampowered.com/app/675010/MudRunner/",
+    "description": "",
+    "abbreviations": "simulation, driving, off-road, vehicle simulation, single player, singleplayer, multiplayer, co-op, coop, cooperative"
   },
   {
     "id": "fall-guys",
@@ -1063,7 +1251,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.fallguys.com/"
+    "url": "https://www.fallguys.com/",
+    "description": "",
+    "abbreviations": "platformer, party, casual, battle royale, multiplayer, online"
   },
   {
     "id": "stumble-guys",
@@ -1074,7 +1264,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://www.stumbleguys.com/"
+    "url": "https://www.stumbleguys.com/",
+    "description": "",
+    "abbreviations": "platformer, party, casual, battle royale, multiplayer, online"
   },
   {
     "id": "alba-a-wildlife-adventure",
@@ -1085,7 +1277,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.albawildlife.com/"
+    "url": "https://www.albawildlife.com/",
+    "description": "",
+    "abbreviations": "adventure, simulation, exploration, photography, family, single player, singleplayer, story"
   },
   {
     "id": "unrailed",
@@ -1096,7 +1290,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/1016920/Unrailed/"
+    "url": "https://store.steampowered.com/app/1016920/Unrailed/",
+    "description": "",
+    "abbreviations": "co-op, coop, cooperative, strategy, simulation, management, survival, multiplayer, single player, singleplayer"
   },
   {
     "id": "just-die-already",
@@ -1107,7 +1303,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/979070/Just_Die_Already/"
+    "url": "https://store.steampowered.com/app/979070/Just_Die_Already/",
+    "description": "",
+    "abbreviations": "action, comedy, sandbox, open world, openworld, multiplayer, single player, singleplayer"
   },
   {
     "id": "happy-wheels",
@@ -1119,7 +1317,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://totaljerkface.com/happy_wheels.tjf"
+    "url": "https://totaljerkface.com/happy_wheels.tjf",
+    "description": "",
+    "abbreviations": "platformer, physics, casual, arcade, single player, singleplayer"
   },
   {
     "id": "abzu",
@@ -1130,7 +1330,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://abzugame.com/"
+    "url": "https://abzugame.com/",
+    "description": "",
+    "abbreviations": "abzu, adventure, exploration, simulation, underwater, narrative, story, single player, singleplayer"
   },
   {
     "id": "pc-building-simulator",
@@ -1141,7 +1343,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.pcbuildingsim.com/"
+    "url": "https://www.pcbuildingsim.com/",
+    "description": "",
+    "abbreviations": "simulation, management, educational, single player, singleplayer"
   },
   {
     "id": "the-vanishing-of-ethan-carter",
@@ -1152,7 +1356,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/258520/The_Vanishing_of_Ethan_Carter/"
+    "url": "https://store.steampowered.com/app/258520/The_Vanishing_of_Ethan_Carter/",
+    "description": "",
+    "abbreviations": "adventure, walking simulator, mystery, horror, puzzle, narrative, story, single player, singleplayer"
   },
   {
     "id": "the-vanishing-of-ethan-carter-redux",
@@ -1163,7 +1369,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/400430/The_Vanishing_of_Ethan_Carter_Redux/"
+    "url": "https://store.steampowered.com/app/400430/The_Vanishing_of_Ethan_Carter_Redux/",
+    "description": "",
+    "abbreviations": "adventure, walking simulator, mystery, horror, puzzle, narrative, story, single player, singleplayer"
   },
   {
     "id": "pine",
@@ -1174,18 +1382,22 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/1042780/Pine/"
+    "url": "https://store.steampowered.com/app/1042780/Pine/",
+    "description": "",
+    "abbreviations": "action, adventure, open world, openworld, RPG, role playing game, exploration, single player, singleplayer, story"
   },
   {
     "id": "john-carpenters-toxic-commando",
     "title": "John Carpenter's Toxic Commando",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/JohnCarpenter'sToxicCommando.png",
     "rating": 4.7,
-    "gameplay": "Demo",
+    "gameplay": "Demo // 100%",
     "platforms": [
       "PC"
     ],
-    "url": "https://www.focus-entmt.com/en/games/john-carpenters-toxic-commando"
+    "url": "https://www.focus-entmt.com/en/games/john-carpenters-toxic-commando",
+    "description": "",
+    "abbreviations": "FPS, first person shooter, action, shooter, zombie, co-op, coop, cooperative, multiplayer, online"
   },
   {
     "id": "skate",
@@ -1197,7 +1409,9 @@
       "PC",
       "Console"
     ],
-    "url": "https://www.ea.com/games/skate"
+    "url": "https://www.ea.com/games/skate",
+    "description": "",
+    "abbreviations": "sports, skateboarding, simulation, single player, singleplayer, multiplayer, online"
   },
   {
     "id": "lifeless-planet-premier-edition",
@@ -1208,7 +1422,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.lifelessplanet.com/"
+    "url": "https://www.lifelessplanet.com/",
+    "description": "",
+    "abbreviations": "adventure, exploration, sci-fi, platformer, puzzle, single player, singleplayer, story"
   },
   {
     "id": "rise-of-industry",
@@ -1219,7 +1435,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.riseofindustry.com/"
+    "url": "https://www.riseofindustry.com/",
+    "description": "",
+    "abbreviations": "simulation, strategy, management, city builder, economy, single player, singleplayer"
   },
   {
     "id": "rage-2",
@@ -1230,7 +1448,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://bethesda.net/en/game/rage2"
+    "url": "https://bethesda.net/en/game/rage2",
+    "description": "",
+    "abbreviations": "rage2, action, FPS, first person shooter, open world, openworld, shooter, single player, singleplayer, story"
   },
   {
     "id": "horizon-chase-turbo",
@@ -1241,7 +1461,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.horizonchase2.com/games/horizon-chase-turbo"
+    "url": "https://www.horizonchase2.com/games/horizon-chase-turbo",
+    "description": "",
+    "abbreviations": "racing, arcade racing, driving, single player, singleplayer, multiplayer"
   },
   {
     "id": "infinifactory",
@@ -1252,7 +1474,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.zachtronics.com/infinifactory/"
+    "url": "https://www.zachtronics.com/infinifactory/",
+    "description": "",
+    "abbreviations": "puzzle, factory, automation, simulation, single player, singleplayer"
   },
   {
     "id": "the-forest-quartet",
@@ -1263,7 +1487,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/1620720/The_Forest_Quartet/"
+    "url": "https://store.steampowered.com/app/1620720/The_Forest_Quartet/",
+    "description": "",
+    "abbreviations": "adventure, puzzle, narrative, story, single player, singleplayer"
   },
   {
     "id": "breathedge",
@@ -1274,7 +1500,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/738520/Breathedge/"
+    "url": "https://store.steampowered.com/app/738520/Breathedge/",
+    "description": "",
+    "abbreviations": "survival, sci-fi, adventure, crafting, simulation, single player, singleplayer, story"
   },
   {
     "id": "thehunter-call-of-the-wild",
@@ -1285,7 +1513,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://callofthewild.thehunter.com/"
+    "url": "https://callofthewild.thehunter.com/",
+    "description": "",
+    "abbreviations": "simulation, hunting, FPS, first person shooter, first person, open world, openworld, single player, singleplayer, multiplayer"
   },
   {
     "id": "redout-enhanced-edition",
@@ -1296,7 +1526,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/517710/Redout_Enhanced_Edition/"
+    "url": "https://store.steampowered.com/app/517710/Redout_Enhanced_Edition/",
+    "description": "",
+    "abbreviations": "racing, arcade racing, futuristic racing, driving, single player, singleplayer, multiplayer"
   },
   {
     "id": "farlight-84",
@@ -1307,7 +1539,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://farlight84.farlightgames.com/"
+    "url": "https://farlight84.farlightgames.com/",
+    "description": "",
+    "abbreviations": "battle royale, hero shooter, FPS, first person shooter, TPS, third person shooter, multiplayer, online, competitive"
   },
   {
     "id": "rogue-company",
@@ -1318,7 +1552,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/872200/Rogue_Company/"
+    "url": "https://store.steampowered.com/app/872200/Rogue_Company/",
+    "description": "",
+    "abbreviations": "TPS, third person shooter, hero shooter, tactical shooter, multiplayer, competitive, online"
   },
   {
     "id": "never-alone-kisima-ingitchuna",
@@ -1329,7 +1565,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.neveralonegame.com/never-alone"
+    "url": "https://www.neveralonegame.com/never-alone",
+    "description": "",
+    "abbreviations": "platformer, adventure, puzzle, co-op, coop, cooperative, multiplayer, single player, singleplayer, story"
   },
   {
     "id": "deliver-at-all-costs",
@@ -1340,7 +1578,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/1880610/Deliver_At_All_Costs/"
+    "url": "https://store.steampowered.com/app/1880610/Deliver_At_All_Costs/",
+    "description": "",
+    "abbreviations": "action, adventure, delivery, driving, comedy, single player, singleplayer, story"
   },
   {
     "id": "heroes-generals-wwii",
@@ -1351,7 +1591,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/227940/Heroes__Generals/"
+    "url": "https://store.steampowered.com/app/227940/Heroes__Generals/",
+    "description": "",
+    "abbreviations": "FPS, first person shooter, strategy, war, multiplayer, online"
   },
   {
     "id": "supraland",
@@ -1362,7 +1604,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/813630/Supraland/"
+    "url": "https://store.steampowered.com/app/813630/Supraland/",
+    "description": "",
+    "abbreviations": "platformer, puzzle, action, adventure, metroidvania, FPS, first person shooter, first person, single player, singleplayer, story"
   },
   {
     "id": "cities-skylines",
@@ -1373,7 +1617,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.paradoxinteractive.com/games/cities-skylines/"
+    "url": "https://www.paradoxinteractive.com/games/cities-skylines/",
+    "description": "",
+    "abbreviations": "cities skylines, city builder, simulation, management, strategy, sandbox, single player, singleplayer"
   },
   {
     "id": "guacamelee-super-turbo-championship-edition",
@@ -1384,7 +1630,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/275390/Guacamelee_Super_Turbo_Championship_Edition/"
+    "url": "https://store.steampowered.com/app/275390/Guacamelee_Super_Turbo_Championship_Edition/",
+    "description": "",
+    "abbreviations": "action, platformer, metroidvania, fighting, beat em up, co-op, coop, cooperative, multiplayer, single player, singleplayer, story"
   },
   {
     "id": "idle-champions-of-the-forgotten-realms",
@@ -1395,7 +1643,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://idlechampions.com/"
+    "url": "https://idlechampions.com/",
+    "description": "",
+    "abbreviations": "idle, RPG, role playing game, strategy, management, multiplayer, online"
   },
   {
     "id": "rennsport",
@@ -1406,7 +1656,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.rennsport.gg/"
+    "url": "https://www.rennsport.gg/",
+    "description": "",
+    "abbreviations": "racing, simulation, driving, competitive, multiplayer, online, single player, singleplayer"
   },
   {
     "id": "torque-drift-2-demo",
@@ -1417,7 +1669,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.greasemonkeygames.com/games/torque-drift-2"
+    "url": "https://www.greasemonkeygames.com/games/torque-drift-2",
+    "description": "",
+    "abbreviations": "racing, drifting, driving, simulation, demo, single player, singleplayer, multiplayer"
   },
   {
     "id": "the-hidden-room",
@@ -1428,7 +1682,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/1771380/The_Hidden_Room/"
+    "url": "https://store.steampowered.com/app/1771380/The_Hidden_Room/",
+    "description": "",
+    "abbreviations": "puzzle, adventure, mystery, escape room, single player, singleplayer"
   },
   {
     "id": "century-age-of-ashes",
@@ -1439,7 +1695,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://century-age-of-ashes.com/"
+    "url": "https://century-age-of-ashes.com/",
+    "description": "",
+    "abbreviations": "action, dragon, shooter, multiplayer, online, competitive"
   },
   {
     "id": "core",
@@ -1450,7 +1708,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.coregames.com/"
+    "url": "https://www.coregames.com/",
+    "description": "",
+    "abbreviations": "action, sandbox, multiplayer, online, adventure, user generated"
   },
   {
     "id": "adios",
@@ -1461,7 +1721,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/1271400/Adios/"
+    "url": "https://store.steampowered.com/app/1271400/Adios/",
+    "description": "",
+    "abbreviations": "adventure, narrative, story, walking simulator, single player, singleplayer"
   },
   {
     "id": "filament",
@@ -1472,7 +1734,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://thinkygames.com/games/filament/"
+    "url": "https://thinkygames.com/games/filament/",
+    "description": "",
+    "abbreviations": "puzzle, adventure, logic, single player, singleplayer, story"
   },
   {
     "id": "saints-row-boss-factory",
@@ -1483,7 +1747,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.epicgames.com/p/saints-row--boss-factory"
+    "url": "https://store.epicgames.com/p/saints-row--boss-factory",
+    "description": "",
+    "abbreviations": "character creator, sandbox, customization, free tool"
   },
   {
     "id": "encased-a-sci-fi-post-apocalyptic-rpg",
@@ -1494,7 +1760,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://encasedgame.com/"
+    "url": "https://encasedgame.com/",
+    "description": "",
+    "abbreviations": "RPG, role playing game, CRPG, computer role-playing game, turn based, turn-based, turnbased, sci-fi, post-apocalyptic, strategy, single player, singleplayer, story"
   },
   {
     "id": "escape-academy",
@@ -1505,7 +1773,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://escapeacademygame.com/"
+    "url": "https://escapeacademygame.com/",
+    "description": "",
+    "abbreviations": "puzzle, escape room, adventure, single player, singleplayer, multiplayer, co-op, coop, cooperative"
   },
   {
     "id": "recipe-for-disaster",
@@ -1516,7 +1786,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.kasedogames.com/recipefordisaster"
+    "url": "https://www.kasedogames.com/recipefordisaster",
+    "description": "",
+    "abbreviations": "simulation, management, strategy, restaurant, sandbox, single player, singleplayer"
   },
   {
     "id": "kerbal-space-program",
@@ -1527,7 +1799,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.kerbalspaceprogram.com/"
+    "url": "https://www.kerbalspaceprogram.com/",
+    "description": "",
+    "abbreviations": "simulation, sandbox, space, engineering, strategy, single player, singleplayer, multiplayer"
   },
   {
     "id": "against-all-odds",
@@ -1538,7 +1812,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/1465560/Against_All_Odds/"
+    "url": "https://store.steampowered.com/app/1465560/Against_All_Odds/",
+    "description": "",
+    "abbreviations": "strategy, management, simulation, single player, singleplayer"
   },
   {
     "id": "relicta",
@@ -1549,7 +1825,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/941570/Relicta/"
+    "url": "https://store.steampowered.com/app/941570/Relicta/",
+    "description": "",
+    "abbreviations": "puzzle, adventure, sci-fi, FPS, first person shooter, first person, single player, singleplayer, story"
   },
   {
     "id": "paragon-the-overprime",
@@ -1560,7 +1838,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/1531430/Paragon_The_Overprime/"
+    "url": "https://store.steampowered.com/app/1531430/Paragon_The_Overprime/",
+    "description": "",
+    "abbreviations": "MOBA, multiplayer online battle arena, multiplayer, online, action, TPS, third person shooter, competitive, team-based"
   },
   {
     "id": "gigabash",
@@ -1571,7 +1851,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/1546400/GigaBash/"
+    "url": "https://store.steampowered.com/app/1546400/GigaBash/",
+    "description": "",
+    "abbreviations": "fighting, action, arcade, multiplayer, single player, singleplayer, co-op, coop, cooperative"
   },
   {
     "id": "call-of-the-sea",
@@ -1582,7 +1864,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/1042490/Call_of_the_Sea/"
+    "url": "https://store.steampowered.com/app/1042490/Call_of_the_Sea/",
+    "description": "",
+    "abbreviations": "adventure, puzzle, mystery, horror, narrative, story, single player, singleplayer"
   },
   {
     "id": "dodo-peak",
@@ -1593,7 +1877,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.movingpieces.io/dodo-peak"
+    "url": "https://www.movingpieces.io/dodo-peak",
+    "description": "",
+    "abbreviations": "platformer, casual, arcade, adventure, single player, singleplayer"
   },
   {
     "id": "the-bridge",
@@ -1604,7 +1890,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/204240/The_Bridge/"
+    "url": "https://store.steampowered.com/app/204240/The_Bridge/",
+    "description": "",
+    "abbreviations": "puzzle, platformer, physics, indie, single player, singleplayer"
   },
   {
     "id": "aerial-knights-never-yield",
@@ -1615,7 +1903,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.aerialknight.com/never-yield-first-game-press.html"
+    "url": "https://www.aerialknight.com/never-yield-first-game-press.html",
+    "description": "",
+    "abbreviations": "aerial knights never yield, runner, platformer, action, arcade, single player, singleplayer"
   },
   {
     "id": "surviving-the-aftermath",
@@ -1626,7 +1916,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.paradoxinteractive.com/games/surviving-the-aftermath"
+    "url": "https://www.paradoxinteractive.com/games/surviving-the-aftermath",
+    "description": "",
+    "abbreviations": "strategy, simulation, city builder, survival, management, single player, singleplayer"
   },
   {
     "id": "crsed-cuisine-royale",
@@ -1637,7 +1929,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://crsed.net/"
+    "url": "https://crsed.net/",
+    "description": "",
+    "abbreviations": "battle royale, TPS, third person shooter, shooter, multiplayer, online"
   },
   {
     "id": "city-of-gangsters",
@@ -1648,7 +1942,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.kasedogames.com/cityofgangsters"
+    "url": "https://www.kasedogames.com/cityofgangsters",
+    "description": "",
+    "abbreviations": "strategy, simulation, management, city builder, economy, single player, singleplayer"
   },
   {
     "id": "pinball-fx",
@@ -1659,7 +1955,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.pinballfx.com/"
+    "url": "https://www.pinballfx.com/",
+    "description": "",
+    "abbreviations": "pinball, simulation, arcade, sports, single player, singleplayer, multiplayer"
   },
   {
     "id": "the-sims-4",
@@ -1670,7 +1968,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.ea.com/en/games/the-sims/the-sims-4"
+    "url": "https://www.ea.com/en/games/the-sims/the-sims-4",
+    "description": "",
+    "abbreviations": "life simulation, simulation, sandbox, management, single player, singleplayer, story, multiplayer"
   },
   {
     "id": "we-become-what-we-behold-fan-made-port",
@@ -1681,7 +1981,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/1103210/We_Become_What_We_Behold_FanMade_Port/"
+    "url": "https://store.steampowered.com/app/1103210/We_Become_What_We_Behold_FanMade_Port/",
+    "description": "",
+    "abbreviations": "simulation, interactive story, narrative, satire, single player, singleplayer"
   },
   {
     "id": "nfs-hot-pursuit",
@@ -1692,7 +1994,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.ea.com/en/games/need-for-speed/need-for-speed-hot-pursuit-remastered"
+    "url": "https://www.ea.com/en/games/need-for-speed/need-for-speed-hot-pursuit-remastered",
+    "description": "",
+    "abbreviations": "nfs hot pursuit, racing, arcade racing, driving, single player, singleplayer, multiplayer, online"
   },
   {
     "id": "nfs-no-limits",
@@ -1704,7 +2008,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://www.ea.com/games/need-for-speed/need-for-speed-no-limits"
+    "url": "https://www.ea.com/games/need-for-speed/need-for-speed-no-limits",
+    "description": "",
+    "abbreviations": "nfs no limits, racing, arcade racing, driving, mobile racing, single player, singleplayer, multiplayer"
   },
   {
     "id": "nfs-heat",
@@ -1715,7 +2021,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.ea.com/games/need-for-speed/need-for-speed-heat"
+    "url": "https://www.ea.com/games/need-for-speed/need-for-speed-heat",
+    "description": "",
+    "abbreviations": "nfs heat, racing, open world, openworld, driving, arcade racing, single player, singleplayer, multiplayer, online"
   },
   {
     "id": "vector",
@@ -1727,7 +2035,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://nekki.com/vector/"
+    "url": "https://nekki.com/vector/",
+    "description": "",
+    "abbreviations": "platformer, action, runner, arcade, single player, singleplayer"
   },
   {
     "id": "altos-adventure",
@@ -1739,7 +2049,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://altosadventure.com/"
+    "url": "https://altosadventure.com/",
+    "description": "",
+    "abbreviations": "altos adventure, endless runner, snowboarding, sports, arcade, casual, single player, singleplayer"
   },
   {
     "id": "altos-odyssey",
@@ -1751,7 +2063,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://www.altosodyssey.com/"
+    "url": "https://www.altosodyssey.com/",
+    "description": "",
+    "abbreviations": "altos odyssey, endless runner, sandboarding, sports, arcade, casual, single player, singleplayer"
   },
   {
     "id": "bomb-squad",
@@ -1762,7 +2076,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://www.froemling.net/apps/bombsquad"
+    "url": "https://www.froemling.net/apps/bombsquad",
+    "description": "",
+    "abbreviations": "party, action, arcade, multiplayer, local multiplayer, online"
   },
   {
     "id": "azur-lane",
@@ -1773,7 +2089,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://azurlane.yo-star.com/"
+    "url": "https://azurlane.yo-star.com/",
+    "description": "",
+    "abbreviations": "RPG, role playing game, gacha, shoot em up, shooter, naval, mobile, single player, singleplayer, multiplayer"
   },
   {
     "id": "carx-street",
@@ -1785,7 +2103,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.carxtech.sr"
+    "url": "https://play.google.com/store/apps/details?id=com.carxtech.sr",
+    "description": "",
+    "abbreviations": "racing, open world, openworld, driving, simulation, single player, singleplayer, multiplayer, online"
   },
   {
     "id": "csr-2",
@@ -1797,7 +2117,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://www.csr-racing.com/"
+    "url": "https://www.csr-racing.com/",
+    "description": "",
+    "abbreviations": "racing, drag racing, driving, simulation, single player, singleplayer, multiplayer, online"
   },
   {
     "id": "cats-crash-arena-turbo-stars",
@@ -1809,7 +2131,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://www.catsthegame.com/"
+    "url": "https://www.catsthegame.com/",
+    "description": "",
+    "abbreviations": "action, arcade, vehicle combat, casual, multiplayer, single player, singleplayer"
   },
   {
     "id": "dr-driving",
@@ -1821,7 +2145,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.ansangha.drdriving"
+    "url": "https://play.google.com/store/apps/details?id=com.ansangha.drdriving",
+    "description": "",
+    "abbreviations": "dr driving, driving, simulation, racing, casual, single player, singleplayer"
   },
   {
     "id": "dr-driving-2",
@@ -1833,7 +2159,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.ansangha.drjb"
+    "url": "https://play.google.com/store/apps/details?id=com.ansangha.drjb",
+    "description": "",
+    "abbreviations": "dr driving 2, driving, simulation, racing, casual, single player, singleplayer"
   },
   {
     "id": "grayland-remastered",
@@ -1845,7 +2173,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://www.1der-ent.com/grayland"
+    "url": "https://www.1der-ent.com/grayland",
+    "description": "",
+    "abbreviations": "platformer, action, adventure, arcade, single player, singleplayer"
   },
   {
     "id": "gt-racing-2-the-real-car-experience",
@@ -1857,7 +2187,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://www.gameloft.com/newsroom/gameloft-announces-the-official-launch-of-gt-racing-3062"
+    "url": "https://www.gameloft.com/newsroom/gameloft-announces-the-official-launch-of-gt-racing-3062",
+    "description": "",
+    "abbreviations": "racing, simulation, driving, sports, single player, singleplayer, multiplayer, online"
   },
   {
     "id": "hills-of-steel",
@@ -1869,7 +2201,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.superplusgames.hosandroid"
+    "url": "https://play.google.com/store/apps/details?id=com.superplusgames.hosandroid",
+    "description": "",
+    "abbreviations": "racing, arcade, vehicle, casual, single player, singleplayer, multiplayer"
   },
   {
     "id": "kick-the-buddy-forever",
@@ -1881,7 +2215,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.playgendary.ktb2"
+    "url": "https://play.google.com/store/apps/details?id=com.playgendary.ktb2",
+    "description": "",
+    "abbreviations": "casual, sandbox, physics, simulation, arcade, single player, singleplayer"
   },
   {
     "id": "level-devil-not-a-troll-game",
@@ -1892,7 +2228,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.unept.leveldevil"
+    "url": "https://play.google.com/store/apps/details?id=com.unept.leveldevil",
+    "description": "",
+    "abbreviations": "platformer, puzzle, precision platformer, casual, single player, singleplayer"
   },
   {
     "id": "lets-create-pottery",
@@ -1903,7 +2241,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://www.idreams.pl/en/our-products/show/product/21-Lets-Create-Pottery"
+    "url": "https://www.idreams.pl/en/our-products/show/product/21-Lets-Create-Pottery",
+    "description": "",
+    "abbreviations": "simulation, creative, crafting, casual, single player, singleplayer"
   },
   {
     "id": "lets-create-pottery-lite",
@@ -1914,7 +2254,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=pl.idreams.potterylite"
+    "url": "https://play.google.com/store/apps/details?id=pl.idreams.potterylite",
+    "description": "",
+    "abbreviations": "simulation, creative, crafting, casual, single player, singleplayer"
   },
   {
     "id": "mini-militia",
@@ -1926,7 +2268,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.appsomniacs.da2"
+    "url": "https://play.google.com/store/apps/details?id=com.appsomniacs.da2",
+    "description": "",
+    "abbreviations": "action, shooter, 2D shooter, multiplayer, online, competitive"
   },
   {
     "id": "angry-birds-classic",
@@ -1937,7 +2281,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://www.angrybirds.com/explore/hall-of-games/#year-2009"
+    "url": "https://www.angrybirds.com/explore/hall-of-games/#year-2009",
+    "description": "",
+    "abbreviations": "puzzle, physics, casual, arcade, single player, singleplayer"
   },
   {
     "id": "angry-birds-seasons",
@@ -1948,7 +2294,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://www.angrybirds.com/explore/hall-of-games/#year-2010"
+    "url": "https://www.angrybirds.com/explore/hall-of-games/#year-2010",
+    "description": "",
+    "abbreviations": "puzzle, physics, casual, arcade, single player, singleplayer"
   },
   {
     "id": "angry-birds-space",
@@ -1959,7 +2307,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://www.angrybirds.com/explore/hall-of-games/#year-2012"
+    "url": "https://www.angrybirds.com/explore/hall-of-games/#year-2012",
+    "description": "",
+    "abbreviations": "puzzle, physics, casual, arcade, single player, singleplayer"
   },
   {
     "id": "bad-piggies",
@@ -1971,7 +2321,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://www.angrybirds.com/explore/hall-of-games/#year-2012"
+    "url": "https://www.angrybirds.com/explore/hall-of-games/#year-2012",
+    "description": "",
+    "abbreviations": "puzzle, physics, sandbox, casual, simulation, single player, singleplayer"
   },
   {
     "id": "angry-birds-2",
@@ -1983,7 +2335,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://www.angrybirds.com/games/angry-birds-2/"
+    "url": "https://www.angrybirds.com/games/angry-birds-2/",
+    "description": "",
+    "abbreviations": "puzzle, physics, casual, arcade, single player, singleplayer, multiplayer"
   },
   {
     "id": "ninja-arashi-2",
@@ -1995,7 +2349,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.blackpanther.ninjaarashi2"
+    "url": "https://play.google.com/store/apps/details?id=com.blackpanther.ninjaarashi2",
+    "description": "",
+    "abbreviations": "action, platformer, hack and slash, 2D, single player, singleplayer, story"
   },
   {
     "id": "shadow-fight-3",
@@ -2007,7 +2363,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://shadowfight3.com/"
+    "url": "https://shadowfight3.com/",
+    "description": "",
+    "abbreviations": "fighting, action, RPG, role playing game, martial arts, single player, singleplayer, story, multiplayer"
   },
   {
     "id": "shadow-fight-4-arena",
@@ -2019,7 +2377,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://shadowfight.com/"
+    "url": "https://shadowfight.com/",
+    "description": "",
+    "abbreviations": "fighting, action, competitive, multiplayer, online, martial arts"
   },
   {
     "id": "paperio-2",
@@ -2031,7 +2391,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=io.voodoo.paper2"
+    "url": "https://play.google.com/store/apps/details?id=io.voodoo.paper2",
+    "description": "",
+    "abbreviations": "paperio 2, arcade, territory control, casual, multiplayer, online"
   },
   {
     "id": "plague-inc-evolved",
@@ -2042,7 +2404,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.ndemiccreations.com/en/25-plague-inc-evolved"
+    "url": "https://www.ndemiccreations.com/en/25-plague-inc-evolved",
+    "description": "",
+    "abbreviations": "strategy, simulation, strategy simulation, single player, singleplayer, multiplayer"
   },
   {
     "id": "plague-inc",
@@ -2053,7 +2417,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://www.ndemiccreations.com/en/22-plague-inc"
+    "url": "https://www.ndemiccreations.com/en/22-plague-inc",
+    "description": "",
+    "abbreviations": "strategy, simulation, strategy simulation, single player, singleplayer, mobile"
   },
   {
     "id": "raid-shadow-legends",
@@ -2065,7 +2431,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://raidshadowlegends.com/"
+    "url": "https://raidshadowlegends.com/",
+    "description": "",
+    "abbreviations": "RPG, role playing game, gacha, turn based, turn-based, turnbased, hero collector, single player, singleplayer, multiplayer, online"
   },
   {
     "id": "tom-clancys-rainbow-six-mobile",
@@ -2076,7 +2444,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://www.ubisoft.com/en-gb/game/rainbow-six/mobile"
+    "url": "https://www.ubisoft.com/en-gb/game/rainbow-six/mobile",
+    "description": "",
+    "abbreviations": "FPS, first person shooter, tactical shooter, competitive, multiplayer, online, team-based"
   },
   {
     "id": "real-racing-3",
@@ -2088,7 +2458,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://www.ea.com/games/real-racing/real-racing-3"
+    "url": "https://www.ea.com/games/real-racing/real-racing-3",
+    "description": "",
+    "abbreviations": "racing, simulation, driving, sports, single player, singleplayer, multiplayer, online"
   },
   {
     "id": "solo-leveling-arise",
@@ -2100,7 +2472,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://sololeveling.netmarble.com/"
+    "url": "https://sololeveling.netmarble.com/",
+    "description": "",
+    "abbreviations": "action, RPG, role playing game, action RPG, gacha, hack and slash, single player, singleplayer, story"
   },
   {
     "id": "smash-hit",
@@ -2112,7 +2486,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.mediocre.smashhit"
+    "url": "https://play.google.com/store/apps/details?id=com.mediocre.smashhit",
+    "description": "",
+    "abbreviations": "arcade, casual, action, rail shooter, first person, single player, singleplayer"
   },
   {
     "id": "standoff-2",
@@ -2124,7 +2500,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://install.standoff2.com/"
+    "url": "https://install.standoff2.com/",
+    "description": "",
+    "abbreviations": "FPS, first person shooter, tactical shooter, multiplayer, competitive, online"
   },
   {
     "id": "subway-surfers",
@@ -2136,7 +2514,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://subwaysurfers.com/"
+    "url": "https://subwaysurfers.com/",
+    "description": "",
+    "abbreviations": "endless runner, runner, arcade, casual, single player, singleplayer"
   },
   {
     "id": "temple-run",
@@ -2147,7 +2527,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.imangi.templerun"
+    "url": "https://play.google.com/store/apps/details?id=com.imangi.templerun",
+    "description": "",
+    "abbreviations": "endless runner, runner, arcade, casual, single player, singleplayer"
   },
   {
     "id": "temple-run-2",
@@ -2159,7 +2541,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.imangi.templerun2"
+    "url": "https://play.google.com/store/apps/details?id=com.imangi.templerun2",
+    "description": "",
+    "abbreviations": "endless runner, runner, arcade, casual, single player, singleplayer"
   },
   {
     "id": "tower-of-god-new-world",
@@ -2170,7 +2554,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://towerofgod.netmarble.com/"
+    "url": "https://towerofgod.netmarble.com/",
+    "description": "",
+    "abbreviations": "RPG, role playing game, gacha, strategy, hero collector, single player, singleplayer, multiplayer, online"
   },
   {
     "id": "the-ghost",
@@ -2182,7 +2568,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://theghostgame.com/"
+    "url": "https://theghostgame.com/",
+    "description": "",
+    "abbreviations": "horror, survival horror, multiplayer, co-op, coop, cooperative, online, single player, singleplayer"
   },
   {
     "id": "tentacle-wars",
@@ -2193,7 +2581,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://www.fdg-entertainment.com/games/tentacle-wars/"
+    "url": "https://www.fdg-entertainment.com/games/tentacle-wars/",
+    "description": "",
+    "abbreviations": "strategy, puzzle, casual, single player, singleplayer"
   },
   {
     "id": "tank-stars",
@@ -2205,7 +2595,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.playgendary.tanks"
+    "url": "https://play.google.com/store/apps/details?id=com.playgendary.tanks",
+    "description": "",
+    "abbreviations": "action, arcade, artillery, tank, multiplayer, single player, singleplayer"
   },
   {
     "id": "traffic-racer",
@@ -2217,7 +2609,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.skgames.trafficracer"
+    "url": "https://play.google.com/store/apps/details?id=com.skgames.trafficracer",
+    "description": "",
+    "abbreviations": "racing, arcade, driving, endless, casual, single player, singleplayer"
   },
   {
     "id": "traffic-rider",
@@ -2229,7 +2623,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.skgames.trafficrider"
+    "url": "https://play.google.com/store/apps/details?id=com.skgames.trafficrider",
+    "description": "",
+    "abbreviations": "racing, arcade, driving, endless, casual, single player, singleplayer"
   },
   {
     "id": "wings-on-fire",
@@ -2240,7 +2636,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.skgames.wingsonfiregame"
+    "url": "https://play.google.com/store/apps/details?id=com.skgames.wingsonfiregame",
+    "description": "",
+    "abbreviations": "arcade, action, flight, shooter, casual, single player, singleplayer"
   },
   {
     "id": "trench-assault",
@@ -2252,7 +2650,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.companyname.TrenchAssault"
+    "url": "https://play.google.com/store/apps/details?id=com.companyname.TrenchAssault",
+    "description": "",
+    "abbreviations": "strategy, tower defense, war, casual, single player, singleplayer"
   },
   {
     "id": "war-robots",
@@ -2264,7 +2664,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://warrobots.com/"
+    "url": "https://warrobots.com/",
+    "description": "",
+    "abbreviations": "action, shooter, mech, TPS, third person shooter, multiplayer, online, competitive"
   },
   {
     "id": "zooba-zoo-battle-arena",
@@ -2275,7 +2677,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://wildlifestudios.com/games/zooba/"
+    "url": "https://wildlifestudios.com/games/zooba/",
+    "description": "",
+    "abbreviations": "battle royale, TPS, third person shooter, action, multiplayer, online, competitive"
   },
   {
     "id": "bhop-pro",
@@ -2287,7 +2691,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://bhoppro.com/"
+    "url": "https://bhoppro.com/",
+    "description": "",
+    "abbreviations": "FPS, first person shooter, first person, movement, platformer, arcade, single player, singleplayer, multiplayer"
   },
   {
     "id": "alien-invasion-rpg-idle-space",
@@ -2298,7 +2704,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.multicastgames.venomSurvive"
+    "url": "https://play.google.com/store/apps/details?id=com.multicastgames.venomSurvive",
+    "description": "",
+    "abbreviations": "idle, RPG, role playing game, strategy, simulation, single player, singleplayer"
   },
   {
     "id": "sand-box",
@@ -2309,7 +2717,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=smellymoo.sand"
+    "url": "https://play.google.com/store/apps/details?id=smellymoo.sand",
+    "description": "",
+    "abbreviations": "sandbox, simulation, creative, physics, single player, singleplayer"
   },
   {
     "id": "powder-game",
@@ -2321,7 +2731,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://dan-ball.jp/en/mobile/dustviewer/"
+    "url": "https://dan-ball.jp/en/mobile/dustviewer/",
+    "description": "",
+    "abbreviations": "sandbox, simulation, physics, creative, single player, singleplayer"
   },
   {
     "id": "evertech-sandbox",
@@ -2333,7 +2745,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://vitsum.itch.io/evertech-sandbox"
+    "url": "https://vitsum.itch.io/evertech-sandbox",
+    "description": "",
+    "abbreviations": "sandbox, simulation, creative, building, single player, singleplayer"
   },
   {
     "id": "golf-battle",
@@ -2344,7 +2758,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://www.miniclip.com/games/golf-battle"
+    "url": "https://www.miniclip.com/games/golf-battle",
+    "description": "",
+    "abbreviations": "sports, golf, arcade, multiplayer, online, competitive"
   },
   {
     "id": "8-ball-pool",
@@ -2356,7 +2772,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://8ballpool.com/game"
+    "url": "https://8ballpool.com/game",
+    "description": "",
+    "abbreviations": "sports, pool, billiards, simulation, multiplayer, online, competitive"
   },
   {
     "id": "chain-reaction-neo",
@@ -2367,7 +2785,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.rtv.cr_neo"
+    "url": "https://play.google.com/store/apps/details?id=com.rtv.cr_neo",
+    "description": "",
+    "abbreviations": "puzzle, strategy, casual, arcade, single player, singleplayer"
   },
   {
     "id": "diepio",
@@ -2379,7 +2799,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.miniclip.diep.io"
+    "url": "https://play.google.com/store/apps/details?id=com.miniclip.diep.io",
+    "description": "",
+    "abbreviations": "diepio, action, shooter, multiplayer, online, competitive, arcade"
   },
   {
     "id": "it-takes-two-friends-pass",
@@ -2390,7 +2812,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.ea.com/games/it-takes-two/it-takes-two"
+    "url": "https://www.ea.com/games/it-takes-two/it-takes-two",
+    "description": "",
+    "abbreviations": "action, adventure, platformer, puzzle, co-op, coop, cooperative, multiplayer, story"
   },
   {
     "id": "fruit-ninja",
@@ -2401,7 +2825,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.halfbrick.fruitninjafree"
+    "url": "https://play.google.com/store/apps/details?id=com.halfbrick.fruitninjafree",
+    "description": "",
+    "abbreviations": "arcade, casual, action, single player, singleplayer"
   },
   {
     "id": "purble-place",
@@ -2412,7 +2838,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://en.wikipedia.org/wiki/Purble_Place"
+    "url": "https://en.wikipedia.org/wiki/Purble_Place",
+    "description": "",
+    "abbreviations": "casual, educational, puzzle, simulation, single player, singleplayer"
   },
   {
     "id": "hill-climb-racing",
@@ -2424,7 +2852,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://fingersoft.com/games/hill-climb-racing/"
+    "url": "https://fingersoft.com/games/hill-climb-racing/",
+    "description": "",
+    "abbreviations": "racing, arcade, driving, physics, casual, single player, singleplayer"
   },
   {
     "id": "hill-climb-racing-2",
@@ -2436,7 +2866,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://fingersoft.com/games/hill-climb-racing-2/"
+    "url": "https://fingersoft.com/games/hill-climb-racing-2/",
+    "description": "",
+    "abbreviations": "racing, arcade, driving, physics, casual, multiplayer, single player, singleplayer"
   },
   {
     "id": "beach-buggy-racing",
@@ -2447,7 +2879,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://www.vectorunit.com/beach-buggy-racing"
+    "url": "https://www.vectorunit.com/beach-buggy-racing",
+    "description": "",
+    "abbreviations": "racing, arcade racing, driving, casual, single player, singleplayer, multiplayer"
   },
   {
     "id": "beach-buggy-racing-2",
@@ -2458,7 +2892,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://www.vectorunit.com/beach-buggy-racing-2"
+    "url": "https://www.vectorunit.com/beach-buggy-racing-2",
+    "description": "",
+    "abbreviations": "racing, arcade racing, driving, casual, single player, singleplayer, multiplayer"
   },
   {
     "id": "my-talking-tom",
@@ -2469,7 +2905,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.outfit7.mytalkingtomfree"
+    "url": "https://play.google.com/store/apps/details?id=com.outfit7.mytalkingtomfree",
+    "description": "",
+    "abbreviations": "casual, simulation, virtual pet, life simulation, single player, singleplayer"
   },
   {
     "id": "keyboard-warrior",
@@ -2480,7 +2918,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/2071050/Keyboard_Warrior/"
+    "url": "https://store.steampowered.com/app/2071050/Keyboard_Warrior/",
+    "description": "",
+    "abbreviations": "typing, educational, arcade, casual, single player, singleplayer"
   },
   {
     "id": "whiteout-survival",
@@ -2491,7 +2931,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://whiteoutsurvival.centurygames.com/"
+    "url": "https://whiteoutsurvival.centurygames.com/",
+    "description": "",
+    "abbreviations": "strategy, survival, city builder, management, multiplayer, online"
   },
   {
     "id": "flaming-core",
@@ -2502,7 +2944,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.habby.flamingcore"
+    "url": "https://play.google.com/store/apps/details?id=com.habby.flamingcore",
+    "description": "",
+    "abbreviations": "action, arcade, puzzle, runner, single player, singleplayer"
   },
   {
     "id": "drifto",
@@ -2513,7 +2957,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.UnluckyDuck.Drifto"
+    "url": "https://play.google.com/store/apps/details?id=com.UnluckyDuck.Drifto",
+    "description": "",
+    "abbreviations": "racing, driving, arcade, casual, single player, singleplayer"
   },
   {
     "id": "agario",
@@ -2525,7 +2971,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://miniclip.com/games/agario"
+    "url": "https://miniclip.com/games/agario",
+    "description": "",
+    "abbreviations": "agario, action, arcade, casual, multiplayer, online"
   },
   {
     "id": "head-ball-2",
@@ -2536,7 +2984,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://miniclip.com/games/head-ball-2"
+    "url": "https://miniclip.com/games/head-ball-2",
+    "description": "",
+    "abbreviations": "sports, football, soccer, arcade, multiplayer, online, competitive"
   },
   {
     "id": "carrom-pool-disc-game",
@@ -2547,7 +2997,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://miniclip.com/games/carrom"
+    "url": "https://miniclip.com/games/carrom",
+    "description": "",
+    "abbreviations": "sports, board, casual, arcade, multiplayer, online"
   },
   {
     "id": "super-mario-bros",
@@ -2558,7 +3010,9 @@
     "platforms": [
       "Console"
     ],
-    "url": "https://mario.nintendo.com/history/"
+    "url": "https://mario.nintendo.com/history/",
+    "description": "",
+    "abbreviations": "platformer, action, adventure, arcade, single player, singleplayer"
   },
   {
     "id": "duck-hunt",
@@ -2569,7 +3023,9 @@
     "platforms": [
       "Console"
     ],
-    "url": "https://www.nintendo.com/en-gb/Games/NES/Duck-Hunt-946955.html"
+    "url": "https://www.nintendo.com/en-gb/Games/NES/Duck-Hunt-946955.html",
+    "description": "",
+    "abbreviations": "light gun, shooting, arcade, casual, single player, singleplayer"
   },
   {
     "id": "eve-online",
@@ -2580,7 +3036,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.eveonline.com/"
+    "url": "https://www.eveonline.com/",
+    "description": "",
+    "abbreviations": "MMORPG, massively multiplayer online RPG, space, RPG, role playing game, simulation, strategy, multiplayer, online, sandbox"
   },
   {
     "id": "homescapes",
@@ -2591,7 +3049,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://playrix.com/games/homescapes"
+    "url": "https://playrix.com/games/homescapes",
+    "description": "",
+    "abbreviations": "match 3, puzzle, casual, simulation, single player, singleplayer"
   },
   {
     "id": "hot-slide",
@@ -2602,7 +3062,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.tapcheer.hotslide"
+    "url": "https://play.google.com/store/apps/details?id=com.tapcheer.hotslide",
+    "description": "",
+    "abbreviations": "racing, arcade racing, driving, casual, multiplayer, online"
   },
   {
     "id": "hybrid-animals",
@@ -2613,7 +3075,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.abstractsoft.hybridanimals"
+    "url": "https://play.google.com/store/apps/details?id=com.abstractsoft.hybridanimals",
+    "description": "",
+    "abbreviations": "sandbox, simulation, adventure, casual, single player, singleplayer, multiplayer"
   },
   {
     "id": "infinity-clan",
@@ -2624,7 +3088,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://cw.topgamesinc.com/"
+    "url": "https://cw.topgamesinc.com/",
+    "description": "",
+    "abbreviations": "RPG, role playing game, strategy, idle, gacha, multiplayer, online"
   },
   {
     "id": "make-more-idle-manager",
@@ -2635,7 +3101,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.fingersoft.makemore"
+    "url": "https://play.google.com/store/apps/details?id=com.fingersoft.makemore",
+    "description": "",
+    "abbreviations": "idle, simulation, management, casual, single player, singleplayer"
   },
   {
     "id": "modern-sniper",
@@ -2646,7 +3114,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.xs.armysniper"
+    "url": "https://play.google.com/store/apps/details?id=com.xs.armysniper",
+    "description": "",
+    "abbreviations": "FPS, first person shooter, sniper, shooter, single player, singleplayer"
   },
   {
     "id": "sniper-3d",
@@ -2657,7 +3127,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.fungames.sniper3d"
+    "url": "https://play.google.com/store/apps/details?id=com.fungames.sniper3d",
+    "description": "",
+    "abbreviations": "FPS, first person shooter, sniper, shooter, single player, singleplayer, multiplayer"
   },
   {
     "id": "nobodies-murder-cleaner",
@@ -2669,7 +3141,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.blyts.nobodies"
+    "url": "https://play.google.com/store/apps/details?id=com.blyts.nobodies",
+    "description": "",
+    "abbreviations": "puzzle, adventure, stealth, mystery, point and click, single player, singleplayer, story"
   },
   {
     "id": "pirate-code-pvp-sea-battles",
@@ -2680,7 +3154,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.happyfish.piratecode"
+    "url": "https://play.google.com/store/apps/details?id=com.happyfish.piratecode",
+    "description": "",
+    "abbreviations": "action, naval, strategy, multiplayer, online, competitive"
   },
   {
     "id": "race-rocket-arena-car-extreme",
@@ -2691,7 +3167,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.smokoko.race"
+    "url": "https://play.google.com/store/apps/details?id=com.smokoko.race",
+    "description": "",
+    "abbreviations": "racing, arcade racing, vehicle combat, multiplayer, online"
   },
   {
     "id": "snufkin-melody-of-moominvalley",
@@ -2702,7 +3180,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://new.snufkin.game/"
+    "url": "https://new.snufkin.game/",
+    "description": "",
+    "abbreviations": "adventure, exploration, simulation, narrative, story, single player, singleplayer"
   },
   {
     "id": "sphaze",
@@ -2713,7 +3193,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://subpixels.pl/projects/sphaze/"
+    "url": "https://subpixels.pl/projects/sphaze/",
+    "description": "",
+    "abbreviations": "puzzle, adventure, platformer, casual, single player, singleplayer"
   },
   {
     "id": "terragenesis-landfall",
@@ -2724,7 +3206,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.alexanderwinn.landfall"
+    "url": "https://play.google.com/store/apps/details?id=com.alexanderwinn.landfall",
+    "description": "",
+    "abbreviations": "simulation, strategy, city builder, space, management, single player, singleplayer"
   },
   {
     "id": "clash-royale",
@@ -2736,7 +3220,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://supercell.com/en/games/clashroyale/"
+    "url": "https://supercell.com/en/games/clashroyale/",
+    "description": "",
+    "abbreviations": "strategy, card, tower defense, real-time strategy, multiplayer, online, competitive"
   },
   {
     "id": "brawl-stars",
@@ -2747,7 +3233,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://store.supercell.com/brawlstars"
+    "url": "https://store.supercell.com/brawlstars",
+    "description": "",
+    "abbreviations": "action, shooter, hero shooter, MOBA, multiplayer online battle arena, multiplayer, online, competitive"
   },
   {
     "id": "chess-com",
@@ -2758,7 +3246,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.chess.com/"
+    "url": "https://www.chess.com/",
+    "description": "",
+    "abbreviations": "strategy, board, chess, online, multiplayer, single player, singleplayer, competitive"
   },
   {
     "id": "hocus",
@@ -2769,7 +3259,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://www.gamebra.in/"
+    "url": "https://www.gamebra.in/",
+    "description": "",
+    "abbreviations": "puzzle, casual, geometry, single player, singleplayer"
   },
   {
     "id": "hungry-shark-evolution",
@@ -2781,7 +3273,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://www.ubisoft.com/en-gb/game/hungry-shark/evolution"
+    "url": "https://www.ubisoft.com/en-gb/game/hungry-shark/evolution",
+    "description": "",
+    "abbreviations": "action, arcade, simulation, survival, single player, singleplayer"
   },
   {
     "id": "moba-legends-5v5",
@@ -2792,7 +3286,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.mobiin.gp"
+    "url": "https://play.google.com/store/apps/details?id=com.mobiin.gp",
+    "description": "",
+    "abbreviations": "MOBA, multiplayer online battle arena, action, multiplayer, online, competitive, team-based"
   },
   {
     "id": "slitherio",
@@ -2804,7 +3300,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=air.com.hypah.io.slither"
+    "url": "https://play.google.com/store/apps/details?id=air.com.hypah.io.slither",
+    "description": "",
+    "abbreviations": "slitherio, arcade, action, snake, multiplayer, online, competitive"
   },
   {
     "id": "cube-escape-collection",
@@ -2815,7 +3313,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://www.rustylake.com/room-escape-games/cube-escape-collection.html"
+    "url": "https://www.rustylake.com/room-escape-games/cube-escape-collection.html",
+    "description": "",
+    "abbreviations": "puzzle, adventure, escape room, point and click, mystery, single player, singleplayer, story"
   },
   {
     "id": "cube-escape-paradox",
@@ -2826,7 +3326,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://www.rustylake.com/room-escape-games/cube-escape-paradox.html"
+    "url": "https://www.rustylake.com/room-escape-games/cube-escape-paradox.html",
+    "description": "",
+    "abbreviations": "puzzle, adventure, escape room, point and click, mystery, single player, singleplayer, story"
   },
   {
     "id": "cube-escape-the-lake",
@@ -2837,7 +3339,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://www.rustylake.com/room-escape-games/cube-escape-the-lake.html"
+    "url": "https://www.rustylake.com/room-escape-games/cube-escape-the-lake.html",
+    "description": "",
+    "abbreviations": "puzzle, adventure, escape room, point and click, mystery, single player, singleplayer, story"
   },
   {
     "id": "cube-escape-birthday",
@@ -2848,7 +3352,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://www.rustylake.com/room-escape-games/cube-escape-birthday.html"
+    "url": "https://www.rustylake.com/room-escape-games/cube-escape-birthday.html",
+    "description": "",
+    "abbreviations": "puzzle, adventure, escape room, point and click, mystery, single player, singleplayer, story"
   },
   {
     "id": "cube-escape-the-cave",
@@ -2859,7 +3365,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://www.rustylake.com/room-escape-games/cube-escape-the-cave.html"
+    "url": "https://www.rustylake.com/room-escape-games/cube-escape-the-cave.html",
+    "description": "",
+    "abbreviations": "puzzle, adventure, escape room, point and click, mystery, single player, singleplayer, story"
   },
   {
     "id": "cell-to-singularity-evolution",
@@ -2870,7 +3378,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://celltosingularity.com/"
+    "url": "https://celltosingularity.com/",
+    "description": "",
+    "abbreviations": "idle, simulation, strategy, incremental, science, single player, singleplayer"
   },
   {
     "id": "cut-the-rope",
@@ -2881,7 +3391,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://www.zeptolab.com/franchise/cut-the-rope"
+    "url": "https://www.zeptolab.com/franchise/cut-the-rope",
+    "description": "",
+    "abbreviations": "puzzle, physics, casual, single player, singleplayer"
   },
   {
     "id": "jetpack-joyride",
@@ -2892,7 +3404,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.halfbrick.jetpackjoyride"
+    "url": "https://play.google.com/store/apps/details?id=com.halfbrick.jetpackjoyride",
+    "description": "",
+    "abbreviations": "endless runner, arcade, action, casual, single player, singleplayer"
   },
   {
     "id": "frag-pro-shooter",
@@ -2904,7 +3418,9 @@
       "PC",
       "Mobile"
     ],
-    "url": "https://www.fragthegame.com/"
+    "url": "https://www.fragthegame.com/",
+    "description": "",
+    "abbreviations": "FPS, first person shooter, hero shooter, shooter, multiplayer, online, competitive"
   },
   {
     "id": "mekorama",
@@ -2915,7 +3431,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://www.mekorama.com/"
+    "url": "https://www.mekorama.com/",
+    "description": "",
+    "abbreviations": "puzzle, strategy, casual, single player, singleplayer"
   },
   {
     "id": "odd-bot-out",
@@ -2926,7 +3444,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://www.oddbotout.com/"
+    "url": "https://www.oddbotout.com/",
+    "description": "",
+    "abbreviations": "puzzle, platformer, physics, casual, single player, singleplayer"
   },
   {
     "id": "spectre-divide",
@@ -2937,7 +3457,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/2641470/Spectre_Divide/"
+    "url": "https://store.steampowered.com/app/2641470/Spectre_Divide/",
+    "description": "",
+    "abbreviations": "FPS, first person shooter, tactical shooter, multiplayer, competitive, online, team-based"
   },
   {
     "id": "blood-strike",
@@ -2948,7 +3470,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.blood-strike.com/"
+    "url": "https://www.blood-strike.com/",
+    "description": "",
+    "abbreviations": "FPS, first person shooter, battle royale, shooter, multiplayer, online, competitive"
   },
   {
     "id": "planet-of-lana",
@@ -2959,7 +3483,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.planetoflana.com/pol1"
+    "url": "https://www.planetoflana.com/pol1",
+    "description": "",
+    "abbreviations": "adventure, platformer, puzzle, sci-fi, narrative, story, single player, singleplayer"
   },
   {
     "id": "prologue-go-wayback",
@@ -2970,7 +3496,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://playerunknownproductions.net/projects/go-wayback"
+    "url": "https://playerunknownproductions.net/projects/go-wayback",
+    "description": "",
+    "abbreviations": "prologue go wayback, FPS, first person shooter, horror, survival, story, single player, singleplayer, demo"
   },
   {
     "id": "unravel",
@@ -2981,7 +3509,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.ea.com/games/unravel/unravel"
+    "url": "https://www.ea.com/games/unravel/unravel",
+    "description": "",
+    "abbreviations": "unravel 1, platformer, puzzle, adventure, narrative, story, single player, singleplayer"
   },
   {
     "id": "unravel-two",
@@ -2992,7 +3522,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.ea.com/games/unravel/unravel-two"
+    "url": "https://www.ea.com/games/unravel/unravel-two",
+    "description": "",
+    "abbreviations": "unravel 2, platformer, puzzle, adventure, co-op, coop, cooperative, multiplayer, single player, singleplayer, story"
   },
   {
     "id": "cod-mw4-beta",
@@ -3003,7 +3535,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.callofduty.com/modernwarfare4/beta"
+    "url": "https://www.callofduty.com/modernwarfare4/beta",
+    "description": "",
+    "abbreviations": "COD MW4, MW4, codmw4, callofduty, FPS, first person shooter, action, shooter, multiplayer, online, competitive, beta"
   },
   {
     "id": "norush-tower-edition",
@@ -3014,7 +3548,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/3297160/NoRush/"
+    "url": "https://store.steampowered.com/app/3297160/NoRush/",
+    "description": "",
+    "abbreviations": "tower defense, strategy, arcade, casual, single player, singleplayer"
   },
   {
     "id": "candy-crush-saga",
@@ -3025,7 +3561,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://candycrush.com/"
+    "url": "https://candycrush.com/",
+    "description": "",
+    "abbreviations": "match 3, puzzle, casual, single player, singleplayer, social"
   },
   {
     "id": "microsoft-solitaire-collection",
@@ -3036,7 +3574,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.microsoftcasualgames.com/solitaire"
+    "url": "https://www.microsoftcasualgames.com/solitaire",
+    "description": "",
+    "abbreviations": "card, solitaire, casual, puzzle, single player, singleplayer, multiplayer"
   },
   {
     "id": "paradise-island-2",
@@ -3047,7 +3587,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.game-insight.com/en/games/paradise-island-2"
+    "url": "https://www.game-insight.com/en/games/paradise-island-2",
+    "description": "",
+    "abbreviations": "simulation, city builder, management, casual, single player, singleplayer"
   },
   {
     "id": "war-planet-online-global-conquest",
@@ -3058,7 +3600,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.gameloft.com/game/war-planet-online-global-conquest"
+    "url": "https://www.gameloft.com/game/war-planet-online-global-conquest",
+    "description": "",
+    "abbreviations": "strategy, 4X, MMO, massively multiplayer online, multiplayer, online, management, war"
   },
   {
     "id": "tyr-playtest",
@@ -3069,7 +3613,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.playtyr.com/"
+    "url": "https://www.playtyr.com/",
+    "description": "",
+    "abbreviations": "action, shooter, demo, playtest, single player, singleplayer"
   },
   {
     "id": "gunship-battle-helicopter-3d",
@@ -3080,7 +3626,9 @@
     "platforms": [
       "Mobile"
     ],
-    "url": "https://play.google.com/store/apps/details?id=com.theonegames.gunshipbattle"
+    "url": "https://play.google.com/store/apps/details?id=com.theonegames.gunshipbattle",
+    "description": "",
+    "abbreviations": "action, flight, simulation, shooter, single player, singleplayer, multiplayer"
   },
   {
     "id": "tom-clancys-the-division-resurgence",
@@ -3091,7 +3639,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://www.ubisoft.com/en-gb/game/the-division/resurgence#6Q4BAYofeRBepptV7jEqPO"
+    "url": "https://www.ubisoft.com/en-gb/game/the-division/resurgence#6Q4BAYofeRBepptV7jEqPO",
+    "description": "",
+    "abbreviations": "TPS, third person shooter, looter shooter, RPG, role playing game, open world, openworld, multiplayer, online, co-op, coop, cooperative"
   },
   {
     "id": "caravan-sandwitch",
@@ -3102,7 +3652,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://caravansandwitch.com/"
+    "url": "https://caravansandwitch.com/",
+    "description": "",
+    "abbreviations": "adventure, exploration, open world, openworld, driving, narrative, story, single player, singleplayer"
   },
   {
     "id": "asgsg",
@@ -3113,7 +3665,9 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://store.steampowered.com/app/3384180/A_Simple_Garbage_Sorting_Game/"
+    "url": "https://store.steampowered.com/app/3384180/A_Simple_Garbage_Sorting_Game/",
+    "description": "",
+    "abbreviations": "asgsg, casual, puzzle, simulation, sorting, single player, singleplayer"
   },
   {
     "id": "viewfinder",
@@ -3124,17 +3678,21 @@
     "platforms": [
       "PC"
     ],
-    "url": "https://thunderfulgames.com/games/viewfinder/"
+    "url": "https://thunderfulgames.com/games/viewfinder/",
+    "description": "",
+    "abbreviations": "puzzle, first person, adventure, perspective, single player, singleplayer, story"
   },
   {
     "id": "vtm-bloodlines2",
-    "title": "Vampire: The Masquerade – Bloodlines 2",
+    "title": "Vampire: The Masquerade - Bloodlines 2",
     "image": "https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/VampireTheMasquerade%E2%80%93Bloodlines2.png",
     "rating": 7.2,
     "gameplay": "The Streets Incarnadine // 100%",
     "platforms": [
       "PC"
     ],
-    "url": "https://www.paradoxinteractive.com/games/vampire-the-masquerade-bloodlines-2/about"
+    "url": "https://www.paradoxinteractive.com/games/vampire-the-masquerade-bloodlines-2/about",
+    "description": "",
+    "abbreviations": "vtm bloodlines 2, vampire the masquerade, RPG, role playing game, action RPG, story, narrative, horror, vampire, single player, singleplayer, adventure, dialogue, choice driven"
   }
 ]

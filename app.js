@@ -1,7 +1,10 @@
 const state = {
   games: [],
   query: "",
-  sortMode: "rating-desc"
+  searchMode: "title",
+  filterMode: "none",
+  sortMode: "rating-desc",
+  connectionMode: "good"
 };
 
 const PLATFORM_ICONS = {
@@ -40,6 +43,8 @@ const elements = {
   grid: document.querySelector("#game-grid"),
   template: document.querySelector("#game-card-template"),
   search: document.querySelector("#game-search"),
+  searchMode: document.querySelector("#search-mode"),
+  filter: document.querySelector("#filter-games"),
   sort: document.querySelector("#sort-games"),
   emptyState: document.querySelector("#empty-state"),
   emptyTitle: document.querySelector("#empty-title"),
@@ -54,7 +59,15 @@ const elements = {
   loadingScreen: document.querySelector("#loading-screen"),
   loaderBar: document.querySelector("#loader-bar"),
   loaderPercent: document.querySelector("#loader-percent"),
-  loaderMessage: document.querySelector("#loader-message")
+  loaderMessage: document.querySelector("#loader-message"),
+  reviewModalBackdrop: document.querySelector("#review-modal-backdrop"),
+  reviewModal: document.querySelector("#review-modal"),
+  reviewModalTitle: document.querySelector("#review-modal-title"),
+  reviewModalId: document.querySelector("#review-modal-id"),
+  reviewModalBody: document.querySelector("#review-modal-body"),
+  reviewModalClose: document.querySelector("#review-modal-close"),
+  reviewModalCloseBtn: document.querySelector("#review-modal-close-btn"),
+  mainContent: document.querySelector("#main-content")
 };
 
 const scrambleTimers = new WeakMap();
@@ -172,15 +185,11 @@ function normalizePlatforms(value) {
   )];
 }
 
-function getPosterUrl(originalUrl) {
+function getSmallPosterUrl(originalUrl) {
   if (!originalUrl) return "";
 
-  if (!window.matchMedia("(max-width: 700px)").matches) {
-    return originalUrl;
-  }
-
   try {
-    const url = new URL(originalUrl);
+    const url = new URL(originalUrl, window.location.href);
 
     const filename = url.pathname.split("/").pop();
     if (!filename) return originalUrl;
@@ -199,8 +208,59 @@ function getPosterUrl(originalUrl) {
 
     return url.toString();
   } catch {
-    return originalUrl;
+    return originalUrl.replace(/\.[^/.]+$/, "_small.jpg");
   }
+}
+
+function getPosterUrl(originalUrl) {
+  if (!originalUrl) return "";
+  if (state.connectionMode === "slow") {
+    return getSmallPosterUrl(originalUrl);
+  }
+  return originalUrl;
+}
+
+function detectConnectionQuality(timing = null) {
+  const conn =
+    navigator.connection ||
+    navigator.mozConnection ||
+    navigator.webkitConnection;
+
+  if (conn) {
+    if (conn.saveData) {
+      console.log("[GameWall] Save-Data active -> SLOW connection mode");
+      return "slow";
+    }
+
+    if (conn.effectiveType === "slow-2g" || conn.effectiveType === "2g") {
+      console.log(`[GameWall] Effective network type (${conn.effectiveType}) -> SLOW connection mode`);
+      return "slow";
+    }
+
+    if (typeof conn.downlink === "number" && conn.downlink > 0) {
+      if (conn.downlink < 2) {
+        console.log(`[GameWall] Network downlink (${conn.downlink} Mbps < 2 Mbps) -> SLOW connection mode`);
+        return "slow";
+      }
+      console.log(`[GameWall] Network downlink (${conn.downlink} Mbps >= 2 Mbps) -> GOOD connection mode`);
+      return "good";
+    }
+  }
+
+  // Fallback estimation using games.json download throughput
+  if (timing && typeof timing.bytes === "number" && typeof timing.durationMs === "number" && timing.bytes > 0) {
+    if (timing.durationMs >= 200) {
+      const durationSeconds = timing.durationMs / 1000;
+      const mbps = (timing.bytes * 8) / (durationSeconds * 1_000_000);
+      console.log(`[GameWall] Measured database throughput: ${mbps.toFixed(2)} Mbps (${timing.durationMs}ms for ${timing.bytes} bytes)`);
+      if (mbps < 2) {
+        return "slow";
+      }
+      return "good";
+    }
+  }
+
+  return "good";
 }
 
 function normaliseGame(game, index) {
@@ -208,11 +268,13 @@ function normaliseGame(game, index) {
   return {
     id: typeof game.id === "string" && game.id.trim() ? game.id.trim() : `entry-${index + 1}`,
     title: typeof game.title === "string" && game.title.trim() ? game.title.trim() : "Untitled game",
+    abbreviations: typeof game.abbreviations === "string" ? game.abbreviations.trim() : "",
     image: typeof game.image === "string" ? game.image.trim() : "",
     rating: Number.isFinite(rating) ? Math.max(0, Math.min(10, rating)) : 0,
     gameplay: typeof game.gameplay === "string" && game.gameplay.trim() ? game.gameplay.trim() : "Unspecified",
     platforms: normalizePlatforms(game.platforms),
     url: isSafeUrl(game.url) ? game.url : "#",
+    description: typeof game.description === "string" ? game.description.trim() : "",
     originalIndex: index
   };
 }
@@ -230,12 +292,22 @@ function isSafeUrl(value) {
 async function loadGames() {
   setLoaderProgress(18, "CONNECTING TO DATABASE...");
   try {
+    const fetchStart = performance.now();
     const response = await fetch("games.json", { cache: "no-cache" });
     if (!response.ok) throw new Error(`games.json returned ${response.status}`);
 
     setLoaderProgress(62, "VERIFYING ARCHIVE DATA...");
-    const data = await response.json();
+    const blob = await response.blob();
+    const fetchDurationMs = performance.now() - fetchStart;
+    const jsonText = await blob.text();
+    const data = JSON.parse(jsonText);
     if (!Array.isArray(data)) throw new Error("games.json must contain an array of games");
+
+    state.connectionMode = detectConnectionQuality({
+      bytes: blob.size,
+      durationMs: fetchDurationMs
+    });
+    console.log(`[GameWall] Connection mode set: ${state.connectionMode.toUpperCase()}`);
 
     state.games = data.map(normaliseGame);
     setLoaderProgress(
@@ -268,23 +340,105 @@ async function loadGames() {
   }
 }
 
+function matchesSearch(game, query, searchMode) {
+  if (!query) return true;
+
+  switch (searchMode) {
+    case "gameplay":
+      return (game.gameplay || "").toLocaleLowerCase().includes(query);
+
+    case "review":
+      return (game.description || "").toLocaleLowerCase().includes(query);
+
+    case "everything": {
+      if ((game.title || "").toLocaleLowerCase().includes(query)) return true;
+      if ((game.abbreviations || "").toLocaleLowerCase().includes(query)) return true;
+      if ((game.gameplay || "").toLocaleLowerCase().includes(query)) return true;
+      if ((game.description || "").toLocaleLowerCase().includes(query)) return true;
+      if ((game.url || "").toLocaleLowerCase().includes(query)) return true;
+      if ((game.image || "").toLocaleLowerCase().includes(query)) return true;
+      if ((game.id || "").toLocaleLowerCase().includes(query)) return true;
+
+      const cardId = `gw-${String((game.originalIndex ?? 0) + 1).padStart(3, "0")}`;
+      if (cardId.includes(query)) return true;
+
+      const rawRating = String(game.rating);
+      const formattedRating = formatRating(game.rating);
+      if (rawRating.includes(query) || formattedRating.includes(query)) return true;
+
+      if (Array.isArray(game.platforms)) {
+        const platformsText = game.platforms.join(" ").toLocaleLowerCase();
+        if (platformsText.includes(query)) return true;
+      }
+
+      for (const [key, value] of Object.entries(game)) {
+        if (typeof value === "string" && value.toLocaleLowerCase().includes(query)) {
+          return true;
+        }
+        if (typeof value === "number" && String(value).includes(query)) {
+          return true;
+        }
+        if (Array.isArray(value)) {
+          const arrStr = value.map((v) => String(v ?? "")).join(" ").toLocaleLowerCase();
+          if (arrStr.includes(query)) return true;
+        }
+      }
+
+      return false;
+    }
+
+    case "title":
+    default: {
+      const titleMatch = (game.title || "").toLocaleLowerCase().includes(query);
+      const abbrevMatch = (game.abbreviations || "").toLocaleLowerCase().includes(query);
+      return titleMatch || abbrevMatch;
+    }
+  }
+}
+
+function matchesFilter(game, filterMode) {
+  const gameplay = game.gameplay || "";
+  const description = (game.description || "").trim();
+
+  switch (filterMode) {
+    case "100":
+      return gameplay.includes("100%");
+
+    case "not-100":
+      return !gameplay.includes("100%");
+
+    case "reviews":
+      return description.length > 0;
+
+    case "no-reviews":
+      return description.length === 0;
+
+    case "none":
+    default:
+      return true;
+  }
+}
+
 function getVisibleGames() {
   const query = state.query.trim().toLocaleLowerCase();
-  const games = query
-    ? state.games.filter((game) => game.title.toLocaleLowerCase().includes(query))
-    : [...state.games];
+  const searchMode = state.searchMode || "title";
+  const filterMode = state.filterMode || "none";
+
+  const filtered = state.games.filter((game) => {
+    return matchesSearch(game, query, searchMode) && matchesFilter(game, filterMode);
+  });
 
   switch (state.sortMode) {
     case "rating-desc":
-      return games.sort((a, b) => b.rating - a.rating || a.title.localeCompare(b.title));
+      return filtered.sort((a, b) => b.rating - a.rating || a.title.localeCompare(b.title));
     case "rating-asc":
-      return games.sort((a, b) => a.rating - b.rating || a.title.localeCompare(b.title));
+      return filtered.sort((a, b) => a.rating - b.rating || a.title.localeCompare(b.title));
     case "title-asc":
-      return games.sort((a, b) => a.title.localeCompare(b.title));
+      return filtered.sort((a, b) => a.title.localeCompare(b.title));
     case "title-desc":
-      return games.sort((a, b) => b.title.localeCompare(a.title));
+      return filtered.sort((a, b) => b.title.localeCompare(a.title));
     default:
-      return games.sort((a, b) => a.originalIndex - b.originalIndex);
+      return filtered.sort((a, b) => a.originalIndex - b.originalIndex);
   }
 }
 
@@ -447,21 +601,38 @@ function createGameCard(game, position) {
   viewLink.href = game.url;
   viewLink.setAttribute("aria-label", `View ${game.title} in a new tab`);
 
+  const reviewButton = card.querySelector(".review-button");
+  if (game.description) {
+    reviewButton.hidden = false;
+    reviewButton.setAttribute("aria-label", `Read review for ${game.title}`);
+    reviewButton.addEventListener("click", () => {
+      openReviewModal(game, identifier, reviewButton);
+    });
+  } else {
+    reviewButton?.remove();
+  }
+
   if (game.image) {
-    const imageUrl = getPosterUrl(game.image.trim());
+    const originalUrl = game.image.trim();
+    const isSlow = state.connectionMode === "slow";
+    const primaryUrl = isSlow ? getSmallPosterUrl(originalUrl) : originalUrl;
+    let currentUrl = primaryUrl;
+
     console.log(
       `[GameWall] Loading poster for "${game.title}":`,
-      imageUrl
+      currentUrl,
+      isSlow ? "(slow connection mode: small poster)" : "(good connection mode: standard poster)"
     );
     posterFrame.style.setProperty(
       "--poster-bg",
-      `url("${imageUrl}")`
+      `url("${currentUrl}")`
     );
     image.classList.add("is-loading");
     placeholder.hidden = true;
     posterLoader.classList.remove("is-hidden");
     image.alt = `${game.title} poster`;
-    image.addEventListener("load", () => {
+
+    const onPosterLoad = () => {
       console.log(
         `[GameWall] Poster loaded: ${game.title}`,
         image.naturalWidth,
@@ -470,17 +641,35 @@ function createGameCard(game, position) {
       image.classList.remove("is-loading");
       placeholder.hidden = true;
       posterLoader.classList.add("is-hidden");
-    }, { once: true });
-    image.addEventListener("error", () => {
+    };
+
+    const onPosterError = () => {
+      if (currentUrl !== originalUrl && originalUrl) {
+        console.warn(
+          `[GameWall] Small poster failed for "${game.title}", falling back to original:`,
+          originalUrl
+        );
+        currentUrl = originalUrl;
+        posterFrame.style.setProperty(
+          "--poster-bg",
+          `url("${currentUrl}")`
+        );
+        image.src = currentUrl;
+        return;
+      }
+
       console.error(
         `[GameWall] Poster FAILED: ${game.title}`,
-        imageUrl
+        currentUrl
       );
       image.classList.add("is-loading");
       posterLoader.classList.add("is-hidden");
       placeholder.hidden = false;
-    }, { once: true });
-    image.src = imageUrl;
+    };
+
+    image.addEventListener("load", onPosterLoad);
+    image.addEventListener("error", onPosterError);
+    image.src = currentUrl;
   } else {
     image.classList.add("is-loading");
     posterLoader.classList.add("is-hidden");
@@ -688,15 +877,33 @@ function observeGameplayBadge(textElement) {
   }
 }
 
-elements.search.addEventListener("input", (event) => {
-  state.query = event.target.value;
-  renderGames();
-});
+if (elements.search) {
+  elements.search.addEventListener("input", (event) => {
+    state.query = event.target.value;
+    renderGames();
+  });
+}
 
-elements.sort.addEventListener("change", (event) => {
-  state.sortMode = event.target.value;
-  renderGames();
-});
+if (elements.searchMode) {
+  elements.searchMode.addEventListener("change", (event) => {
+    state.searchMode = event.target.value;
+    renderGames();
+  });
+}
+
+if (elements.filter) {
+  elements.filter.addEventListener("change", (event) => {
+    state.filterMode = event.target.value;
+    renderGames();
+  });
+}
+
+if (elements.sort) {
+  elements.sort.addEventListener("change", (event) => {
+    state.sortMode = event.target.value;
+    renderGames();
+  });
+}
 
 function initBackgroundCanvas() {
   const canvas = document.querySelector("#background-canvas");
@@ -709,9 +916,8 @@ function initBackgroundCanvas() {
 
   if (!context) return;
 
-  const reduceMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  ).matches;
+  const mobileQuery = window.matchMedia("(max-width: 760px)");
+  const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   const state = {
     width: 0,
@@ -763,6 +969,15 @@ function initBackgroundCanvas() {
   }
 
   function resize() {
+    if (mobileQuery.matches) {
+      if (state.raf) {
+        cancelAnimationFrame(state.raf);
+        state.raf = 0;
+      }
+      context.clearRect(0, 0, state.width, state.height);
+      return;
+    }
+
     const rect = canvas.getBoundingClientRect();
 
     state.width = Math.max(1, rect.width);
@@ -782,11 +997,7 @@ function initBackgroundCanvas() {
     );
 
     const area = state.width * state.height;
-    const mobile = state.width <= 760;
-
-    const desiredNodes = mobile
-      ? clamp(Math.round(area / 36000), 18, 30)
-      : clamp(Math.round(area / 24000), 30, 72);
+    const desiredNodes = clamp(Math.round(area / 24000), 30, 72);
 
     while (state.nodes.length < desiredNodes) {
       state.nodes.push(makeNode(state.nodes.length));
@@ -796,7 +1007,7 @@ function initBackgroundCanvas() {
       state.nodes.length = desiredNodes;
     }
 
-    const desiredCircuits = mobile ? 5 : 11;
+    const desiredCircuits = 11;
 
     while (state.circuits.length < desiredCircuits) {
       state.circuits.push(makeCircuit());
@@ -819,9 +1030,9 @@ function initBackgroundCanvas() {
   }
 
   function drawCircuit(circuit, time) {
-    const glow = .12 + (
+    const glow = .22 + (
       Math.sin(time * circuit.speed + circuit.phase) + 1
-    ) * .025;
+    ) * .05;
 
     context.beginPath();
     context.moveTo(
@@ -836,7 +1047,7 @@ function initBackgroundCanvas() {
       );
     }
 
-    context.strokeStyle = color(circuit.color, .055);
+    context.strokeStyle = color(circuit.color, .095);
     context.lineWidth = 1;
     context.stroke();
 
@@ -866,7 +1077,7 @@ function initBackgroundCanvas() {
     context.arc(
       px,
       py,
-      1.2,
+      1.4,
       0,
       Math.PI * 2
     );
@@ -874,16 +1085,25 @@ function initBackgroundCanvas() {
       circuit.color,
       glow
     );
-    context.shadowBlur = 9;
+    context.shadowBlur = 12;
     context.shadowColor = color(
       circuit.color,
-      .5
+      .75
     );
     context.fill();
     context.shadowBlur = 0;
   }
 
   function render(time) {
+    if (mobileQuery.matches) {
+      if (state.raf) {
+        cancelAnimationFrame(state.raf);
+        state.raf = 0;
+      }
+      context.clearRect(0, 0, state.width, state.height);
+      return;
+    }
+
     if (!state.visible) {
       state.raf = requestAnimationFrame(render);
       return;
@@ -910,11 +1130,11 @@ function initBackgroundCanvas() {
 
     gradient.addColorStop(
       0,
-      "rgba(0, 240, 255, .025)"
+      "rgba(0, 240, 255, .045)"
     );
     gradient.addColorStop(
       .5,
-      "rgba(138, 92, 255, .010)"
+      "rgba(138, 92, 255, .022)"
     );
     gradient.addColorStop(
       1,
@@ -933,13 +1153,12 @@ function initBackgroundCanvas() {
       drawCircuit(circuit, seconds);
     }
 
-    const maxDistance =
-      state.width <= 760 ? 105 : 135;
+    const maxDistance = 135;
 
     for (let i = 0; i < state.nodes.length; i++) {
       const node = state.nodes[i];
 
-      if (!reduceMotion) {
+      if (!motionQuery.matches) {
         node.x += node.vx * .015;
         node.y += node.vy * .015;
 
@@ -950,10 +1169,10 @@ function initBackgroundCanvas() {
       }
 
       const pulse =
-        .22 +
+        .36 +
         (
           Math.sin(seconds * .7 + node.phase) + 1
-        ) * .06;
+        ) * .10;
 
       for (let j = i + 1; j < state.nodes.length; j++) {
         const other = state.nodes[j];
@@ -964,7 +1183,7 @@ function initBackgroundCanvas() {
         if (distance > maxDistance) continue;
 
         const opacity =
-          (1 - distance / maxDistance) * .045;
+          (1 - distance / maxDistance) * .085;
 
         context.beginPath();
         context.moveTo(node.x, node.y);
@@ -973,7 +1192,7 @@ function initBackgroundCanvas() {
           node.hue,
           opacity
         );
-        context.lineWidth = .55;
+        context.lineWidth = .7;
         context.stroke();
       }
 
@@ -995,6 +1214,32 @@ function initBackgroundCanvas() {
     state.raf = requestAnimationFrame(render);
   }
 
+  function updateAnimationLoop() {
+    if (mobileQuery.matches) {
+      if (state.raf) {
+        cancelAnimationFrame(state.raf);
+        state.raf = 0;
+      }
+      context.clearRect(0, 0, state.width, state.height);
+      return;
+    }
+
+    resize();
+
+    if (motionQuery.matches) {
+      if (state.raf) {
+        cancelAnimationFrame(state.raf);
+        state.raf = 0;
+      }
+      render(0);
+      return;
+    }
+
+    if (!state.raf) {
+      state.raf = requestAnimationFrame(render);
+    }
+  }
+
   const visibilityObserver = new IntersectionObserver(
     (entries) => {
       state.visible = entries[0]?.isIntersecting !== false;
@@ -1004,25 +1249,383 @@ function initBackgroundCanvas() {
 
   visibilityObserver.observe(canvas);
 
+  mobileQuery.addEventListener("change", updateAnimationLoop);
+  motionQuery.addEventListener("change", updateAnimationLoop);
+
   window.addEventListener(
     "resize",
-    resize,
+    () => {
+      if (mobileQuery.matches) {
+        if (state.raf) {
+          cancelAnimationFrame(state.raf);
+          state.raf = 0;
+        }
+        context.clearRect(0, 0, state.width, state.height);
+      } else {
+        resize();
+        if (!state.raf && !motionQuery.matches) {
+          state.raf = requestAnimationFrame(render);
+        }
+      }
+    },
     { passive: true }
   );
 
-  resize();
-
-  if (reduceMotion) {
-    render(0);
-    cancelAnimationFrame(state.raf);
-    return;
-  }
-
-  state.raf = requestAnimationFrame(render);
+  updateAnimationLoop();
 }
 
+let accessCounterLoaded = false;
+
+async function loadAccessCounter() {
+  if (accessCounterLoaded) return;
+  accessCounterLoaded = true;
+
+  const counterElement = document.querySelector("#access-counter");
+  if (!counterElement) return;
+
+  try {
+    const response = await fetch(
+      "https://abacus.jasoncameron.dev/hit/intenseparijat.github.io/gamewall",
+      { cache: "no-store" }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Counter API returned HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+    if (typeof data.value === "number") {
+      counterElement.textContent = data.value.toLocaleString();
+    } else {
+      throw new Error("Invalid counter response payload");
+    }
+  } catch (error) {
+    console.warn("GameWall access counter unavailable:", error);
+    counterElement.textContent = "—";
+  }
+}
+
+function processSafeEmbeds(markdown) {
+  if (!markdown) return "";
+
+  const lines = markdown.split("\n");
+  const processed = lines.map((line) => {
+    const trimmed = line.trim();
+
+    // Standalone YouTube URL: https://www.youtube.com/watch?v=ID or https://youtu.be/ID or embed/
+    const ytMatch = trimmed.match(
+      /^(?:https?:)?\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:\S*)?$/i
+    );
+    if (ytMatch) {
+      const videoId = encodeURIComponent(ytMatch[1]);
+      return `<div class="review-video-embed"><iframe src="https://www.youtube-nocookie.com/embed/${videoId}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe></div>`;
+    }
+
+    // Standalone Vimeo URL: https://vimeo.com/ID
+    const vimeoMatch = trimmed.match(
+      /^(?:https?:)?\/\/(?:www\.)?vimeo\.com\/(\d+)(?:\S*)?$/i
+    );
+    if (vimeoMatch) {
+      const videoId = encodeURIComponent(vimeoMatch[1]);
+      return `<div class="review-video-embed"><iframe src="https://player.vimeo.com/video/${videoId}" allowfullscreen allow="autoplay; fullscreen; picture-in-picture"></iframe></div>`;
+    }
+
+    return line;
+  });
+
+  return processed.join("\n");
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function fallbackMarkdownParse(text) {
+  if (!text) return "";
+
+  const embedBlocks = [];
+  let working = text.replace(/<div class="review-video-embed">[\s\S]*?<\/div>/gi, (match) => {
+    embedBlocks.push(match);
+    return `%%EMBED${embedBlocks.length - 1}%%`;
+  });
+
+  const codeBlocks = [];
+  working = working.replace(/```([a-z0-9_-]*)[ \t]*\r?\n([\s\S]*?)```/gi, (_, lang, code) => {
+    codeBlocks.push(`<pre><code>${escapeHtml(code.trim())}</code></pre>`);
+    return `%%CODEBLOCK${codeBlocks.length - 1}%%`;
+  });
+
+  working = working.replace(/`([^`]+)`/g, (_, code) => `<code>${escapeHtml(code)}</code>`);
+
+  const blocks = working.split(/\r?\n\s*\r?\n/);
+  const parsedBlocks = [];
+
+  for (const block of blocks) {
+    const trimmed = block.trim();
+    if (!trimmed) continue;
+    if (trimmed.startsWith("%%CODEBLOCK") || trimmed.startsWith("%%EMBED")) {
+      parsedBlocks.push(trimmed);
+      continue;
+    }
+
+    const hMatch = trimmed.match(/^(#{1,6})\s+(.+)$/);
+    if (hMatch) {
+      const level = hMatch[1].length;
+      parsedBlocks.push(`<h${level}>${hMatch[2]}</h${level}>`);
+      continue;
+    }
+
+    if (trimmed.startsWith(">")) {
+      const quoteText = trimmed.replace(/^>\s?/gm, "");
+      parsedBlocks.push(`<blockquote><p>${quoteText}</p></blockquote>`);
+      continue;
+    }
+
+    if (/^(?:---|\*\*\*|___)$/.test(trimmed)) {
+      parsedBlocks.push("<hr />");
+      continue;
+    }
+
+    const lines = trimmed.split(/\r?\n/);
+    if (lines.every((l) => /^\s*[-*]\s+/.test(l))) {
+      const items = lines.map((l) => `<li>${l.replace(/^\s*[-*]\s+/, "")}</li>`).join("");
+      parsedBlocks.push(`<ul>${items}</ul>`);
+      continue;
+    }
+
+    if (lines.every((l) => /^\s*\d+\.\s+/.test(l))) {
+      const items = lines.map((l) => `<li>${l.replace(/^\s*\d+\.\s+/, "")}</li>`).join("");
+      parsedBlocks.push(`<ol>${items}</ol>`);
+      continue;
+    }
+
+    parsedBlocks.push(`<p>${lines.join("<br />")}</p>`);
+  }
+
+  let result = parsedBlocks.join("\n");
+
+  result = result.replace(/!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/gi, (_, alt, url) => {
+    return `<img src="${escapeHtml(url)}" alt="${escapeHtml(alt)}" loading="lazy" />`;
+  });
+
+  result = result.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/gi, (_, label, url) => {
+    return `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+  });
+
+  result = result.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  result = result.replace(/__([^_]+)__/g, "<strong>$1</strong>");
+  result = result.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, "<em>$1</em>");
+  result = result.replace(/(?<!_)_([^_]+)_(?!_)/g, "<em>$1</em>");
+  result = result.replace(/~~([^~]+)~~/g, "<del>$1</del>");
+
+  result = result.replace(/%%CODEBLOCK(\d+)%%/g, (_, idx) => codeBlocks[Number(idx)] || "");
+  result = result.replace(/%%EMBED(\d+)%%/g, (_, idx) => embedBlocks[Number(idx)] || "");
+
+  return result;
+}
+
+function fallbackSanitizeHtml(html) {
+  const template = document.createElement("template");
+  template.innerHTML = html;
+  const content = template.content;
+
+  const dangerous = content.querySelectorAll("script, object, embed, style, link, meta, base");
+  dangerous.forEach((el) => el.remove());
+
+  const allElements = content.querySelectorAll("*");
+  allElements.forEach((el) => {
+    for (const attr of Array.from(el.attributes)) {
+      const name = attr.name.toLowerCase();
+      const value = attr.value.toLowerCase().trim();
+      if (name.startsWith("on") || value.startsWith("javascript:") || value.startsWith("data:text/html")) {
+        el.removeAttribute(attr.name);
+      }
+    }
+  });
+
+  return template.innerHTML;
+}
+
+function postProcessReviewHtml(cleanHtml) {
+  const template = document.createElement("template");
+  template.innerHTML = cleanHtml;
+  const content = template.content;
+
+  content.querySelectorAll("a").forEach((link) => {
+    const href = link.getAttribute("href") || "";
+    if (/^https?:\/\//i.test(href)) {
+      link.setAttribute("target", "_blank");
+      link.setAttribute("rel", "noopener noreferrer");
+    } else {
+      link.removeAttribute("href");
+      link.setAttribute("aria-disabled", "true");
+    }
+  });
+
+  content.querySelectorAll("img").forEach((img) => {
+    img.setAttribute("loading", "lazy");
+    const src = img.getAttribute("src") || "";
+    if (!/^(?:https?:|\/|data:image\/)/i.test(src)) {
+      img.remove();
+    }
+  });
+
+  content.querySelectorAll("iframe").forEach((iframe) => {
+    const src = iframe.getAttribute("src") || "";
+    const isSafeYoutube = /^https:\/\/(?:www\.)?(?:youtube-nocookie\.com|youtube\.com)\/embed\/[a-zA-Z0-9_-]+/i.test(src);
+    const isSafeVimeo = /^https:\/\/player\.vimeo\.com\/video\/\d+/i.test(src);
+
+    if (!isSafeYoutube && !isSafeVimeo) {
+      iframe.remove();
+    } else {
+      iframe.setAttribute("loading", "lazy");
+      iframe.setAttribute("allowfullscreen", "true");
+    }
+  });
+
+  return template.innerHTML;
+}
+
+function renderReviewMarkdown(rawMarkdown) {
+  if (!rawMarkdown || typeof rawMarkdown !== "string") return "";
+
+  const embedProcessed = processSafeEmbeds(rawMarkdown);
+
+  let html = "";
+  if (window.marked && typeof window.marked.parse === "function") {
+    html = window.marked.parse(embedProcessed, {
+      breaks: true,
+      gfm: true
+    });
+  } else {
+    html = fallbackMarkdownParse(embedProcessed);
+  }
+
+  let cleanHtml = "";
+  if (window.DOMPurify && typeof window.DOMPurify.sanitize === "function") {
+    cleanHtml = window.DOMPurify.sanitize(html, {
+      ADD_TAGS: ["iframe"],
+      ADD_ATTR: ["allow", "allowfullscreen", "frameborder", "loading"]
+    });
+  } else {
+    cleanHtml = fallbackSanitizeHtml(html);
+  }
+
+  return postProcessReviewHtml(cleanHtml);
+}
+
+let lastFocusedElement = null;
+let savedScrollY = 0;
+
+function openReviewModal(game, identifier, triggerElement) {
+  if (!game || !game.description) return;
+
+  lastFocusedElement = triggerElement || document.activeElement;
+  savedScrollY = window.scrollY || window.pageYOffset || 0;
+
+  document.documentElement.classList.add("modal-open");
+  document.body.classList.add("modal-open");
+  elements.mainContent?.setAttribute("aria-hidden", "true");
+
+  if (elements.reviewModalId) {
+    elements.reviewModalId.textContent = identifier;
+  }
+  if (elements.reviewModalTitle) {
+    elements.reviewModalTitle.textContent = `${game.title} — Review`;
+  }
+  if (elements.reviewModalBody) {
+    elements.reviewModalBody.innerHTML = renderReviewMarkdown(game.description);
+    elements.reviewModalBody.scrollTop = 0;
+  }
+
+  if (elements.reviewModalBackdrop) {
+    elements.reviewModalBackdrop.hidden = false;
+    elements.reviewModalBackdrop.removeAttribute("aria-hidden");
+    requestAnimationFrame(() => {
+      elements.reviewModalBackdrop.classList.add("is-open");
+      elements.reviewModalClose?.focus();
+    });
+  }
+}
+
+function closeReviewModal() {
+  if (!elements.reviewModalBackdrop || elements.reviewModalBackdrop.hidden) return;
+
+  elements.reviewModalBackdrop.classList.remove("is-open");
+  document.documentElement.classList.remove("modal-open");
+  document.body.classList.remove("modal-open");
+  elements.mainContent?.removeAttribute("aria-hidden");
+
+  window.scrollTo(0, savedScrollY);
+
+  setTimeout(() => {
+    elements.reviewModalBackdrop.hidden = true;
+    elements.reviewModalBackdrop.setAttribute("aria-hidden", "true");
+    if (elements.reviewModalBody) {
+      elements.reviewModalBody.innerHTML = "";
+    }
+    if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
+      lastFocusedElement.focus();
+    }
+  }, 250);
+}
+
+function initReviewModalEvents() {
+  if (elements.reviewModalClose) {
+    elements.reviewModalClose.addEventListener("click", closeReviewModal);
+  }
+  if (elements.reviewModalCloseBtn) {
+    elements.reviewModalCloseBtn.addEventListener("click", closeReviewModal);
+  }
+
+  if (elements.reviewModalBackdrop) {
+    elements.reviewModalBackdrop.addEventListener("click", (event) => {
+      if (event.target === elements.reviewModalBackdrop) {
+        closeReviewModal();
+      }
+    });
+  }
+
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && elements.reviewModalBackdrop && !elements.reviewModalBackdrop.hidden) {
+      closeReviewModal();
+    }
+  });
+
+  if (elements.reviewModal) {
+    elements.reviewModal.addEventListener("keydown", (event) => {
+      if (event.key !== "Tab") return;
+
+      const focusables = Array.from(
+        elements.reviewModal.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+      ).filter((el) => !el.disabled && el.offsetParent !== null);
+
+      if (!focusables.length) return;
+
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+  }
+}
 
 initBackgroundCanvas();
+initReviewModalEvents();
+loadAccessCounter();
 
 scrambleText(
   document.querySelector(".loading-screen h1"),
