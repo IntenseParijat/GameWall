@@ -1965,6 +1965,14 @@ body.modal-open {
   text-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
 }
 
+.review-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex-shrink: 0;
+}
+
+.review-modal-share,
 .review-modal-close {
   display: inline-flex;
   align-items: center;
@@ -1979,6 +1987,53 @@ body.modal-open {
   cursor: pointer;
   flex-shrink: 0;
   transition: color .2s, border-color .2s, background .2s, transform .2s, box-shadow .2s;
+}
+
+.review-modal-share {
+  position: relative;
+}
+
+.review-modal-share:hover,
+.review-modal-share:focus-visible {
+  color: #fff;
+  border-color: var(--neon-cyan);
+  background: rgba(0, 240, 255, 0.18);
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.4);
+  transform: scale(1.05);
+}
+
+.review-modal-share.is-copied {
+  border-color: var(--neon-cyan);
+  background: rgba(0, 240, 255, 0.25);
+  color: var(--neon-cyan);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.5);
+}
+
+.review-share-toast {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  right: 0;
+  padding: .3rem .6rem;
+  background: var(--surface-raised);
+  border: 1px solid var(--neon-cyan);
+  border-radius: 3px;
+  color: var(--neon-cyan);
+  font: 700 .65rem/1 Rajdhani, sans-serif;
+  letter-spacing: .12em;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.7), 0 0 8px rgba(0, 240, 255, 0.35);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(4px);
+  transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+  z-index: 10;
+}
+
+.review-modal-share.is-copied .review-share-toast {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 .review-modal-close:hover,
@@ -2140,6 +2195,102 @@ body.modal-open {
   border: 0;
 }
 
+/* Instagram embed wrapper */
+.review-instagram-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 540px;
+  margin: 1.6rem auto;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  border-radius: var(--radius);
+}
+
+.review-instagram-wrapper blockquote.instagram-media {
+  margin: 0 auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  box-shadow: none !important;
+}
+
+.review-instagram-wrapper iframe {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  border-radius: var(--radius) !important;
+}
+
+/* Instagram fallback card */
+.review-instagram-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .85rem;
+  width: 100%;
+  max-width: 540px;
+  padding: .85rem 1.15rem;
+  margin: 1.25rem auto;
+  border: 1px solid rgba(0, 240, 255, 0.28);
+  border-radius: var(--radius);
+  background: linear-gradient(120deg, rgba(12, 16, 26, 0.95), rgba(17, 23, 37, 0.85));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 4px 16px rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
+}
+
+.review-instagram-fallback-info {
+  display: inline-flex;
+  align-items: center;
+  gap: .65rem;
+  min-width: 0;
+}
+
+.instagram-fallback-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  color: var(--neon-pink);
+}
+
+.instagram-fallback-text {
+  font: 600 .78rem/1.2 Rajdhani, sans-serif;
+  letter-spacing: .08em;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.instagram-fallback-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .4rem .75rem;
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  border-radius: var(--radius);
+  background: rgba(0, 240, 255, 0.08);
+  color: var(--neon-cyan) !important;
+  font: 700 .68rem/1 Rajdhani, sans-serif;
+  letter-spacing: .12em;
+  text-decoration: none !important;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all .2s ease;
+}
+
+.instagram-fallback-link:hover,
+.instagram-fallback-link:focus-visible {
+  color: #fff !important;
+  background: rgba(0, 240, 255, 0.22);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.35);
+  transform: translateY(-1px);
+}
+
 .review-modal-footer {
   flex-shrink: 0;
   display: flex;
@@ -2204,9 +2355,37 @@ body.modal-open {
     padding: .9rem 1rem .75rem;
   }
 
+  .review-modal-actions {
+    gap: .35rem;
+  }
+
+  .review-modal-share,
+  .review-modal-close {
+    width: 2rem;
+    height: 2rem;
+  }
+
   .review-modal-body {
     padding: 1rem .85rem 1.25rem;
     font-size: .9rem;
+  }
+
+  .review-instagram-wrapper {
+    margin: 1rem auto;
+  }
+
+  .review-instagram-fallback {
+    padding: .75rem .85rem;
+    gap: .5rem;
+  }
+
+  .instagram-fallback-text {
+    font-size: .72rem;
+  }
+
+  .instagram-fallback-link {
+    padding: .35rem .6rem;
+    font-size: .62rem;
   }
 
   .review-modal-footer {

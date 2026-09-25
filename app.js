@@ -67,6 +67,8 @@ const elements = {
   reviewModalBody: document.querySelector("#review-modal-body"),
   reviewModalClose: document.querySelector("#review-modal-close"),
   reviewModalCloseBtn: document.querySelector("#review-modal-close-btn"),
+  reviewModalShare: document.querySelector("#review-modal-share"),
+  reviewShareToast: document.querySelector("#review-share-toast"),
   mainContent: document.querySelector("#main-content")
 };
 
@@ -328,6 +330,7 @@ async function loadGames() {
     await new Promise((resolve) => window.setTimeout(resolve, 1000));
 
     hideLoading();
+    checkInitialReviewSlug();
   } catch (error) {
     console.error("GameWall could not load games.json:", error);
     showError();
@@ -877,9 +880,82 @@ function observeGameplayBadge(textElement) {
   }
 }
 
+const VALID_SEARCH_MODES = ["title", "gameplay", "review", "everything"];
+const VALID_FILTERS = ["none", "100", "not-100", "reviews", "no-reviews"];
+
+function buildSearchQueryString(query = state.query, searchMode = state.searchMode, filterMode = state.filterMode) {
+  const params = new URLSearchParams();
+  const trimmed = (query || "").trim();
+  if (trimmed) {
+    params.set("s", trimmed);
+  }
+  if (searchMode && searchMode !== "title" && VALID_SEARCH_MODES.includes(searchMode)) {
+    params.set("p1", searchMode);
+  }
+  if (filterMode && filterMode !== "none" && VALID_FILTERS.includes(filterMode)) {
+    params.set("p2", filterMode);
+  }
+  const qs = params.toString();
+  return qs ? `?${qs}` : "";
+}
+
+function syncSearchUrl() {
+  if (activeReviewSlug) return;
+  const currentPath = window.location.pathname;
+  const qs = buildSearchQueryString();
+  const newUrl = `${currentPath}${qs}${window.location.hash}`;
+  const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+  if (currentUrl !== newUrl) {
+    window.history.replaceState({ type: "search" }, "", newUrl);
+  }
+}
+
+function initUrlState() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+
+    const sParam = params.get("s");
+    if (typeof sParam === "string" && sParam.length > 0) {
+      state.query = sParam;
+      if (elements.search) {
+        elements.search.value = sParam;
+      }
+    }
+
+    const p1Param = params.get("p1");
+    if (p1Param && VALID_SEARCH_MODES.includes(p1Param)) {
+      state.searchMode = p1Param;
+      if (elements.searchMode) {
+        elements.searchMode.value = p1Param;
+      }
+    } else {
+      state.searchMode = "title";
+      if (elements.searchMode) {
+        elements.searchMode.value = "title";
+      }
+    }
+
+    const p2Param = params.get("p2");
+    if (p2Param && VALID_FILTERS.includes(p2Param)) {
+      state.filterMode = p2Param;
+      if (elements.filter) {
+        elements.filter.value = p2Param;
+      }
+    } else {
+      state.filterMode = "none";
+      if (elements.filter) {
+        elements.filter.value = "none";
+      }
+    }
+  } catch (err) {
+    console.warn("[GameWall] Error initializing URL search state:", err);
+  }
+}
+
 if (elements.search) {
   elements.search.addEventListener("input", (event) => {
     state.query = event.target.value;
+    syncSearchUrl();
     renderGames();
   });
 }
@@ -887,6 +963,7 @@ if (elements.search) {
 if (elements.searchMode) {
   elements.searchMode.addEventListener("change", (event) => {
     state.searchMode = event.target.value;
+    syncSearchUrl();
     renderGames();
   });
 }
@@ -894,6 +971,7 @@ if (elements.searchMode) {
 if (elements.filter) {
   elements.filter.addEventListener("change", (event) => {
     state.filterMode = event.target.value;
+    syncSearchUrl();
     renderGames();
   });
 }
@@ -1305,6 +1383,61 @@ async function loadAccessCounter() {
   }
 }
 
+function validateInstagramUrl(rawUrl) {
+  if (!rawUrl || typeof rawUrl !== "string") return null;
+  const decoded = rawUrl
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#039;/g, "'")
+    .trim();
+
+  try {
+    const withProto = decoded.startsWith("//") ? `https:${decoded}` : decoded;
+    const parsed = new URL(withProto);
+    const hostname = parsed.hostname.toLowerCase();
+    if (hostname !== "instagram.com" && hostname !== "www.instagram.com") {
+      return null;
+    }
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+      return null;
+    }
+    parsed.protocol = "https:";
+    return parsed.toString();
+  } catch {
+    return null;
+  }
+}
+
+function processInstagramEmbeds(text) {
+  if (!text || typeof text !== "string") return "";
+
+  // 1. Discard official Instagram embed.js script tag if present in Markdown
+  let cleaned = text.replace(
+    /<script\b[^>]*?src=["'](?:https?:)?\/\/(?:www\.)?instagram\.com\/embed\.js["'][^>]*?>\s*(?:<\/script>)?/gi,
+    ""
+  );
+
+  // 2. Recognize official Instagram blockquote embed code
+  const instagramBlockquoteRegex = /<blockquote\b[^>]*\bclass=["'][^"']*\binstagram-media\b[^"']*["'][^>]*>[\s\S]*?<\/blockquote>/gi;
+
+  cleaned = cleaned.replace(instagramBlockquoteRegex, (match) => {
+    const permalinkMatch = match.match(/data-instgrm-permalink=["']([^"']+)["']/i);
+    if (!permalinkMatch || !permalinkMatch[1]) {
+      return "";
+    }
+
+    const validatedUrl = validateInstagramUrl(permalinkMatch[1]);
+    if (!validatedUrl) {
+      return "";
+    }
+
+    // Replace with safe GameWall placeholder element containing only the validated permalink
+    return `\n\n<div class="review-instagram-placeholder" data-instagram-permalink="${escapeHtml(validatedUrl)}"></div>\n\n`;
+  });
+
+  return cleaned;
+}
+
 function processSafeEmbeds(markdown) {
   if (!markdown) return "";
 
@@ -1349,7 +1482,7 @@ function fallbackMarkdownParse(text) {
   if (!text) return "";
 
   const embedBlocks = [];
-  let working = text.replace(/<div class="review-video-embed">[\s\S]*?<\/div>/gi, (match) => {
+  let working = text.replace(/<div class="(?:review-video-embed|review-instagram-placeholder)"[\s\S]*?<\/div>/gi, (match) => {
     embedBlocks.push(match);
     return `%%EMBED${embedBlocks.length - 1}%%`;
   });
@@ -1494,7 +1627,8 @@ function postProcessReviewHtml(cleanHtml) {
 function renderReviewMarkdown(rawMarkdown) {
   if (!rawMarkdown || typeof rawMarkdown !== "string") return "";
 
-  const embedProcessed = processSafeEmbeds(rawMarkdown);
+  const instagramProcessed = processInstagramEmbeds(rawMarkdown);
+  const embedProcessed = processSafeEmbeds(instagramProcessed);
 
   let html = "";
   if (window.marked && typeof window.marked.parse === "function") {
@@ -1510,7 +1644,7 @@ function renderReviewMarkdown(rawMarkdown) {
   if (window.DOMPurify && typeof window.DOMPurify.sanitize === "function") {
     cleanHtml = window.DOMPurify.sanitize(html, {
       ADD_TAGS: ["iframe"],
-      ADD_ATTR: ["allow", "allowfullscreen", "frameborder", "loading"]
+      ADD_ATTR: ["allow", "allowfullscreen", "frameborder", "loading", "data-instagram-permalink"]
     });
   } else {
     cleanHtml = fallbackSanitizeHtml(html);
@@ -1519,11 +1653,255 @@ function renderReviewMarkdown(rawMarkdown) {
   return postProcessReviewHtml(cleanHtml);
 }
 
+let instagramScriptPromise = null;
+
+function loadInstagramScript() {
+  if (window.instgrm?.Embeds) {
+    return Promise.resolve(window.instgrm);
+  }
+  if (instagramScriptPromise) {
+    return instagramScriptPromise;
+  }
+
+  const existingScript = document.querySelector('script[src*="instagram.com/embed.js"]');
+  if (existingScript) {
+    instagramScriptPromise = new Promise((resolve, reject) => {
+      if (window.instgrm?.Embeds) {
+        resolve(window.instgrm);
+        return;
+      }
+      existingScript.addEventListener("load", () => {
+        if (window.instgrm?.Embeds) resolve(window.instgrm);
+        else reject(new Error("Instagram API missing"));
+      }, { once: true });
+      existingScript.addEventListener("error", () => reject(new Error("Failed to load Instagram script")), { once: true });
+      setTimeout(() => {
+        if (window.instgrm?.Embeds) resolve(window.instgrm);
+        else reject(new Error("Instagram script timeout"));
+      }, 6000);
+    });
+    return instagramScriptPromise;
+  }
+
+  instagramScriptPromise = new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.async = true;
+    script.defer = true;
+    script.src = "https://www.instagram.com/embed.js";
+
+    const timer = setTimeout(() => {
+      if (window.instgrm?.Embeds) {
+        resolve(window.instgrm);
+      } else {
+        reject(new Error("Instagram embed script timed out"));
+      }
+    }, 6000);
+
+    script.onload = () => {
+      clearTimeout(timer);
+      if (window.instgrm?.Embeds) {
+        resolve(window.instgrm);
+      } else {
+        let retries = 0;
+        const check = setInterval(() => {
+          retries++;
+          if (window.instgrm?.Embeds) {
+            clearInterval(check);
+            resolve(window.instgrm);
+          } else if (retries > 25) {
+            clearInterval(check);
+            reject(new Error("Instagram embed object not available"));
+          }
+        }, 50);
+      }
+    };
+
+    script.onerror = (err) => {
+      clearTimeout(timer);
+      reject(err || new Error("Failed to load Instagram embed script"));
+    };
+
+    document.head.appendChild(script);
+  });
+
+  return instagramScriptPromise;
+}
+
+function createInstagramFallback(permalink) {
+  const fallback = document.createElement("div");
+  fallback.className = "review-instagram-fallback";
+
+  const info = document.createElement("div");
+  info.className = "review-instagram-fallback-info";
+  info.innerHTML = `
+    <svg class="instagram-fallback-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+    </svg>
+    <span class="instagram-fallback-text">View this post on Instagram</span>
+  `;
+
+  const link = document.createElement("a");
+  link.className = "instagram-fallback-link";
+  link.href = permalink;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.innerHTML = `<span>VIEW POST</span><span aria-hidden="true">↗</span>`;
+
+  fallback.append(info, link);
+  return fallback;
+}
+
+function hydrateInstagramEmbeds(container) {
+  if (!container) return;
+  const placeholders = Array.from(container.querySelectorAll(".review-instagram-placeholder"));
+  if (!placeholders.length) return;
+
+  const items = placeholders.map((placeholder) => {
+    const permalink = placeholder.getAttribute("data-instagram-permalink");
+    const validated = validateInstagramUrl(permalink);
+    if (!validated) {
+      placeholder.remove();
+      return null;
+    }
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "review-instagram-wrapper";
+
+    const blockquote = document.createElement("blockquote");
+    blockquote.className = "instagram-media";
+    blockquote.setAttribute("data-instgrm-permalink", validated);
+    blockquote.setAttribute("data-instgrm-version", "14");
+
+    wrapper.appendChild(blockquote);
+    placeholder.replaceWith(wrapper);
+    return { wrapper, blockquote, permalink: validated };
+  }).filter(Boolean);
+
+  if (!items.length) return;
+
+  loadInstagramScript()
+    .then((instgrm) => {
+      try {
+        if (instgrm?.Embeds?.process) {
+          instgrm.Embeds.process();
+        } else if (window.instgrm?.Embeds?.process) {
+          window.instgrm.Embeds.process();
+        }
+      } catch (err) {
+        console.warn("[GameWall] Instagram Embeds.process error:", err);
+      }
+    })
+    .catch((err) => {
+      console.warn("[GameWall] Instagram script load failed, using fallback:", err);
+      items.forEach(({ wrapper, permalink }) => {
+        wrapper.replaceChildren(createInstagramFallback(permalink));
+      });
+    });
+
+  // Watchdog: If after 5 seconds Instagram's script hasn't injected an iframe or rendered content, display fallback
+  setTimeout(() => {
+    items.forEach(({ wrapper, permalink }) => {
+      if (document.contains(wrapper)) {
+        const hasIframe = wrapper.querySelector("iframe");
+        const hasProcessedBlock = wrapper.querySelector(".instagram-media-rendered");
+        if (!hasIframe && !hasProcessedBlock && wrapper.firstElementChild?.tagName === "BLOCKQUOTE") {
+          wrapper.replaceChildren(createInstagramFallback(permalink));
+        }
+      }
+    });
+  }, 5000);
+}
+
 let lastFocusedElement = null;
 let savedScrollY = 0;
+let currentReviewGame = null;
+let activeReviewSlug = null;
+let previousSearchUrl = null;
+let copyFeedbackTimeout = null;
 
-function openReviewModal(game, identifier, triggerElement) {
+function showCopyFeedback() {
+  if (!elements.reviewModalShare) return;
+  elements.reviewModalShare.classList.add("is-copied");
+  elements.reviewModalShare.setAttribute("aria-label", "Review link copied to clipboard");
+  if (copyFeedbackTimeout) clearTimeout(copyFeedbackTimeout);
+  copyFeedbackTimeout = setTimeout(() => {
+    if (elements.reviewModalShare) {
+      elements.reviewModalShare.classList.remove("is-copied");
+      elements.reviewModalShare.setAttribute("aria-label", "Share review link");
+    }
+  }, 2000);
+}
+
+function legacyCopyToClipboard(text) {
+  try {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.style.position = "fixed";
+    textarea.style.left = "-9999px";
+    textarea.style.top = "0";
+    textarea.setAttribute("readonly", "");
+    document.body.appendChild(textarea);
+    textarea.select();
+    const success = document.execCommand("copy");
+    document.body.removeChild(textarea);
+    return success;
+  } catch (e) {
+    console.warn("[GameWall] Legacy clipboard copy failed:", e);
+    return false;
+  }
+}
+
+async function shareCurrentReview() {
+  if (!currentReviewGame) return;
+  const shareUrl = `${window.location.origin}${window.location.pathname}?review=${encodeURIComponent(currentReviewGame.id)}`;
+  const shareData = {
+    title: `${currentReviewGame.title} — Review`,
+    url: shareUrl
+  };
+
+  if (navigator.share) {
+    try {
+      await navigator.share(shareData);
+      return;
+    } catch (err) {
+      if (err.name === "AbortError") {
+        return;
+      }
+    }
+  }
+
+  try {
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+      await navigator.clipboard.writeText(shareUrl);
+      showCopyFeedback();
+    } else {
+      const ok = legacyCopyToClipboard(shareUrl);
+      if (ok) showCopyFeedback();
+    }
+  } catch (err) {
+    const ok = legacyCopyToClipboard(shareUrl);
+    if (ok) showCopyFeedback();
+  }
+}
+
+function openReviewModal(game, identifier, triggerElement, fromPopstate = false) {
   if (!game || !game.description) return;
+
+  currentReviewGame = game;
+
+  if (!activeReviewSlug && !fromPopstate) {
+    const currentQs = buildSearchQueryString();
+    previousSearchUrl = `${window.location.pathname}${currentQs}${window.location.hash}`;
+  }
+
+  activeReviewSlug = game.id;
+
+  if (!fromPopstate) {
+    const reviewUrl = `${window.location.pathname}?review=${encodeURIComponent(game.id)}${window.location.hash}`;
+    window.history.replaceState({ type: "review", slug: game.id }, "", reviewUrl);
+  }
 
   lastFocusedElement = triggerElement || document.activeElement;
   savedScrollY = window.scrollY || window.pageYOffset || 0;
@@ -1541,6 +1919,7 @@ function openReviewModal(game, identifier, triggerElement) {
   if (elements.reviewModalBody) {
     elements.reviewModalBody.innerHTML = renderReviewMarkdown(game.description);
     elements.reviewModalBody.scrollTop = 0;
+    hydrateInstagramEmbeds(elements.reviewModalBody);
   }
 
   if (elements.reviewModalBackdrop) {
@@ -1553,8 +1932,16 @@ function openReviewModal(game, identifier, triggerElement) {
   }
 }
 
-function closeReviewModal() {
+function closeReviewModal(fromPopstate = false) {
   if (!elements.reviewModalBackdrop || elements.reviewModalBackdrop.hidden) return;
+
+  if (!fromPopstate) {
+    const restoreUrl = previousSearchUrl || `${window.location.pathname}${buildSearchQueryString()}${window.location.hash}`;
+    window.history.replaceState({ type: "search" }, "", restoreUrl);
+  }
+  previousSearchUrl = null;
+  activeReviewSlug = null;
+  currentReviewGame = null;
 
   elements.reviewModalBackdrop.classList.remove("is-open");
   document.documentElement.classList.remove("modal-open");
@@ -1575,25 +1962,52 @@ function closeReviewModal() {
   }, 250);
 }
 
+function checkInitialReviewSlug() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get("review");
+    if (!slug) return;
+
+    const trimmed = slug.trim().toLowerCase();
+    const game = state.games.find((g) => g.id.toLowerCase() === trimmed);
+    if (game && game.description) {
+      const position = state.games.indexOf(game);
+      const identifier = `GW-${String(position + 1).padStart(3, "0")}`;
+      previousSearchUrl = `${window.location.pathname}${buildSearchQueryString()}${window.location.hash}`;
+      openReviewModal(game, identifier, null, false);
+    } else {
+      // Invalid slug: ignore/remove gracefully without error
+      const cleanUrl = `${window.location.pathname}${buildSearchQueryString()}${window.location.hash}`;
+      window.history.replaceState({ type: "search" }, "", cleanUrl);
+    }
+  } catch (err) {
+    console.warn("[GameWall] Error checking initial review slug:", err);
+  }
+}
+
 function initReviewModalEvents() {
+  if (elements.reviewModalShare) {
+    elements.reviewModalShare.addEventListener("click", shareCurrentReview);
+  }
+
   if (elements.reviewModalClose) {
-    elements.reviewModalClose.addEventListener("click", closeReviewModal);
+    elements.reviewModalClose.addEventListener("click", () => closeReviewModal(false));
   }
   if (elements.reviewModalCloseBtn) {
-    elements.reviewModalCloseBtn.addEventListener("click", closeReviewModal);
+    elements.reviewModalCloseBtn.addEventListener("click", () => closeReviewModal(false));
   }
 
   if (elements.reviewModalBackdrop) {
     elements.reviewModalBackdrop.addEventListener("click", (event) => {
       if (event.target === elements.reviewModalBackdrop) {
-        closeReviewModal();
+        closeReviewModal(false);
       }
     });
   }
 
   window.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && elements.reviewModalBackdrop && !elements.reviewModalBackdrop.hidden) {
-      closeReviewModal();
+      closeReviewModal(false);
     }
   });
 
@@ -1623,6 +2037,57 @@ function initReviewModalEvents() {
   }
 }
 
+window.addEventListener("popstate", () => {
+  const currentParams = new URLSearchParams(window.location.search);
+  const reviewSlug = currentParams.get("review");
+
+  if (reviewSlug) {
+    if (activeReviewSlug !== reviewSlug) {
+      const targetGame = state.games.find((g) => g.id.toLowerCase() === reviewSlug.trim().toLowerCase());
+      if (targetGame && targetGame.description) {
+        const gameIndex = state.games.indexOf(targetGame);
+        const identifier = `GW-${String(gameIndex + 1).padStart(3, "0")}`;
+        openReviewModal(targetGame, identifier, null, true);
+      }
+    }
+  } else {
+    if (elements.reviewModalBackdrop && !elements.reviewModalBackdrop.hidden) {
+      closeReviewModal(true);
+    }
+
+    const sParam = currentParams.get("s");
+    const p1Param = currentParams.get("p1");
+    const p2Param = currentParams.get("p2");
+
+    let needsRender = false;
+    const newQuery = sParam || "";
+    if (state.query !== newQuery) {
+      state.query = newQuery;
+      if (elements.search) elements.search.value = newQuery;
+      needsRender = true;
+    }
+
+    const newP1 = (p1Param && VALID_SEARCH_MODES.includes(p1Param)) ? p1Param : "title";
+    if (state.searchMode !== newP1) {
+      state.searchMode = newP1;
+      if (elements.searchMode) elements.searchMode.value = newP1;
+      needsRender = true;
+    }
+
+    const newP2 = (p2Param && VALID_FILTERS.includes(p2Param)) ? p2Param : "none";
+    if (state.filterMode !== newP2) {
+      state.filterMode = newP2;
+      if (elements.filter) elements.filter.value = newP2;
+      needsRender = true;
+    }
+
+    if (needsRender) {
+      renderGames();
+    }
+  }
+});
+
+initUrlState();
 initBackgroundCanvas();
 initReviewModalEvents();
 loadAccessCounter();
