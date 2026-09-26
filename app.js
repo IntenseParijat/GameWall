@@ -4,7 +4,8 @@ const state = {
   searchMode: "title",
   filterMode: "none",
   sortMode: "rating-desc",
-  connectionMode: "good"
+  connectionMode: "good",
+  initialized: false
 };
 
 const PLATFORM_ICONS = {
@@ -330,6 +331,7 @@ async function loadGames() {
     await new Promise((resolve) => window.setTimeout(resolve, 1000));
 
     hideLoading();
+    state.initialized = true;
     checkInitialReviewSlug();
   } catch (error) {
     console.error("GameWall could not load games.json:", error);
@@ -340,6 +342,7 @@ async function loadGames() {
     await new Promise((resolve) => window.setTimeout(resolve, 1000));
 
     hideLoading();
+    state.initialized = true;
   }
 }
 
@@ -1590,26 +1593,25 @@ function postProcessReviewHtml(cleanHtml) {
   const content = template.content;
 
   content.querySelectorAll("a").forEach((link) => {
-    const href = link.getAttribute("href") || "";
+    const href = (link.getAttribute("href") || "").trim();
 
-    if (/^https?:\/\//i.test(href)) {
-      try {
-        const url = new URL(href, window.location.href);
-        if (
-          url.origin === window.location.origin &&
-          url.searchParams.has("review")
-        ) {
-          link.removeAttribute("target");
-          link.removeAttribute("rel");
-        } else {
-          link.setAttribute("target", "_blank");
-          link.setAttribute("rel", "noopener noreferrer");
-        }
-      } catch {
+    try {
+      const url = new URL(href, window.location.href);
+      if (
+        url.origin === window.location.origin &&
+        url.searchParams.has("review")
+      ) {
+        link.removeAttribute("target");
+        link.removeAttribute("rel");
+        link.setAttribute("data-review-slug", url.searchParams.get("review") || "");
+      } else if (url.protocol === "http:" || url.protocol === "https:") {
         link.setAttribute("target", "_blank");
         link.setAttribute("rel", "noopener noreferrer");
+      } else {
+        link.removeAttribute("href");
+        link.setAttribute("aria-disabled", "true");
       }
-    } else {
+    } catch {
       link.removeAttribute("href");
       link.setAttribute("aria-disabled", "true");
     }
@@ -1835,6 +1837,17 @@ let currentReviewGame = null;
 let activeReviewSlug = null;
 let previousSearchUrl = null;
 let copyFeedbackTimeout = null;
+let reviewCloseTimeout = null;
+let isHandlingUrlChange = false;
+
+function safeHistoryUpdate(fn) {
+  isHandlingUrlChange = true;
+  try {
+    fn();
+  } finally {
+    isHandlingUrlChange = false;
+  }
+}
 
 function showCopyFeedback() {
   if (!elements.reviewModalShare) return;
@@ -1904,26 +1917,58 @@ async function shareCurrentReview() {
 function openReviewModal(game, identifier, triggerElement, fromPopstate = false) {
   if (!game || !game.description) return;
 
+  const isModalOpen = elements.reviewModalBackdrop &&
+    !elements.reviewModalBackdrop.hidden &&
+    elements.reviewModalBackdrop.classList.contains("is-open");
+
+  if (isModalOpen && activeReviewSlug?.toLowerCase() === game.id.toLowerCase()) {
+    return;
+  }
+
+  if (reviewCloseTimeout) {
+    clearTimeout(reviewCloseTimeout);
+    reviewCloseTimeout = null;
+  }
+
   currentReviewGame = game;
 
-  if (!activeReviewSlug && !fromPopstate) {
+  if (!activeReviewSlug) {
     const currentQs = buildSearchQueryString();
     previousSearchUrl = `${window.location.pathname}${currentQs}${window.location.hash}`;
   }
 
   activeReviewSlug = game.id;
 
-  if (!fromPopstate) {
-    const reviewUrl = `${window.location.pathname}?review=${encodeURIComponent(game.id)}${window.location.hash}`;
-    window.history.replaceState({ type: "review", slug: game.id }, "", reviewUrl);
+  const reviewUrl = `${window.location.pathname}?review=${encodeURIComponent(game.id)}${window.location.hash}`;
+  const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+
+  if (!fromPopstate && currentUrl !== reviewUrl) {
+    safeHistoryUpdate(() => {
+      if (isModalOpen) {
+        window.history.pushState({ type: "review", slug: game.id }, "", reviewUrl);
+      } else {
+        window.history.replaceState({ type: "review", slug: game.id }, "", reviewUrl);
+      }
+    });
   }
 
-  lastFocusedElement = triggerElement || document.activeElement;
-  savedScrollY = window.scrollY || window.pageYOffset || 0;
+  if (!isModalOpen) {
+    lastFocusedElement = triggerElement || document.activeElement;
+    savedScrollY = window.scrollY || window.pageYOffset || 0;
 
-  document.documentElement.classList.add("modal-open");
-  document.body.classList.add("modal-open");
-  elements.mainContent?.setAttribute("aria-hidden", "true");
+    document.documentElement.classList.add("modal-open");
+    document.body.classList.add("modal-open");
+    elements.mainContent?.setAttribute("aria-hidden", "true");
+  }
+
+  if (copyFeedbackTimeout) {
+    clearTimeout(copyFeedbackTimeout);
+    copyFeedbackTimeout = null;
+  }
+  if (elements.reviewModalShare) {
+    elements.reviewModalShare.classList.remove("is-copied");
+    elements.reviewModalShare.setAttribute("aria-label", "Share review link");
+  }
 
   if (elements.reviewModalId) {
     elements.reviewModalId.textContent = identifier;
@@ -1932,27 +1977,44 @@ function openReviewModal(game, identifier, triggerElement, fromPopstate = false)
     elements.reviewModalTitle.textContent = `${game.title} — Review`;
   }
   if (elements.reviewModalBody) {
+    elements.reviewModalBody.querySelectorAll("iframe").forEach((frame) => {
+      try {
+        frame.src = "about:blank";
+      } catch {}
+    });
+    elements.reviewModalBody.replaceChildren();
     elements.reviewModalBody.innerHTML = renderReviewMarkdown(game.description);
     elements.reviewModalBody.scrollTop = 0;
     hydrateInstagramEmbeds(elements.reviewModalBody);
   }
 
   if (elements.reviewModalBackdrop) {
-    elements.reviewModalBackdrop.hidden = false;
-    elements.reviewModalBackdrop.removeAttribute("aria-hidden");
-    requestAnimationFrame(() => {
-      elements.reviewModalBackdrop.classList.add("is-open");
+    if (!isModalOpen) {
+      elements.reviewModalBackdrop.hidden = false;
+      elements.reviewModalBackdrop.removeAttribute("aria-hidden");
+      requestAnimationFrame(() => {
+        elements.reviewModalBackdrop.classList.add("is-open");
+        elements.reviewModalClose?.focus();
+      });
+    } else {
       elements.reviewModalClose?.focus();
-    });
+    }
   }
 }
 
 function closeReviewModal(fromPopstate = false) {
   if (!elements.reviewModalBackdrop || elements.reviewModalBackdrop.hidden) return;
 
+  if (reviewCloseTimeout) {
+    clearTimeout(reviewCloseTimeout);
+    reviewCloseTimeout = null;
+  }
+
   if (!fromPopstate) {
     const restoreUrl = previousSearchUrl || `${window.location.pathname}${buildSearchQueryString()}${window.location.hash}`;
-    window.history.replaceState({ type: "search" }, "", restoreUrl);
+    safeHistoryUpdate(() => {
+      window.history.replaceState({ type: "search" }, "", restoreUrl);
+    });
   }
   previousSearchUrl = null;
   activeReviewSlug = null;
@@ -1965,7 +2027,8 @@ function closeReviewModal(fromPopstate = false) {
 
   window.scrollTo(0, savedScrollY);
 
-  setTimeout(() => {
+  reviewCloseTimeout = setTimeout(() => {
+    reviewCloseTimeout = null;
     elements.reviewModalBackdrop.hidden = true;
     elements.reviewModalBackdrop.setAttribute("aria-hidden", "true");
     if (elements.reviewModalBody) {
@@ -1993,11 +2056,70 @@ function checkInitialReviewSlug() {
     } else {
       // Invalid slug: ignore/remove gracefully without error
       const cleanUrl = `${window.location.pathname}${buildSearchQueryString()}${window.location.hash}`;
-      window.history.replaceState({ type: "search" }, "", cleanUrl);
+      safeHistoryUpdate(() => {
+        window.history.replaceState({ type: "search" }, "", cleanUrl);
+      });
     }
   } catch (err) {
     console.warn("[GameWall] Error checking initial review slug:", err);
   }
+}
+
+function navigateToReview(slug, fromPopstate = false) {
+  if (!slug) return;
+  const trimmed = slug.trim().toLowerCase();
+
+  if (!state.initialized) return;
+
+  const targetGame = state.games.find((g) => g.id.toLowerCase() === trimmed);
+  if (targetGame && targetGame.description) {
+    const gameIndex = state.games.indexOf(targetGame);
+    const identifier = `GW-${String(gameIndex + 1).padStart(3, "0")}`;
+    openReviewModal(targetGame, identifier, null, fromPopstate);
+  } else {
+    if (elements.reviewModalBackdrop && !elements.reviewModalBackdrop.hidden) {
+      closeReviewModal(fromPopstate);
+    }
+  }
+}
+
+function handleUrlChange(fromHistory = false) {
+  if (isHandlingUrlChange || !state.initialized) return;
+
+  const currentParams = new URLSearchParams(window.location.search);
+  const reviewSlug = currentParams.get("review");
+
+  if (reviewSlug) {
+    const normalizedSlug = reviewSlug.trim().toLowerCase();
+    if (activeReviewSlug?.toLowerCase() !== normalizedSlug) {
+      safeHistoryUpdate(() => {
+        navigateToReview(normalizedSlug, true);
+      });
+    }
+  } else {
+    if (elements.reviewModalBackdrop && !elements.reviewModalBackdrop.hidden) {
+      safeHistoryUpdate(() => {
+        closeReviewModal(true);
+      });
+    }
+  }
+}
+
+function hookHistoryNavigation() {
+  const originalPushState = window.history.pushState;
+  const originalReplaceState = window.history.replaceState;
+
+  window.history.pushState = function(...args) {
+    const result = originalPushState.apply(this, args);
+    handleUrlChange(true);
+    return result;
+  };
+
+  window.history.replaceState = function(...args) {
+    const result = originalReplaceState.apply(this, args);
+    handleUrlChange(true);
+    return result;
+  };
 }
 
 function initReviewModalEvents() {
@@ -2050,6 +2172,29 @@ function initReviewModalEvents() {
       }
     });
   }
+
+  document.addEventListener("click", (event) => {
+    if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
+      return;
+    }
+
+    const link = event.target.closest("a");
+    if (!link) return;
+
+    const href = link.getAttribute("href");
+    if (!href) return;
+
+    try {
+      const url = new URL(href, window.location.href);
+      if (url.origin === window.location.origin && url.searchParams.has("review")) {
+        const targetSlug = url.searchParams.get("review");
+        if (targetSlug && state.initialized) {
+          event.preventDefault();
+          navigateToReview(targetSlug, false);
+        }
+      }
+    } catch {}
+  });
 }
 
 window.addEventListener("popstate", () => {
@@ -2057,14 +2202,7 @@ window.addEventListener("popstate", () => {
   const reviewSlug = currentParams.get("review");
 
   if (reviewSlug) {
-    if (activeReviewSlug !== reviewSlug) {
-      const targetGame = state.games.find((g) => g.id.toLowerCase() === reviewSlug.trim().toLowerCase());
-      if (targetGame && targetGame.description) {
-        const gameIndex = state.games.indexOf(targetGame);
-        const identifier = `GW-${String(gameIndex + 1).padStart(3, "0")}`;
-        openReviewModal(targetGame, identifier, null, true);
-      }
-    }
+    handleUrlChange(true);
   } else {
     if (elements.reviewModalBackdrop && !elements.reviewModalBackdrop.hidden) {
       closeReviewModal(true);
@@ -2105,6 +2243,7 @@ window.addEventListener("popstate", () => {
 initUrlState();
 initBackgroundCanvas();
 initReviewModalEvents();
+hookHistoryNavigation();
 loadAccessCounter();
 
 scrambleText(
