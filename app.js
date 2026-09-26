@@ -1591,9 +1591,24 @@ function postProcessReviewHtml(cleanHtml) {
 
   content.querySelectorAll("a").forEach((link) => {
     const href = link.getAttribute("href") || "";
+
     if (/^https?:\/\//i.test(href)) {
-      link.setAttribute("target", "_blank");
-      link.setAttribute("rel", "noopener noreferrer");
+      try {
+        const url = new URL(href, window.location.href);
+        if (
+          url.origin === window.location.origin &&
+          url.searchParams.has("review")
+        ) {
+          link.removeAttribute("target");
+          link.removeAttribute("rel");
+        } else {
+          link.setAttribute("target", "_blank");
+          link.setAttribute("rel", "noopener noreferrer");
+        }
+      } catch {
+        link.setAttribute("target", "_blank");
+        link.setAttribute("rel", "noopener noreferrer");
+      }
     } else {
       link.removeAttribute("href");
       link.setAttribute("aria-disabled", "true");

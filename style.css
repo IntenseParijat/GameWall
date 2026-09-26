@@ -1277,7 +1277,7 @@ body::after {
 }
 
 .card-actions .view-game:only-child,
-.card-actions .review-button[hidden] + .view-game {
+.card-actions .review-button[hidden]+.view-game {
   flex: 1 1 100%;
   width: 100%;
 }
@@ -1590,6 +1590,7 @@ body::after {
 }
 
 @media (max-width: 760px) {
+
   .background-canvas,
   .background-particles,
   .ambient,
@@ -1757,7 +1758,7 @@ body::after {
   }
 
   .card-actions .view-game:only-child,
-  .card-actions .review-button[hidden] + .view-game {
+  .card-actions .review-button[hidden]+.view-game {
     justify-content: space-between;
     padding-inline: .5rem;
   }
@@ -2065,13 +2066,16 @@ body.modal-open {
 .review-modal-body::-webkit-scrollbar {
   width: 7px;
 }
+
 .review-modal-body::-webkit-scrollbar-track {
   background: rgba(12, 16, 26, 0.6);
 }
+
 .review-modal-body::-webkit-scrollbar-thumb {
   background: rgba(0, 240, 255, 0.28);
   border-radius: 4px;
 }
+
 .review-modal-body::-webkit-scrollbar-thumb:hover {
   background: var(--neon-cyan);
 }
@@ -2177,7 +2181,8 @@ body.modal-open {
 .review-video-embed {
   position: relative;
   width: 100%;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  padding-bottom: 56.25%;
+  /* 16:9 aspect ratio */
   height: 0;
   margin: 1.5rem 0;
   overflow: hidden;
