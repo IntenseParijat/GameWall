@@ -1434,8 +1434,25 @@ function processInstagramEmbeds(text) {
       return "";
     }
 
-    // Replace with safe GameWall placeholder element containing only the validated permalink
-    return `\n\n<div class="review-instagram-placeholder" data-instagram-permalink="${escapeHtml(validatedUrl)}"></div>\n\n`;
+    const isCaptioned = /\bdata-instgrm-captioned\b/i.test(match) ? "true" : "false";
+
+    const versionMatch = match.match(/data-instgrm-version=["']([^"']+)["']/i);
+    const version = versionMatch ? versionMatch[1] : "14";
+
+    let author = "";
+    const authorMatch = match.match(/<a\b[^>]*>(?:A\s+post\s+shared\s+by\s+)?([^<]+)<\/a>/i);
+    if (authorMatch && authorMatch[1]) {
+      author = authorMatch[1].trim();
+    }
+
+    let caption = "";
+    const captionMatch = match.match(/<p\b[^>]*style=["'][^"']*overflow:\s*hidden[^"']*["'][^>]*>([\s\S]*?)<\/p>/i);
+    if (captionMatch && captionMatch[1]) {
+      caption = captionMatch[1].replace(/<[^>]+>/g, "").trim();
+    }
+
+    // Replace with safe GameWall placeholder element containing validated metadata
+    return `\n\n<div class="review-instagram-placeholder" data-instagram-permalink="${escapeHtml(validatedUrl)}" data-instagram-captioned="${isCaptioned}" data-instagram-version="${escapeHtml(version)}" data-instagram-author="${escapeHtml(author)}" data-instagram-caption="${escapeHtml(caption)}"></div>\n\n`;
   });
 
   return cleaned;
@@ -1661,7 +1678,17 @@ function renderReviewMarkdown(rawMarkdown) {
   if (window.DOMPurify && typeof window.DOMPurify.sanitize === "function") {
     cleanHtml = window.DOMPurify.sanitize(html, {
       ADD_TAGS: ["iframe"],
-      ADD_ATTR: ["allow", "allowfullscreen", "frameborder", "loading", "data-instagram-permalink"]
+      ADD_ATTR: [
+        "allow",
+        "allowfullscreen",
+        "frameborder",
+        "loading",
+        "data-instagram-permalink",
+        "data-instagram-captioned",
+        "data-instagram-version",
+        "data-instagram-author",
+        "data-instagram-caption"
+      ]
     });
   } else {
     cleanHtml = fallbackSanitizeHtml(html);
@@ -1670,78 +1697,184 @@ function renderReviewMarkdown(rawMarkdown) {
   return postProcessReviewHtml(cleanHtml);
 }
 
-let instagramScriptPromise = null;
-
-function loadInstagramScript() {
-  if (window.instgrm?.Embeds) {
-    return Promise.resolve(window.instgrm);
+function extractInstagramShortcode(rawUrl) {
+  if (!rawUrl || typeof rawUrl !== "string") return null;
+  try {
+    const withProto = rawUrl.startsWith("//") ? `https:${rawUrl}` : rawUrl;
+    const parsed = new URL(withProto);
+    const match = parsed.pathname.match(/\/(?:p|reel|tv)\/([a-zA-Z0-9_-]+)/);
+    return match ? match[1] : null;
+  } catch {
+    const match = rawUrl.match(/\/(?:p|reel|tv)\/([a-zA-Z0-9_-]+)/);
+    return match ? match[1] : null;
   }
-  if (instagramScriptPromise) {
-    return instagramScriptPromise;
+}
+
+function createDarkInstagramEmbed(options) {
+  const {
+    permalink,
+    captioned = false,
+    version = "14",
+    author = "",
+    caption = ""
+  } = options;
+
+  const shortcode = extractInstagramShortcode(permalink);
+  const cleanPermalink = shortcode
+    ? `https://www.instagram.com/p/${shortcode}/`
+    : permalink;
+  const mediaUrl = shortcode
+    ? `https://www.instagram.com/p/${shortcode}/media/?size=l`
+    : null;
+
+  let authorName = "Parijat";
+  let username = "parijatsoftwares";
+  if (author) {
+    const cleanAuthor = author.replace(/^A\s+post\s+shared\s+by\s+/i, "").trim();
+    const handleMatch = cleanAuthor.match(/^(.*?)\s*\(@?([a-zA-Z0-9._]+)\)/);
+    if (handleMatch) {
+      if (handleMatch[1].trim()) authorName = handleMatch[1].trim();
+      if (handleMatch[2].trim()) username = handleMatch[2].trim();
+    } else if (cleanAuthor.startsWith("@")) {
+      username = cleanAuthor.replace(/^@/, "").trim();
+      authorName = username;
+    } else if (cleanAuthor) {
+      authorName = cleanAuthor;
+      username = cleanAuthor.replace(/[^a-zA-Z0-9._]/g, "").toLowerCase() || "parijatsoftwares";
+    }
   }
 
-  const existingScript = document.querySelector('script[src*="instagram.com/embed.js"]');
-  if (existingScript) {
-    instagramScriptPromise = new Promise((resolve, reject) => {
-      if (window.instgrm?.Embeds) {
-        resolve(window.instgrm);
-        return;
-      }
-      existingScript.addEventListener("load", () => {
-        if (window.instgrm?.Embeds) resolve(window.instgrm);
-        else reject(new Error("Instagram API missing"));
-      }, { once: true });
-      existingScript.addEventListener("error", () => reject(new Error("Failed to load Instagram script")), { once: true });
-      setTimeout(() => {
-        if (window.instgrm?.Embeds) resolve(window.instgrm);
-        else reject(new Error("Instagram script timeout"));
-      }, 6000);
+  const profileUrl = `https://www.instagram.com/${encodeURIComponent(username)}/`;
+
+  const card = document.createElement("div");
+  card.className = "review-instagram-card";
+  card.setAttribute("data-instgrm-permalink", cleanPermalink);
+  card.setAttribute("data-instgrm-version", version);
+  if (captioned) {
+    card.setAttribute("data-instgrm-captioned", "");
+  }
+
+  // 1. Header
+  const header = document.createElement("div");
+  header.className = "ig-card-header";
+  header.innerHTML = `
+    <a href="${profileUrl}" target="_blank" rel="noopener noreferrer" class="ig-card-user-link">
+      <div class="ig-card-avatar-ring">
+        <div class="ig-card-avatar" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="ig-card-user-info">
+        <span class="ig-card-username">${escapeHtml(username)}</span>
+        <span class="ig-card-badge">Instagram</span>
+      </div>
+    </a>
+    <a href="${cleanPermalink}" target="_blank" rel="noopener noreferrer" class="ig-card-ig-logo" title="View on Instagram" aria-label="View on Instagram">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+      </svg>
+    </a>
+  `;
+  card.appendChild(header);
+
+  // 2. Media Image Area
+  const mediaContainer = document.createElement("div");
+  mediaContainer.className = "ig-card-media";
+
+  if (mediaUrl) {
+    const mediaAnchor = document.createElement("a");
+    mediaAnchor.href = cleanPermalink;
+    mediaAnchor.target = "_blank";
+    mediaAnchor.rel = "noopener noreferrer";
+    mediaAnchor.className = "ig-card-media-anchor";
+    mediaAnchor.setAttribute("aria-label", "View photo on Instagram");
+
+    const shimmer = document.createElement("div");
+    shimmer.className = "ig-card-media-shimmer";
+    shimmer.setAttribute("aria-hidden", "true");
+
+    const img = document.createElement("img");
+    img.className = "ig-card-media-img";
+    img.alt = `Photo by ${escapeHtml(authorName)} on Instagram`;
+    img.loading = "lazy";
+    img.referrerPolicy = "no-referrer";
+    img.src = mediaUrl;
+
+    img.addEventListener("load", () => {
+      shimmer.remove();
+      img.classList.add("is-loaded");
     });
-    return instagramScriptPromise;
+
+    img.addEventListener("error", () => {
+      card.replaceWith(createInstagramFallback(cleanPermalink));
+    });
+
+    mediaAnchor.appendChild(shimmer);
+    mediaAnchor.appendChild(img);
+    mediaContainer.appendChild(mediaAnchor);
+  } else {
+    mediaContainer.appendChild(createInstagramFallback(cleanPermalink));
   }
+  card.appendChild(mediaContainer);
 
-  instagramScriptPromise = new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-    script.async = true;
-    script.defer = true;
-    script.src = "https://www.instagram.com/embed.js";
+  // 3. Actions Bar
+  const actions = document.createElement("div");
+  actions.className = "ig-card-actions";
+  actions.innerHTML = `
+    <div class="ig-card-actions-left">
+      <a href="${cleanPermalink}" target="_blank" rel="noopener noreferrer" class="ig-card-action-btn" aria-label="Like on Instagram" title="Like">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+      </a>
+      <a href="${cleanPermalink}" target="_blank" rel="noopener noreferrer" class="ig-card-action-btn" aria-label="Comment on Instagram" title="Comment">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+        </svg>
+      </a>
+      <a href="${cleanPermalink}" target="_blank" rel="noopener noreferrer" class="ig-card-action-btn" aria-label="Share post on Instagram" title="Share">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </a>
+    </div>
+    <div class="ig-card-actions-right">
+      <a href="${cleanPermalink}" target="_blank" rel="noopener noreferrer" class="ig-card-action-btn" aria-label="Save on Instagram" title="Save">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </a>
+    </div>
+  `;
+  card.appendChild(actions);
 
-    const timer = setTimeout(() => {
-      if (window.instgrm?.Embeds) {
-        resolve(window.instgrm);
-      } else {
-        reject(new Error("Instagram embed script timed out"));
-      }
-    }, 6000);
+  // 4. Footer
+  const footer = document.createElement("div");
+  footer.className = "ig-card-footer";
 
-    script.onload = () => {
-      clearTimeout(timer);
-      if (window.instgrm?.Embeds) {
-        resolve(window.instgrm);
-      } else {
-        let retries = 0;
-        const check = setInterval(() => {
-          retries++;
-          if (window.instgrm?.Embeds) {
-            clearInterval(check);
-            resolve(window.instgrm);
-          } else if (retries > 25) {
-            clearInterval(check);
-            reject(new Error("Instagram embed object not available"));
-          }
-        }, 50);
-      }
-    };
+  const captionHtml = caption
+    ? `<div class="ig-card-caption-block"><span class="ig-card-caption-text">${escapeHtml(caption)}</span></div>`
+    : "";
 
-    script.onerror = (err) => {
-      clearTimeout(timer);
-      reject(err || new Error("Failed to load Instagram embed script"));
-    };
+  footer.innerHTML = `
+    <a href="${cleanPermalink}" target="_blank" rel="noopener noreferrer" class="ig-card-view-btn">
+      <span>View more on Instagram</span>
+      <span class="ig-card-arrow" aria-hidden="true">→</span>
+    </a>
+    <div class="ig-card-caption-line">
+      <a href="${profileUrl}" target="_blank" rel="noopener noreferrer" class="ig-card-caption-author">${escapeHtml(authorName)}</a>
+      <span class="ig-card-caption-text">(@${escapeHtml(username)}) • Original post on Instagram</span>
+    </div>
+    ${captionHtml}
+  `;
+  card.appendChild(footer);
 
-    document.head.appendChild(script);
-  });
-
-  return instagramScriptPromise;
+  return card;
 }
 
 function createInstagramFallback(permalink) {
@@ -1772,63 +1905,70 @@ function createInstagramFallback(permalink) {
 
 function hydrateInstagramEmbeds(container) {
   if (!container) return;
-  const placeholders = Array.from(container.querySelectorAll(".review-instagram-placeholder"));
-  if (!placeholders.length) return;
 
-  const items = placeholders.map((placeholder) => {
+  // 1. Process custom placeholders
+  const placeholders = Array.from(container.querySelectorAll(".review-instagram-placeholder"));
+  placeholders.forEach((placeholder) => {
     const permalink = placeholder.getAttribute("data-instagram-permalink");
     const validated = validateInstagramUrl(permalink);
     if (!validated) {
       placeholder.remove();
-      return null;
+      return;
     }
 
-    const wrapper = document.createElement("div");
-    wrapper.className = "review-instagram-wrapper";
+    const captioned = placeholder.getAttribute("data-instagram-captioned") === "true";
+    const version = placeholder.getAttribute("data-instagram-version") || "14";
+    const author = placeholder.getAttribute("data-instagram-author") || "";
+    const caption = placeholder.getAttribute("data-instagram-caption") || "";
 
-    const blockquote = document.createElement("blockquote");
-    blockquote.className = "instagram-media";
-    blockquote.setAttribute("data-instgrm-permalink", validated);
-    blockquote.setAttribute("data-instgrm-version", "14");
-
-    wrapper.appendChild(blockquote);
-    placeholder.replaceWith(wrapper);
-    return { wrapper, blockquote, permalink: validated };
-  }).filter(Boolean);
-
-  if (!items.length) return;
-
-  loadInstagramScript()
-    .then((instgrm) => {
-      try {
-        if (instgrm?.Embeds?.process) {
-          instgrm.Embeds.process();
-        } else if (window.instgrm?.Embeds?.process) {
-          window.instgrm.Embeds.process();
-        }
-      } catch (err) {
-        console.warn("[GameWall] Instagram Embeds.process error:", err);
-      }
-    })
-    .catch((err) => {
-      console.warn("[GameWall] Instagram script load failed, using fallback:", err);
-      items.forEach(({ wrapper, permalink }) => {
-        wrapper.replaceChildren(createInstagramFallback(permalink));
-      });
+    const card = createDarkInstagramEmbed({
+      permalink: validated,
+      captioned,
+      version,
+      author,
+      caption
     });
 
-  // Watchdog: If after 5 seconds Instagram's script hasn't injected an iframe or rendered content, display fallback
-  setTimeout(() => {
-    items.forEach(({ wrapper, permalink }) => {
-      if (document.contains(wrapper)) {
-        const hasIframe = wrapper.querySelector("iframe");
-        const hasProcessedBlock = wrapper.querySelector(".instagram-media-rendered");
-        if (!hasIframe && !hasProcessedBlock && wrapper.firstElementChild?.tagName === "BLOCKQUOTE") {
-          wrapper.replaceChildren(createInstagramFallback(permalink));
-        }
-      }
+    placeholder.replaceWith(card);
+  });
+
+  // 2. Process raw blockquote.instagram-media if present
+  const blockquotes = Array.from(container.querySelectorAll("blockquote.instagram-media"));
+  blockquotes.forEach((blockquote) => {
+    const permalink = blockquote.getAttribute("data-instgrm-permalink") ||
+      blockquote.querySelector("a[href*='instagram.com']")?.getAttribute("href");
+    const validated = validateInstagramUrl(permalink);
+    if (!validated) {
+      blockquote.remove();
+      return;
+    }
+
+    const captioned = blockquote.hasAttribute("data-instgrm-captioned");
+    const version = blockquote.getAttribute("data-instgrm-version") || "14";
+    const authorLink = blockquote.querySelector("a[href*='instagram.com']");
+    const author = authorLink ? authorLink.textContent.trim() : "";
+
+    const card = createDarkInstagramEmbed({
+      permalink: validated,
+      captioned,
+      version,
+      author
     });
-  }, 5000);
+
+    blockquote.replaceWith(card);
+  });
+}
+
+// Global instgrm object for compatibility with Instagram Embeds API
+window.instgrm = window.instgrm || {};
+window.instgrm.Embeds = {
+  process: function (target) {
+    hydrateInstagramEmbeds(target || document);
+  }
+};
+
+function loadInstagramScript() {
+  return Promise.resolve(window.instgrm);
 }
 
 let lastFocusedElement = null;
