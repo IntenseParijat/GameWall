@@ -2210,13 +2210,17 @@ body.modal-open {
   display: flex;
   justify-content: center;
   border-radius: var(--radius);
+  background: #111;
+  border: 1px solid rgba(168, 176, 192, 0.16);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
 .review-instagram-wrapper blockquote.instagram-media {
   margin: 0 auto !important;
   padding: 0 !important;
   border: 0 !important;
-  background: transparent !important;
+  background: #111 !important;
+  color-scheme: dark !important;
   max-width: 100% !important;
   min-width: 0 !important;
   width: 100% !important;
@@ -2226,7 +2230,10 @@ body.modal-open {
 .review-instagram-wrapper iframe {
   max-width: 100% !important;
   box-sizing: border-box !important;
+  border: 0 !important;
   border-radius: var(--radius) !important;
+  background: #111 !important;
+  color-scheme: dark !important;
 }
 
 /* Instagram fallback card */
