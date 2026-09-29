@@ -1434,25 +1434,8 @@ function processInstagramEmbeds(text) {
       return "";
     }
 
-    const isCaptioned = /\bdata-instgrm-captioned\b/i.test(match) ? "true" : "false";
-
-    const versionMatch = match.match(/data-instgrm-version=["']([^"']+)["']/i);
-    const version = versionMatch ? versionMatch[1] : "14";
-
-    let author = "";
-    const authorMatch = match.match(/<a\b[^>]*>(?:A\s+post\s+shared\s+by\s+)?([^<]+)<\/a>/i);
-    if (authorMatch && authorMatch[1]) {
-      author = authorMatch[1].trim();
-    }
-
-    let caption = "";
-    const captionMatch = match.match(/<p\b[^>]*style=["'][^"']*overflow:\s*hidden[^"']*["'][^>]*>([\s\S]*?)<\/p>/i);
-    if (captionMatch && captionMatch[1]) {
-      caption = captionMatch[1].replace(/<[^>]+>/g, "").trim();
-    }
-
-    // Replace with safe GameWall placeholder element containing validated metadata
-    return `\n\n<div class="review-instagram-placeholder" data-instagram-permalink="${escapeHtml(validatedUrl)}" data-instagram-captioned="${isCaptioned}" data-instagram-version="${escapeHtml(version)}" data-instagram-author="${escapeHtml(author)}" data-instagram-caption="${escapeHtml(caption)}"></div>\n\n`;
+    // Replace with safe GameWall placeholder element containing only the validated permalink
+    return `\n\n<div class="review-instagram-placeholder" data-instagram-permalink="${escapeHtml(validatedUrl)}"></div>\n\n`;
   });
 
   return cleaned;
@@ -1678,17 +1661,7 @@ function renderReviewMarkdown(rawMarkdown) {
   if (window.DOMPurify && typeof window.DOMPurify.sanitize === "function") {
     cleanHtml = window.DOMPurify.sanitize(html, {
       ADD_TAGS: ["iframe"],
-      ADD_ATTR: [
-        "allow",
-        "allowfullscreen",
-        "frameborder",
-        "loading",
-        "data-instagram-permalink",
-        "data-instagram-captioned",
-        "data-instagram-version",
-        "data-instagram-author",
-        "data-instagram-caption"
-      ]
+      ADD_ATTR: ["allow", "allowfullscreen", "frameborder", "loading", "data-instagram-permalink"]
     });
   } else {
     cleanHtml = fallbackSanitizeHtml(html);
@@ -1748,6 +1721,7 @@ function loadInstagramScript() {
       } else {
         let retries = 0;
         const check = setInterval(() => {
+          retries++;
           if (window.instgrm?.Embeds) {
             clearInterval(check);
             resolve(window.instgrm);
@@ -1755,7 +1729,6 @@ function loadInstagramScript() {
             clearInterval(check);
             reject(new Error("Instagram embed object not available"));
           }
-          retries++;
         }, 50);
       }
     };
@@ -1799,24 +1772,16 @@ function createInstagramFallback(permalink) {
 
 function hydrateInstagramEmbeds(container) {
   if (!container) return;
-
   const placeholders = Array.from(container.querySelectorAll(".review-instagram-placeholder"));
-  const rawBlockquotes = Array.from(container.querySelectorAll("blockquote.instagram-media"));
+  if (!placeholders.length) return;
 
-  if (!placeholders.length && !rawBlockquotes.length) return;
-
-  const items = [];
-
-  placeholders.forEach((placeholder) => {
+  const items = placeholders.map((placeholder) => {
     const permalink = placeholder.getAttribute("data-instagram-permalink");
     const validated = validateInstagramUrl(permalink);
     if (!validated) {
       placeholder.remove();
-      return;
+      return null;
     }
-
-    const captioned = placeholder.getAttribute("data-instagram-captioned") === "true";
-    const version = placeholder.getAttribute("data-instagram-version") || "14";
 
     const wrapper = document.createElement("div");
     wrapper.className = "review-instagram-wrapper";
@@ -1824,34 +1789,12 @@ function hydrateInstagramEmbeds(container) {
     const blockquote = document.createElement("blockquote");
     blockquote.className = "instagram-media";
     blockquote.setAttribute("data-instgrm-permalink", validated);
-    blockquote.setAttribute("data-instgrm-version", version);
-    if (captioned) {
-      blockquote.setAttribute("data-instgrm-captioned", "");
-    }
+    blockquote.setAttribute("data-instgrm-version", "14");
 
     wrapper.appendChild(blockquote);
     placeholder.replaceWith(wrapper);
-    items.push({ wrapper, blockquote, permalink: validated });
-  });
-
-  rawBlockquotes.forEach((blockquote) => {
-    if (blockquote.parentElement?.classList.contains("review-instagram-wrapper")) {
-      return;
-    }
-    const permalink = blockquote.getAttribute("data-instgrm-permalink") ||
-      blockquote.querySelector("a[href*='instagram.com']")?.getAttribute("href");
-    const validated = validateInstagramUrl(permalink);
-    if (!validated) {
-      blockquote.remove();
-      return;
-    }
-
-    const wrapper = document.createElement("div");
-    wrapper.className = "review-instagram-wrapper";
-    blockquote.replaceWith(wrapper);
-    wrapper.appendChild(blockquote);
-    items.push({ wrapper, blockquote, permalink: validated });
-  });
+    return { wrapper, blockquote, permalink: validated };
+  }).filter(Boolean);
 
   if (!items.length) return;
 
@@ -1874,7 +1817,7 @@ function hydrateInstagramEmbeds(container) {
       });
     });
 
-  // Watchdog: If after 6 seconds Instagram's script hasn't injected an iframe or rendered content, display fallback
+  // Watchdog: If after 5 seconds Instagram's script hasn't injected an iframe or rendered content, display fallback
   setTimeout(() => {
     items.forEach(({ wrapper, permalink }) => {
       if (document.contains(wrapper)) {
@@ -1885,7 +1828,7 @@ function hydrateInstagramEmbeds(container) {
         }
       }
     });
-  }, 6000);
+  }, 5000);
 }
 
 let lastFocusedElement = null;

@@ -2200,18 +2200,16 @@ body.modal-open {
   border: 0;
 }
 
-/* Instagram embed wrapper (neutral layout container) */
+/* Instagram embed wrapper */
 .review-instagram-wrapper {
   position: relative;
   width: 100%;
   max-width: 540px;
   margin: 1.6rem auto;
+  overflow: hidden;
   display: flex;
   justify-content: center;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  padding: 0;
+  border-radius: var(--radius);
 }
 
 .review-instagram-wrapper blockquote.instagram-media {
@@ -2228,10 +2226,8 @@ body.modal-open {
 .review-instagram-wrapper iframe {
   max-width: 100% !important;
   box-sizing: border-box !important;
-  border: 0 !important;
   border-radius: var(--radius) !important;
 }
-
 
 /* Instagram fallback card */
 .review-instagram-fallback {
