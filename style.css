@@ -2498,30 +2498,118 @@ body.modal-open {
 }
 
 /* ==========================================================================
-   Neon Mouse Cursor Layer (Fine-pointer devices only)
+   Custom CPU Fan Progress Cursor (Fine-pointer devices only)
    ========================================================================== */
-.neon-cursor-layer {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none !important;
-  z-index: 150;
-  mix-blend-mode: screen;
-  overflow: hidden;
-  opacity: 0;
-  transition: opacity .4s ease;
+@media (pointer: fine) and (hover: hover) {
+  html.has-custom-cursor,
+  html.has-custom-cursor body,
+  html.has-custom-cursor a,
+  html.has-custom-cursor button,
+  html.has-custom-cursor input,
+  html.has-custom-cursor select,
+  html.has-custom-cursor textarea,
+  html.has-custom-cursor label,
+  html.has-custom-cursor [role="button"],
+  html.has-custom-cursor * {
+    cursor: none !important;
+  }
 }
 
-.neon-cursor-layer.is-active {
+.gw-cursor {
+  position: fixed;
+  top: -100px;
+  left: -100px;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+  pointer-events: none !important;
+  z-index: 10000;
+  opacity: 0;
+  transition: opacity .2s ease;
+  user-select: none;
+}
+
+.gw-cursor.is-active {
   opacity: 1;
 }
 
-.neon-cursor-layer canvas {
+.gw-cursor-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform: scale(1);
+  transition: transform .2s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.gw-cursor.is-hover .gw-cursor-inner {
+  transform: scale(1.18);
+}
+
+.gw-cursor-svg {
   display: block;
-  position: absolute !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  pointer-events: none !important;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Outer circular scroll-progress track & fill */
+.gw-cursor-track {
+  fill: none;
+  stroke: rgba(0, 240, 255, 0.16);
+  stroke-width: 3.2;
+}
+
+.gw-cursor-fill {
+  fill: none;
+  stroke: var(--neon-cyan);
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  stroke-dasharray: 307.88 307.88;
+  stroke-dashoffset: 307.88;
+  filter: drop-shadow(0 0 3px rgba(0, 240, 255, 0.85));
+  transition: stroke-dashoffset 15ms linear;
+}
+
+.gw-cursor.is-hover .gw-cursor-fill {
+  filter: drop-shadow(0 0 4px #00f0ff) drop-shadow(0 0 7px rgba(176, 38, 255, 0.7));
+}
+
+/* Inner rotating CPU fan light pattern */
+.gw-cursor-fan {
+  transform-origin: 50px 50px;
+  animation: gw-fan-spin 2.6s linear infinite;
+}
+
+.gw-cursor.is-hover .gw-cursor-fan {
+  animation-duration: 1.3s;
+}
+
+@keyframes gw-fan-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gw-cursor-fan {
+    animation: none !important;
+  }
+  .gw-cursor-inner {
+    transition: none !important;
+  }
+}
+
+/* Central hub */
+.gw-cursor-hub {
+  fill: var(--bg-dark);
+  stroke: rgba(0, 240, 255, 0.45);
+  stroke-width: 1.5;
+}
+
+.gw-cursor-hub-core {
+  fill: var(--neon-cyan);
+  filter: drop-shadow(0 0 2px #00f0ff);
 }

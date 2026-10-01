@@ -298,7 +298,31 @@
     </div>
   </div>
 
-  <div class="neon-cursor-layer" id="neon-cursor-layer" aria-hidden="true"></div>
+  <div class="gw-cursor" id="gw-cursor" aria-hidden="true">
+    <div class="gw-cursor-inner">
+      <svg class="gw-cursor-svg" viewBox="-1 -1 102 102">
+        <defs>
+          <linearGradient id="gw-fan-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.9" />
+            <stop offset="55%" stop-color="#b026ff" stop-opacity="0.8" />
+            <stop offset="100%" stop-color="#00f0ff" stop-opacity="0.25" />
+          </linearGradient>
+          <path id="gw-blade-path" d="M 0.0,-12.0 Q 3.3,-24.8 9.9,-36.7 A 38,38 0 0,1 28.5,-25.9 Q 19.3,-15.8 4.2,-11.2 A 12,12 0 0,0 0.0,-12.0 Z" />
+        </defs>
+        <path class="gw-cursor-track" d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
+        <path class="gw-cursor-fill" id="gw-cursor-progress-fill" d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
+        <g class="gw-cursor-fan">
+          <use href="#gw-blade-path" fill="url(#gw-fan-grad)" transform="translate(50,50) rotate(0)" />
+          <use href="#gw-blade-path" fill="url(#gw-fan-grad)" transform="translate(50,50) rotate(72)" />
+          <use href="#gw-blade-path" fill="url(#gw-fan-grad)" transform="translate(50,50) rotate(144)" />
+          <use href="#gw-blade-path" fill="url(#gw-fan-grad)" transform="translate(50,50) rotate(216)" />
+          <use href="#gw-blade-path" fill="url(#gw-fan-grad)" transform="translate(50,50) rotate(288)" />
+        </g>
+        <circle class="gw-cursor-hub" cx="50" cy="50" r="10" />
+        <circle class="gw-cursor-hub-core" cx="50" cy="50" r="2.5" />
+      </svg>
+    </div>
+  </div>
 
   <button type="button" class="page-nav-btn is-bottom" id="page-nav-btn" aria-label="Go to bottom" title="Go to bottom" hidden>
     <svg class="page-nav-icon page-nav-down" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

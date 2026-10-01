@@ -72,7 +72,8 @@ const elements = {
   reviewShareToast: document.querySelector("#review-share-toast"),
   mainContent: document.querySelector("#main-content"),
   pageNavBtn: document.querySelector("#page-nav-btn"),
-  neonCursorLayer: document.querySelector("#neon-cursor-layer")
+  gwCursor: document.querySelector("#gw-cursor"),
+  gwCursorProgressFill: document.querySelector("#gw-cursor-progress-fill")
 };
 
 const scrambleTimers = new WeakMap();
@@ -497,6 +498,7 @@ async function loadGames() {
     hideLoading();
     state.initialized = true;
     window.__updatePageNav?.();
+    window.__updateCursorProgress?.();
     checkInitialReviewSlug();
   } catch (error) {
     console.error("GameWall could not load games.json:", error);
@@ -509,6 +511,7 @@ async function loadGames() {
     hideLoading();
     state.initialized = true;
     window.__updatePageNav?.();
+    window.__updateCursorProgress?.();
   }
 }
 
@@ -2482,95 +2485,120 @@ function initPageNavigation() {
 function shouldEnableCustomCursor() {
   if (typeof window === "undefined" || !window.matchMedia) return false;
 
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    return false;
-  }
-
-  // Must have a fine pointer and support hover (desktop PC or laptop with mouse/trackpad)
   const hasFinePointer = window.matchMedia("(pointer: fine)").matches;
   const canHover = window.matchMedia("(hover: hover)").matches;
   const isCoarseOnly = window.matchMedia("(pointer: coarse) and not (pointer: fine)").matches;
 
-  return hasFinePointer && canHover && !isCoarseOnly;
+  if (!hasFinePointer || !canHover || isCoarseOnly) {
+    return false;
+  }
+
+  // Prevent pure touch-screen devices that may report fine pointer erroneously
+  if (typeof navigator !== "undefined" && navigator.maxTouchPoints > 0 && !hasFinePointer) {
+    return false;
+  }
+
+  return true;
 }
 
-function initNeonCursor() {
-  const container = elements.neonCursorLayer || document.querySelector("#neon-cursor-layer");
-  if (!container) return;
+function initCustomCursor() {
+  const cursor = elements.gwCursor || document.querySelector("#gw-cursor");
+  const progressFill = elements.gwCursorProgressFill || document.querySelector("#gw-cursor-progress-fill");
+  if (!cursor || !progressFill) return;
 
-  let started = false;
+  if (!shouldEnableCustomCursor()) {
+    document.documentElement.classList.remove("has-custom-cursor");
+    cursor.classList.remove("is-active");
+    return;
+  }
 
-  const startCursor = async (firstEvent) => {
-    if (started) return;
-    if (!shouldEnableCustomCursor()) return;
-    started = true;
+  // Hide native cursor on fine-pointer devices
+  document.documentElement.classList.add("has-custom-cursor");
 
-    try {
-      const { neonCursor } = await import(
-        "https://unpkg.com/threejs-toys@0.0.8/build/threejs-toys.module.cdn.min.js"
-      );
+  const pathLength = progressFill.getTotalLength ? progressFill.getTotalLength() : 307.88;
+  progressFill.style.strokeDasharray = `${pathLength} ${pathLength}`;
+  progressFill.style.strokeDashoffset = `${pathLength}`;
 
-      neonCursor({
-        el: container,
-        shaderPoints: 16,
-        curvePoints: 80,
-        curveLerp: 0.82,
-        radius1: 3,
-        radius2: 2.5,
-        velocityTreshold: 10,
-        sleepRadiusX: 50,
-        sleepRadiusY: 50,
-        sleepTimeCoefX: 0.002,
-        sleepTimeCoefY: 0.002
+  const updateScrollProgress = () => {
+    const scroll = window.scrollY || window.pageYOffset || 0;
+    const docHeight = Math.max(
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight
+    );
+    const winHeight = window.innerHeight || 1;
+    const maxScroll = docHeight - winHeight;
+    const progress = maxScroll > 0 ? Math.min(1, Math.max(0, scroll / maxScroll)) : 0;
+    progressFill.style.strokeDashoffset = (pathLength * (1 - progress)).toFixed(2);
+  };
+
+  updateScrollProgress();
+
+  let scrollTicking = false;
+  const onScroll = () => {
+    if (!scrollTicking) {
+      window.requestAnimationFrame(() => {
+        updateScrollProgress();
+        scrollTicking = false;
       });
-
-      container.classList.add("is-active");
-
-      const forwardPointer = (e) => {
-        if (e.pointerType === "touch") return;
-        container.dispatchEvent(
-          new PointerEvent("pointermove", {
-            clientX: e.clientX,
-            clientY: e.clientY,
-            bubbles: true
-          })
-        );
-      };
-
-      window.addEventListener("pointermove", forwardPointer, { passive: true });
-
-      window.addEventListener("pointerleave", () => {
-        container.dispatchEvent(new PointerEvent("pointerleave"));
-      }, { passive: true });
-
-      window.addEventListener("blur", () => {
-        container.dispatchEvent(new PointerEvent("pointerleave"));
-      }, { passive: true });
-
-      if (firstEvent) {
-        forwardPointer(firstEvent);
-      }
-    } catch (err) {
-      console.warn("[GameWall] Custom neon cursor unavailable; falling back to native pointer.", err);
+      scrollTicking = true;
     }
   };
 
-  const onPointer = (e) => {
-    if (started) return;
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+
+  // Instantaneous mouse tracking: ZERO smoothing, ZERO lerp, ZERO delay
+  window.addEventListener("pointermove", (e) => {
     if (e.pointerType === "touch") return;
-    if (!shouldEnableCustomCursor()) return;
+    cursor.style.left = `${e.clientX}px`;
+    cursor.style.top = `${e.clientY}px`;
+    if (!cursor.classList.contains("is-active")) {
+      cursor.classList.add("is-active");
+    }
+  }, { passive: true });
 
-    window.removeEventListener("pointermove", onPointer);
-    startCursor(e);
-  };
+  window.addEventListener("pointerleave", () => {
+    cursor.classList.remove("is-active");
+  }, { passive: true });
 
-  window.addEventListener("pointermove", onPointer, { passive: true });
+  window.addEventListener("blur", () => {
+    cursor.classList.remove("is-active");
+  }, { passive: true });
+
+  // Event delegation for interactive hover feedback
+  const interactiveSelector = `
+    a, button, input, select, textarea, label,
+    [role="button"], [role="link"], [role="tab"],
+    .game-card, .poster-link, .review-button, .view-game,
+    .filter-chip, .filter-chip-btn, .page-nav-btn,
+    .review-modal-close, .review-modal-share, .review-modal-close-btn
+  `;
+
+  document.addEventListener("pointerover", (e) => {
+    if (e.target && e.target.closest && e.target.closest(interactiveSelector)) {
+      cursor.classList.add("is-hover");
+    }
+  }, { passive: true });
+
+  document.addEventListener("pointerout", (e) => {
+    if (e.target && e.target.closest && e.target.closest(interactiveSelector)) {
+      if (e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest(interactiveSelector)) {
+        return;
+      }
+      cursor.classList.remove("is-hover");
+    }
+  }, { passive: true });
+
+  window.__updateCursorProgress = updateScrollProgress;
 
   if (window.matchMedia) {
     try {
       window.matchMedia("(pointer: fine)").addEventListener("change", (e) => {
-        if (e.matches && !started) {
-          window.addEventListener("pointermove", onPointer, { passive: true });
+        if (e.matches && shouldEnableCustomCursor()) {
+          document.documentElement.classList.add("has-custom-cursor");
+        } else {
+          document.documentElement.classList.remove("has-custom-cursor");
+          cursor.classList.remove("is-active");
         }
       });
     } catch {}
@@ -2583,7 +2611,7 @@ initReviewModalEvents();
 hookHistoryNavigation();
 loadAccessCounter();
 initPageNavigation();
-initNeonCursor();
+initCustomCursor();
 
 scrambleText(
   document.querySelector(".loading-screen h1"),

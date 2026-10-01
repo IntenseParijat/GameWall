@@ -31,7 +31,7 @@ The project is designed for GitHub Pages and can also be embedded inside a Blogg
 - Glitch Split title treatment
 - Scramble animation for the loading screen with pre-measured layout stabilization
 - Floating top/bottom quick page navigation button with scroll direction tracking
-- Procedural neon mouse cursor trail with WebGL glow on fine-pointer devices
+- Custom circular CPU-fan mouse cursor with scroll-progress indicator on fine-pointer devices
 - Curtain Wipe animation when a game title first enters the viewport
 - Ambient animated background with grid, particles, circuitry, and cyan/purple energy effects
 - Responsive and reduced-motion support
@@ -283,13 +283,15 @@ GameWall provides a subtle floating navigation button anchored in the lower corn
 - **Modal awareness:** The navigation button automatically hides whenever the Review modal is active and restores its state upon modal dismissal without affecting scroll locking.
 - **Accessibility & Motion:** Features an accessible minimum 44×44px touch target on mobile devices, requires no hover interaction, and respects `prefers-reduced-motion` with instant scrolling.
 
-### Custom Neon Cursor
+### Custom CPU Fan Progress Cursor
 
-On devices equipped with a fine pointing device (such as desktop mice and precision trackpads), GameWall renders an interactive glowing neon cursor effect:
-- **Visual implementation:** Adapted from the `threejs-toys` `neonCursor` reference, producing a fluid glowing bezier trail and a subtle idle elliptical floating motion.
-- **Pointer capability detection:** Enabled exclusively when CSS Media Queries confirm `(pointer: fine)` and `(hover: hover)`. It is never loaded or initialized on mobile phones, touch tablets, or coarse pointers, leaving native touch interaction completely untouched.
-- **Isolated rendering layer:** Rendered on a dedicated, pointer-transparent `<div id="neon-cursor-layer">` canvas with `mix-blend-mode: screen` and `z-index: 150`. It floats cleanly above both the page and the review modal without intercepting clicks or interfering with the underlying procedural background canvas.
-- **Resilient fallback:** Lazy-loads on the first detected fine pointer movement, falling back silently to the native cursor if WebGL or CDN assets are unavailable.
+On devices equipped with a fine pointing device (such as desktop mice and precision trackpads), GameWall renders a cyber-tech circular hardware cursor:
+- **Instant tracking:** The cursor tracks native mouse coordinates with zero delay, zero lerping, and zero interpolation, providing immediate, precision feedback.
+- **Circular scroll-progress ring:** An outer SVG ring continuously visualizes document scroll progress from 0% at the page top to 100% at the footer.
+- **Rotating CPU fan light pattern:** The interior features a smooth, continuous rotating 5-blade aerodynamic light pattern illuminated in neon cyan and neon purple around a dark hub, visually evocative of an RGB PC cooling fan.
+- **Interactive hover reaction:** When hovering interactive controls (buttons, links, game cards, review dialog controls), the cursor scales subtly and increases rotation speed for tactile feedback.
+- **Pointer capability detection & isolation:** Enabled exclusively when `(pointer: fine)` and `(hover: hover)` match. Native cursor is hidden via scoped `cursor: none !important` on supported devices, while mobile and touch-only devices remain 100% untouched with zero cursor overhead.
+- **Modal & UI integration:** Set to `pointer-events: none` at high stacking index (`z-index: 10000`), allowing full click-through to all buttons, links, and review modal interactions.
 
 ### Game titles
 
@@ -320,10 +322,10 @@ GameWall uses standard browser APIs including:
 - `fetch`
 - `IntersectionObserver`
 - `ResizeObserver`
-- CSS animations and custom properties
+- CSS animations, transforms, and custom properties
+- SVG paths and stroke dash-offset manipulation
 - Pointer Media Queries (`(pointer: fine)`, `(hover: hover)`)
-- Canvas for the ambient background and WebGL for the custom neon cursor
-- Dynamic ES module import (`import()`) for lightweight on-demand cursor enhancement
+- Canvas for the ambient background
 - Native lazy loading
 
 For local testing, use a local HTTP server rather than opening `index.html` directly with `file://`. This allows relative requests such as `games.json` to behave consistently.
