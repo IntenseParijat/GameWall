@@ -2544,8 +2544,7 @@ function initPageNavigation() {
   window.__updatePageNav = updateState;
 }
 
-function shouldEnableCustomCursor() {
-  if (!animationsEnabled) return false;
+function isFinePointerDevice() {
   if (typeof window === "undefined" || !window.matchMedia) return false;
 
   const hasFinePointer = window.matchMedia("(pointer: fine)").matches;
@@ -2564,19 +2563,43 @@ function shouldEnableCustomCursor() {
   return true;
 }
 
+let customCursorActive = false;
+let cursorInitialized = false;
+let lastPointerX = null;
+let lastPointerY = null;
+
+function setCustomCursorEnabled(enabled) {
+  const cursor = elements.gwCursor || document.querySelector("#gw-cursor");
+  const isSupported = isFinePointerDevice();
+  const shouldBeActive = Boolean(enabled && isSupported);
+
+  customCursorActive = shouldBeActive;
+
+  if (shouldBeActive) {
+    document.documentElement.classList.add("has-custom-cursor");
+    if (cursor) {
+      cursor.style.display = "";
+      if (lastPointerX !== null && lastPointerY !== null) {
+        cursor.style.transform = `translate3d(${lastPointerX}px, ${lastPointerY}px, 0)`;
+        cursor.classList.add("is-active");
+      }
+    }
+  } else {
+    document.documentElement.classList.remove("has-custom-cursor");
+    if (cursor) {
+      cursor.classList.remove("is-active", "is-hover");
+      cursor.style.display = "none";
+    }
+  }
+}
+
 function initCustomCursor() {
+  if (cursorInitialized) return;
+  cursorInitialized = true;
+
   const cursor = elements.gwCursor || document.querySelector("#gw-cursor");
   const progressFill = elements.gwCursorProgressFill || document.querySelector("#gw-cursor-progress-fill");
   if (!cursor || !progressFill) return;
-
-  if (!shouldEnableCustomCursor()) {
-    document.documentElement.classList.remove("has-custom-cursor");
-    cursor.classList.remove("is-active");
-    return;
-  }
-
-  // Hide native cursor on fine-pointer devices
-  document.documentElement.classList.add("has-custom-cursor");
 
   const pathLength = 307.88;
   progressFill.style.strokeDasharray = `${pathLength} ${pathLength}`;
@@ -2584,6 +2607,7 @@ function initCustomCursor() {
 
   let lastProgressOffset = pathLength;
   const updateScrollProgress = () => {
+    if (!customCursorActive) return;
     const scroll = window.scrollY || window.pageYOffset || 0;
     const docHeight = Math.max(
       document.body.scrollHeight,
@@ -2603,6 +2627,7 @@ function initCustomCursor() {
 
   let scrollTicking = false;
   const onScroll = () => {
+    if (!customCursorActive) return;
     if (!scrollTicking) {
       window.requestAnimationFrame(() => {
         updateScrollProgress();
@@ -2618,32 +2643,34 @@ function initCustomCursor() {
   // Instantaneous GPU-accelerated mouse tracking:
   // ZERO smoothing, ZERO lerp, ZERO layout queries, ZERO delay.
   // Directly translates on the compositor thread via translate3d.
-  let cursorActive = false;
-
   window.addEventListener("pointermove", (e) => {
-    if (e.pointerType === "touch" || !animationsEnabled) return;
+    if (e.pointerType === "touch") return;
+    lastPointerX = e.clientX;
+    lastPointerY = e.clientY;
+
+    if (!customCursorActive) return;
+
     cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
-    if (!cursorActive) {
-      cursorActive = true;
+    if (!cursor.classList.contains("is-active")) {
       cursor.classList.add("is-active");
     }
   }, { passive: true });
 
   window.addEventListener("pointerleave", () => {
-    cursorActive = false;
+    if (!customCursorActive) return;
     cursor.classList.remove("is-active");
   }, { passive: true });
 
   window.addEventListener("pointerenter", (e) => {
-    if (e.pointerType !== "touch" && animationsEnabled) {
-      cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
-      cursorActive = true;
-      cursor.classList.add("is-active");
-    }
+    if (e.pointerType === "touch" || !customCursorActive) return;
+    lastPointerX = e.clientX;
+    lastPointerY = e.clientY;
+    cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+    cursor.classList.add("is-active");
   }, { passive: true });
 
   window.addEventListener("blur", () => {
-    cursorActive = false;
+    if (!customCursorActive) return;
     cursor.classList.remove("is-active");
   }, { passive: true });
 
@@ -2658,14 +2685,14 @@ function initCustomCursor() {
   `;
 
   document.addEventListener("pointerover", (e) => {
-    if (!animationsEnabled) return;
+    if (!customCursorActive) return;
     if (e.target && e.target.closest && e.target.closest(interactiveSelector)) {
       cursor.classList.add("is-hover");
     }
   }, { passive: true });
 
   document.addEventListener("pointerout", (e) => {
-    if (!animationsEnabled) return;
+    if (!customCursorActive) return;
     if (e.target && e.target.closest && e.target.closest(interactiveSelector)) {
       if (e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest(interactiveSelector)) {
         return;
@@ -2674,31 +2701,19 @@ function initCustomCursor() {
     }
   }, { passive: true });
 
-  window.__updateCursorProgress = updateScrollProgress;
-
-  window.__updateCursorEnabled = (enabled) => {
-    if (enabled && shouldEnableCustomCursor()) {
-      document.documentElement.classList.add("has-custom-cursor");
-    } else {
-      document.documentElement.classList.remove("has-custom-cursor");
-      cursor.classList.remove("is-active");
-      cursorActive = false;
-    }
-  };
-
   if (window.matchMedia) {
     try {
-      window.matchMedia("(pointer: fine)").addEventListener("change", (e) => {
-        if (e.matches && animationsEnabled && shouldEnableCustomCursor()) {
-          document.documentElement.classList.add("has-custom-cursor");
-        } else {
-          document.documentElement.classList.remove("has-custom-cursor");
-          cursor.classList.remove("is-active");
-          cursorActive = false;
-        }
+      window.matchMedia("(pointer: fine)").addEventListener("change", () => {
+        setCustomCursorEnabled(animationsEnabled);
+      });
+      window.matchMedia("(hover: hover)").addEventListener("change", () => {
+        setCustomCursorEnabled(animationsEnabled);
       });
     } catch {}
   }
+
+  // Set initial custom cursor state based on animationsEnabled and device support
+  setCustomCursorEnabled(animationsEnabled);
 }
 
 function setAnimationsEnabled(enabled, persist = true) {
@@ -2721,12 +2736,12 @@ function setAnimationsEnabled(enabled, persist = true) {
   if (enabled) {
     document.documentElement.classList.remove("no-animations");
     window.__updateCanvasAnimations?.(true);
-    window.__updateCursorEnabled?.(true);
   } else {
     document.documentElement.classList.add("no-animations");
     window.__updateCanvasAnimations?.(false);
-    window.__updateCursorEnabled?.(false);
   }
+
+  setCustomCursorEnabled(enabled);
 }
 
 function initAnimationToggle() {

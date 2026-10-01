@@ -2680,16 +2680,16 @@ body.modal-open {
    Custom CPU Fan Progress Cursor (Fine-pointer devices only)
    ========================================================================== */
 @media (pointer: fine) and (hover: hover) {
-  html.has-custom-cursor,
-  html.has-custom-cursor body,
-  html.has-custom-cursor a,
-  html.has-custom-cursor button,
-  html.has-custom-cursor input,
-  html.has-custom-cursor select,
-  html.has-custom-cursor textarea,
-  html.has-custom-cursor label,
-  html.has-custom-cursor [role="button"],
-  html.has-custom-cursor * {
+  html.has-custom-cursor:not(.no-animations),
+  html.has-custom-cursor:not(.no-animations) body,
+  html.has-custom-cursor:not(.no-animations) a,
+  html.has-custom-cursor:not(.no-animations) button,
+  html.has-custom-cursor:not(.no-animations) input,
+  html.has-custom-cursor:not(.no-animations) select,
+  html.has-custom-cursor:not(.no-animations) textarea,
+  html.has-custom-cursor:not(.no-animations) label,
+  html.has-custom-cursor:not(.no-animations) [role="button"],
+  html.has-custom-cursor:not(.no-animations) * {
     cursor: none !important;
   }
 }
@@ -2698,14 +2698,15 @@ body.modal-open {
   position: fixed;
   top: 0;
   left: 0;
-  width: 0;
-  height: 0;
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
   pointer-events: none !important;
   z-index: 10000;
   opacity: 0;
   transition: opacity .2s ease;
   user-select: none;
-  contain: layout style paint;
+  contain: layout style;
   will-change: transform;
   transform: translate3d(-100px, -100px, 0);
 }
@@ -2715,12 +2716,10 @@ body.modal-open {
 }
 
 .gw-cursor-inner {
-  position: absolute;
-  top: -22px;
-  left: -22px;
-  width: 44px;
-  height: 44px;
-  transform-origin: 22px 22px;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-origin: center center;
   transform: scale(1);
   transition: transform .2s cubic-bezier(0.2, 0.9, 0.3, 1);
   will-change: transform;
@@ -2824,4 +2823,5 @@ html.no-animations .gw-cursor-fan {
 
 html.no-animations .gw-cursor {
   display: none !important;
+  opacity: 0 !important;
 }
