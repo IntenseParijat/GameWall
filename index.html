@@ -19,6 +19,29 @@
 </head>
 
 <body>
+  <noscript>
+    <div class="noscript-overlay" role="alert">
+      <div class="noscript-card">
+        <div class="noscript-badge">// SYSTEM ALERT // JAVASCRIPT REQUIRED</div>
+        <h1 class="noscript-title">JAVASCRIPT IS CURRENTLY DISABLED</h1>
+        <p class="noscript-lead">
+          GameWall is an interactive, client-side gaming database. JavaScript is strictly required to decrypt database records, render cards, enable instant search and filtering, and access reviews.
+        </p>
+        <div class="noscript-divider" aria-hidden="true"></div>
+        <div class="noscript-instructions">
+          <p class="noscript-subtitle">HOW TO ENABLE JAVASCRIPT IN YOUR BROWSER:</p>
+          <ul class="noscript-list">
+            <li><strong>Chrome / Brave / Edge:</strong> Open <code>Settings &gt; Privacy and security &gt; Site settings &gt; JavaScript</code> and select <em>Sites can use Javascript</em>.</li>
+            <li><strong>Firefox:</strong> Visit <code>about:config</code>, search for <code>javascript.enabled</code>, and toggle it to <code>true</code>.</li>
+            <li><strong>Safari:</strong> Open <code>Preferences / Settings &gt; Security</code> and enable <strong>JavaScript</strong>.</li>
+          </ul>
+        </div>
+        <div class="noscript-footer">
+          <span>// STATUS: EXECUTION HALTED &bull; AWAITING RUNTIME CAPABILITY</span>
+        </div>
+      </div>
+    </div>
+  </noscript>
   <div class="ambient ambient-one" aria-hidden="true"></div>
   <div class="ambient ambient-two" aria-hidden="true"></div>
   <div class="background-grid" aria-hidden="true"></div>
@@ -40,7 +63,13 @@
     <header class="hero" aria-labelledby="page-title">
       <div class="hero-topline">
         <span class="system-status"><i></i> Archive Access Counter - <span id="access-counter">—</span></span>
-        <span class="coordinate">GAME // COLLECTION</span>
+        <div class="hero-topline-right">
+          <button type="button" class="anim-toggle-btn" id="anim-toggle-btn" aria-label="Toggle site animations" aria-pressed="true" title="Toggle site animations">
+            <span class="anim-toggle-dot" aria-hidden="true"></span>
+            <span class="anim-toggle-text">ANIMATIONS: ON</span>
+          </button>
+          <span class="coordinate">GAME // COLLECTION</span>
+        </div>
       </div>
       <div class="title-lockup">
         <div class="title-bracket" aria-hidden="true"></div>

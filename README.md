@@ -31,7 +31,10 @@ The project is designed for GitHub Pages and can also be embedded inside a Blogg
 - Glitch Split title treatment
 - Scramble animation for the loading screen with pre-measured layout stabilization
 - Floating top/bottom quick page navigation button with scroll direction tracking
-- Custom circular CPU-fan mouse cursor with scroll-progress indicator on fine-pointer devices
+- High-performance custom circular CPU-fan mouse cursor with scroll-progress indicator on fine-pointer devices (hardware-accelerated `translate3d` tracking tested up to 240Hz and 2K/4K displays)
+- User-configurable **Animations ON/OFF** toggle setting with `localStorage` persistence and automatic `prefers-reduced-motion` integration
+- Optimized background canvas with capped 1.0 DPR, pre-cached radial gradients, squared-distance connection culling, and tab-visibility lifecycle pausing
+- Cyber-tech `<noscript>` full-screen warning with browser enablement instructions
 - Curtain Wipe animation when a game title first enters the viewport
 - Ambient animated background with grid, particles, circuitry, and cyan/purple energy effects
 - Responsive and reduced-motion support
@@ -312,6 +315,44 @@ The game grid uses a deliberate responsive column structure rather than unrestri
 Desktop and smaller-screen layouts reduce the number of columns at defined breakpoints so cards do not become excessively narrow.
 
 Cards are equal-height flex layouts. The game title occupies the upper content area while the gameplay row and `VIEW GAME` button remain aligned toward the bottom.
+
+---
+
+## Performance & High-Refresh Display Architecture
+
+GameWall is engineered to run fluidly on high-refresh-rate displays (144Hz, 165Hz, 240Hz) and high resolutions (2K, 4K) without dropped frames or pointer latency:
+
+### 1. Zero-Latency Custom Cursor
+- **Compositor-Only Transformations:** The custom circular CPU-fan cursor uses `transform: translate3d(clientX, clientY, 0)` with `contain: layout style paint` and `will-change: transform`. Mouse positioning executes entirely on the GPU compositor thread without triggering layout reflows or style recalculations.
+- **Decoupled Animation Channels:** Cursor translation (`translate3d`), hover scaling (`scale(1.18)`), CPU fan blade rotation (`@keyframes gw-fan-spin`), and circular scroll progress (`stroke-dashoffset`) operate on completely independent layers. Pointer movement never recalculates SVG attributes or queries the DOM (`getBoundingClientRect()` is avoided entirely during pointer move).
+- **Adaptive Pointer Filtering:** Enabled only on devices satisfying `(pointer: fine) and (hover: hover)`, automatically hiding the native cursor on desktop mice while leaving mobile and touch interfaces completely unaffected.
+
+### 2. Optimized Ambient Canvas
+- **DPR Clamping:** Ambient canvas resolution is capped at 1.0 DPR, eliminating massive 2K/4K pixel fill-rate penalties while preserving sharp cyber-tech circuit visuals.
+- **Pre-Cached Gradients:** Radial atmosphere gradients are generated once on viewport resize rather than reallocated on every animation frame.
+- **Squared Distance Proximity Culling:** Inter-node distance testing uses squared arithmetic (`dx*dx + dy*dy <= maxDistanceSq`), eliminating square root calculations for all non-connecting nodes.
+- **Lifecycle & Tab Visibility Pausing:** Automatically cancels `requestAnimationFrame` loops when the tab is hidden (`document.hidden`) or scrolled out of view (`IntersectionObserver`), preventing background battery drain.
+
+---
+
+## Animation Settings & Reduced Motion
+
+GameWall includes a user-facing **ANIMATIONS: ON / OFF** toggle located in the hero topline alongside the archive status:
+
+- **State Persistence:** User preference is saved to `localStorage` under `gamewall-animations` (`"on"` or `"off"`).
+- **System Preference Detection:** Defaults to `"off"` if the operating system reports `(prefers-reduced-motion: reduce)`, while allowing users to explicitly override and turn animations on.
+- **Instantaneous Disabling:** When animations are turned off:
+  - Background canvas animation loops and RAF scheduling are completely halted.
+  - The custom cursor is hidden and native browser cursors are restored.
+  - Loading screen text scramble animations and delays are bypassed, showing target text immediately.
+  - Stats counters and page top/bottom navigation buttons scroll instantly without animation duration.
+  - Glitch, ambient glow drift, particles, and card entrance transitions are neutralized.
+
+---
+
+## JavaScript Requirement (`<noscript>`)
+
+GameWall is a client-side database application. If JavaScript is disabled or unavailable in the browser, a full-screen cyber-tech `<noscript>` overlay is rendered with clear instructions on enabling JavaScript across Google Chrome, Brave, Microsoft Edge, Mozilla Firefox, and Apple Safari.
 
 ---
 

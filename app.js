@@ -1,3 +1,27 @@
+const ANIMATION_STORAGE_KEY = "gamewall-animations";
+
+function getInitialAnimationPreference() {
+  try {
+    const stored = localStorage.getItem(ANIMATION_STORAGE_KEY);
+    if (stored === "on" || stored === "off") {
+      return stored === "on";
+    }
+  } catch {}
+  if (typeof window !== "undefined" && window.matchMedia) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return false;
+    }
+  }
+  return true;
+}
+
+let animationsEnabled = getInitialAnimationPreference();
+
+// Bootstrap no-animations class immediately to avoid layout flicker or premature animations
+if (!animationsEnabled && typeof document !== "undefined" && document.documentElement) {
+  document.documentElement.classList.add("no-animations");
+}
+
 const state = {
   games: [],
   query: "",
@@ -73,7 +97,8 @@ const elements = {
   mainContent: document.querySelector("#main-content"),
   pageNavBtn: document.querySelector("#page-nav-btn"),
   gwCursor: document.querySelector("#gw-cursor"),
-  gwCursorProgressFill: document.querySelector("#gw-cursor-progress-fill")
+  gwCursorProgressFill: document.querySelector("#gw-cursor-progress-fill"),
+  animToggleBtn: document.querySelector("#anim-toggle-btn")
 };
 
 const scrambleTimers = new WeakMap();
@@ -206,7 +231,7 @@ async function scrambleText(element, target, options = {}) {
   const previousTimer = scrambleTimers.get(element);
   if (previousTimer?.cancel) previousTimer.cancel();
 
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  if (!animationsEnabled || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     element.setAttribute("aria-label", text);
     element.textContent = text;
     return Promise.resolve();
@@ -334,6 +359,10 @@ function setLoaderProgress(value, message) {
 }
 
 function hideLoading() {
+  if (!animationsEnabled) {
+    elements.loadingScreen.classList.add("is-hidden");
+    return;
+  }
   setTimeout(() => elements.loadingScreen.classList.add("is-hidden"), 250);
 }
 
@@ -982,7 +1011,7 @@ async function loadDatabaseUpdate() {
 
 function animateValue(element, target, formatter, duration = 520) {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduceMotion || target === 0) {
+  if (!animationsEnabled || reduceMotion || target === 0) {
     element.textContent = formatter(target);
     return;
   }
@@ -1180,6 +1209,8 @@ function initBackgroundCanvas() {
     visible: true
   };
 
+  let cachedGradient = null;
+
   const clamp = (value, min, max) =>
     Math.max(min, Math.min(max, value));
 
@@ -1219,7 +1250,7 @@ function initBackgroundCanvas() {
   }
 
   function resize() {
-    if (mobileQuery.matches) {
+    if (mobileQuery.matches || !animationsEnabled) {
       if (state.raf) {
         cancelAnimationFrame(state.raf);
         state.raf = 0;
@@ -1232,7 +1263,8 @@ function initBackgroundCanvas() {
 
     state.width = Math.max(1, rect.width);
     state.height = Math.max(1, rect.height);
-    state.dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    // Cap DPR to 1.0 to eliminate 2K/4K fill-rate bottlenecks
+    state.dpr = 1;
 
     canvas.width = Math.round(state.width * state.dpr);
     canvas.height = Math.round(state.height * state.dpr);
@@ -1245,6 +1277,19 @@ function initBackgroundCanvas() {
       0,
       0
     );
+
+    // Pre-cache radial background gradient on resize instead of allocating every frame
+    cachedGradient = context.createRadialGradient(
+      state.width * .5,
+      state.height * .18,
+      0,
+      state.width * .5,
+      state.height * .18,
+      state.width * .62
+    );
+    cachedGradient.addColorStop(0, "rgba(0, 240, 255, .045)");
+    cachedGradient.addColorStop(.5, "rgba(138, 92, 255, .022)");
+    cachedGradient.addColorStop(1, "rgba(5, 7, 13, 0)");
 
     const area = state.width * state.height;
     const desiredNodes = clamp(Math.round(area / 24000), 30, 72);
@@ -1345,7 +1390,7 @@ function initBackgroundCanvas() {
   }
 
   function render(time) {
-    if (mobileQuery.matches) {
+    if (mobileQuery.matches || !animationsEnabled) {
       if (state.raf) {
         cancelAnimationFrame(state.raf);
         state.raf = 0;
@@ -1354,8 +1399,12 @@ function initBackgroundCanvas() {
       return;
     }
 
-    if (!state.visible) {
-      state.raf = requestAnimationFrame(render);
+    // Pause rendering and RAF scheduling when off-screen or tab hidden
+    if (document.hidden || !state.visible) {
+      if (state.raf) {
+        cancelAnimationFrame(state.raf);
+        state.raf = 0;
+      }
       return;
     }
 
@@ -1368,42 +1417,23 @@ function initBackgroundCanvas() {
       state.height
     );
 
-    // Subtle upper technical field.
-    const gradient = context.createRadialGradient(
-      state.width * .5,
-      state.height * .18,
-      0,
-      state.width * .5,
-      state.height * .18,
-      state.width * .62
-    );
-
-    gradient.addColorStop(
-      0,
-      "rgba(0, 240, 255, .045)"
-    );
-    gradient.addColorStop(
-      .5,
-      "rgba(138, 92, 255, .022)"
-    );
-    gradient.addColorStop(
-      1,
-      "rgba(5, 7, 13, 0)"
-    );
-
-    context.fillStyle = gradient;
-    context.fillRect(
-      0,
-      0,
-      state.width,
-      state.height
-    );
+    // Upper technical field using pre-cached gradient
+    if (cachedGradient) {
+      context.fillStyle = cachedGradient;
+      context.fillRect(
+        0,
+        0,
+        state.width,
+        state.height
+      );
+    }
 
     for (const circuit of state.circuits) {
       drawCircuit(circuit, seconds);
     }
 
     const maxDistance = 135;
+    const maxDistanceSq = 135 * 135; // Squared distance check avoids expensive Math.sqrt for distant pairs
 
     for (let i = 0; i < state.nodes.length; i++) {
       const node = state.nodes[i];
@@ -1428,10 +1458,11 @@ function initBackgroundCanvas() {
         const other = state.nodes[j];
         const dx = node.x - other.x;
         const dy = node.y - other.y;
-        const distance = Math.hypot(dx, dy);
+        const distSq = dx * dx + dy * dy;
 
-        if (distance > maxDistance) continue;
+        if (distSq > maxDistanceSq) continue;
 
+        const distance = Math.sqrt(distSq);
         const opacity =
           (1 - distance / maxDistance) * .085;
 
@@ -1465,12 +1496,20 @@ function initBackgroundCanvas() {
   }
 
   function updateAnimationLoop() {
-    if (mobileQuery.matches) {
+    if (mobileQuery.matches || !animationsEnabled) {
       if (state.raf) {
         cancelAnimationFrame(state.raf);
         state.raf = 0;
       }
       context.clearRect(0, 0, state.width, state.height);
+      return;
+    }
+
+    if (document.hidden || !state.visible) {
+      if (state.raf) {
+        cancelAnimationFrame(state.raf);
+        state.raf = 0;
+      }
       return;
     }
 
@@ -1493,11 +1532,30 @@ function initBackgroundCanvas() {
   const visibilityObserver = new IntersectionObserver(
     (entries) => {
       state.visible = entries[0]?.isIntersecting !== false;
+      if (!state.visible) {
+        if (state.raf) {
+          cancelAnimationFrame(state.raf);
+          state.raf = 0;
+        }
+      } else {
+        updateAnimationLoop();
+      }
     },
     { threshold: 0 }
   );
 
   visibilityObserver.observe(canvas);
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      if (state.raf) {
+        cancelAnimationFrame(state.raf);
+        state.raf = 0;
+      }
+    } else {
+      updateAnimationLoop();
+    }
+  });
 
   mobileQuery.addEventListener("change", updateAnimationLoop);
   motionQuery.addEventListener("change", updateAnimationLoop);
@@ -1505,7 +1563,7 @@ function initBackgroundCanvas() {
   window.addEventListener(
     "resize",
     () => {
-      if (mobileQuery.matches) {
+      if (mobileQuery.matches || !animationsEnabled) {
         if (state.raf) {
           cancelAnimationFrame(state.raf);
           state.raf = 0;
@@ -1520,6 +1578,10 @@ function initBackgroundCanvas() {
     },
     { passive: true }
   );
+
+  window.__updateCanvasAnimations = function(enabled) {
+    updateAnimationLoop();
+  };
 
   updateAnimationLoop();
 }
@@ -2455,7 +2517,7 @@ function initPageNavigation() {
 
   navBtn.addEventListener("click", () => {
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const behavior = prefersReduced ? "auto" : "smooth";
+    const behavior = (!animationsEnabled || prefersReduced) ? "auto" : "smooth";
 
     if (navBtn.classList.contains("is-top")) {
       window.scrollTo({ top: 0, behavior });
@@ -2483,6 +2545,7 @@ function initPageNavigation() {
 }
 
 function shouldEnableCustomCursor() {
+  if (!animationsEnabled) return false;
   if (typeof window === "undefined" || !window.matchMedia) return false;
 
   const hasFinePointer = window.matchMedia("(pointer: fine)").matches;
@@ -2515,10 +2578,11 @@ function initCustomCursor() {
   // Hide native cursor on fine-pointer devices
   document.documentElement.classList.add("has-custom-cursor");
 
-  const pathLength = progressFill.getTotalLength ? progressFill.getTotalLength() : 307.88;
+  const pathLength = 307.88;
   progressFill.style.strokeDasharray = `${pathLength} ${pathLength}`;
   progressFill.style.strokeDashoffset = `${pathLength}`;
 
+  let lastProgressOffset = pathLength;
   const updateScrollProgress = () => {
     const scroll = window.scrollY || window.pageYOffset || 0;
     const docHeight = Math.max(
@@ -2528,7 +2592,11 @@ function initCustomCursor() {
     const winHeight = window.innerHeight || 1;
     const maxScroll = docHeight - winHeight;
     const progress = maxScroll > 0 ? Math.min(1, Math.max(0, scroll / maxScroll)) : 0;
-    progressFill.style.strokeDashoffset = (pathLength * (1 - progress)).toFixed(2);
+    const newOffset = (pathLength * (1 - progress)).toFixed(2);
+    if (newOffset !== lastProgressOffset) {
+      lastProgressOffset = newOffset;
+      progressFill.style.strokeDashoffset = newOffset;
+    }
   };
 
   updateScrollProgress();
@@ -2547,21 +2615,35 @@ function initCustomCursor() {
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
 
-  // Instantaneous mouse tracking: ZERO smoothing, ZERO lerp, ZERO delay
+  // Instantaneous GPU-accelerated mouse tracking:
+  // ZERO smoothing, ZERO lerp, ZERO layout queries, ZERO delay.
+  // Directly translates on the compositor thread via translate3d.
+  let cursorActive = false;
+
   window.addEventListener("pointermove", (e) => {
-    if (e.pointerType === "touch") return;
-    cursor.style.left = `${e.clientX}px`;
-    cursor.style.top = `${e.clientY}px`;
-    if (!cursor.classList.contains("is-active")) {
+    if (e.pointerType === "touch" || !animationsEnabled) return;
+    cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+    if (!cursorActive) {
+      cursorActive = true;
       cursor.classList.add("is-active");
     }
   }, { passive: true });
 
   window.addEventListener("pointerleave", () => {
+    cursorActive = false;
     cursor.classList.remove("is-active");
   }, { passive: true });
 
+  window.addEventListener("pointerenter", (e) => {
+    if (e.pointerType !== "touch" && animationsEnabled) {
+      cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+      cursorActive = true;
+      cursor.classList.add("is-active");
+    }
+  }, { passive: true });
+
   window.addEventListener("blur", () => {
+    cursorActive = false;
     cursor.classList.remove("is-active");
   }, { passive: true });
 
@@ -2571,16 +2653,19 @@ function initCustomCursor() {
     [role="button"], [role="link"], [role="tab"],
     .game-card, .poster-link, .review-button, .view-game,
     .filter-chip, .filter-chip-btn, .page-nav-btn,
-    .review-modal-close, .review-modal-share, .review-modal-close-btn
+    .review-modal-close, .review-modal-share, .review-modal-close-btn,
+    .anim-toggle-btn
   `;
 
   document.addEventListener("pointerover", (e) => {
+    if (!animationsEnabled) return;
     if (e.target && e.target.closest && e.target.closest(interactiveSelector)) {
       cursor.classList.add("is-hover");
     }
   }, { passive: true });
 
   document.addEventListener("pointerout", (e) => {
+    if (!animationsEnabled) return;
     if (e.target && e.target.closest && e.target.closest(interactiveSelector)) {
       if (e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest(interactiveSelector)) {
         return;
@@ -2591,20 +2676,86 @@ function initCustomCursor() {
 
   window.__updateCursorProgress = updateScrollProgress;
 
+  window.__updateCursorEnabled = (enabled) => {
+    if (enabled && shouldEnableCustomCursor()) {
+      document.documentElement.classList.add("has-custom-cursor");
+    } else {
+      document.documentElement.classList.remove("has-custom-cursor");
+      cursor.classList.remove("is-active");
+      cursorActive = false;
+    }
+  };
+
   if (window.matchMedia) {
     try {
       window.matchMedia("(pointer: fine)").addEventListener("change", (e) => {
-        if (e.matches && shouldEnableCustomCursor()) {
+        if (e.matches && animationsEnabled && shouldEnableCustomCursor()) {
           document.documentElement.classList.add("has-custom-cursor");
         } else {
           document.documentElement.classList.remove("has-custom-cursor");
           cursor.classList.remove("is-active");
+          cursorActive = false;
         }
       });
     } catch {}
   }
 }
 
+function setAnimationsEnabled(enabled, persist = true) {
+  animationsEnabled = enabled;
+  if (persist) {
+    try {
+      localStorage.setItem(ANIMATION_STORAGE_KEY, enabled ? "on" : "off");
+    } catch {}
+  }
+
+  const btn = elements.animToggleBtn || document.querySelector("#anim-toggle-btn");
+  const textSpan = btn?.querySelector(".anim-toggle-text");
+  if (btn) {
+    btn.setAttribute("aria-pressed", String(enabled));
+  }
+  if (textSpan) {
+    textSpan.textContent = enabled ? "ANIMATIONS: ON" : "ANIMATIONS: OFF";
+  }
+
+  if (enabled) {
+    document.documentElement.classList.remove("no-animations");
+    window.__updateCanvasAnimations?.(true);
+    window.__updateCursorEnabled?.(true);
+  } else {
+    document.documentElement.classList.add("no-animations");
+    window.__updateCanvasAnimations?.(false);
+    window.__updateCursorEnabled?.(false);
+  }
+}
+
+function initAnimationToggle() {
+  const btn = elements.animToggleBtn || document.querySelector("#anim-toggle-btn");
+  if (!btn) return;
+
+  btn.setAttribute("aria-pressed", String(animationsEnabled));
+  const textSpan = btn.querySelector(".anim-toggle-text");
+  if (textSpan) {
+    textSpan.textContent = animationsEnabled ? "ANIMATIONS: ON" : "ANIMATIONS: OFF";
+  }
+
+  btn.addEventListener("click", () => {
+    setAnimationsEnabled(!animationsEnabled, true);
+  });
+
+  if (window.matchMedia) {
+    try {
+      window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", (e) => {
+        try {
+          if (localStorage.getItem(ANIMATION_STORAGE_KEY) !== null) return;
+        } catch {}
+        setAnimationsEnabled(!e.matches, false);
+      });
+    } catch {}
+  }
+}
+
+initAnimationToggle();
 initUrlState();
 initBackgroundCanvas();
 initReviewModalEvents();
