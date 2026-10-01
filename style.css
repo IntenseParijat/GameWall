@@ -1485,6 +1485,15 @@ body::after {
 
 .loading-screen .scramble-text {
   will-change: contents;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.scramble-line {
+  display: block;
+  white-space: nowrap;
+  overflow: visible;
+  width: 100%;
 }
 
 .loader-track {
@@ -2397,3 +2406,122 @@ body.modal-open {
     padding: .75rem 1rem;
   }
 }
+
+/* ==========================================================================
+   Page Navigation Floating Control
+   ========================================================================== */
+.page-nav-btn {
+  position: fixed;
+  bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  right: calc(1.5rem + env(safe-area-inset-right, 0px));
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  margin: 0;
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  background: rgba(5, 7, 13, 0.85);
+  color: var(--neon-cyan);
+  cursor: pointer;
+  outline: none;
+  clip-path: polygon(0 8px, 8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5), 0 0 12px rgba(0, 240, 255, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: opacity .25s ease, transform .25s ease, border-color .25s ease, background .25s ease, box-shadow .25s ease;
+  touch-action: manipulation;
+}
+
+.page-nav-btn[hidden] {
+  display: none !important;
+}
+
+.page-nav-btn:hover,
+.page-nav-btn:focus-visible {
+  color: #fff;
+  border-color: var(--neon-cyan);
+  background: rgba(0, 240, 255, 0.2);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.45);
+  transform: translateY(-2px);
+}
+
+.page-nav-btn:active {
+  transform: translateY(0) scale(0.95);
+}
+
+.page-nav-icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  transition: transform .2s ease;
+  pointer-events: none;
+}
+
+.page-nav-btn.is-bottom .page-nav-up {
+  display: none;
+}
+
+.page-nav-btn.is-top .page-nav-down {
+  display: none;
+}
+
+/* Hide while review modal is open */
+.modal-open .page-nav-btn {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: translateY(12px) scale(0.9) !important;
+}
+
+@media (max-width: 640px) {
+  .page-nav-btn {
+    bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    right: calc(1rem + env(safe-area-inset-right, 0px));
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-nav-btn {
+    transition: none !important;
+  }
+  .page-nav-btn:hover,
+  .page-nav-btn:focus-visible,
+  .page-nav-btn:active {
+    transform: none !important;
+  }
+}
+
+/* ==========================================================================
+   Neon Mouse Cursor Layer (Fine-pointer devices only)
+   ========================================================================== */
+.neon-cursor-layer {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none !important;
+  z-index: 150;
+  mix-blend-mode: screen;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+
+.neon-cursor-layer.is-active {
+  opacity: 1;
+}
+
+.neon-cursor-layer canvas {
+  display: block;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important;
+}

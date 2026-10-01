@@ -29,7 +29,9 @@ The project is designed for GitHub Pages and can also be embedded inside a Blogg
 - Highest-rated game statistic
 - Staggered card entrance animation
 - Glitch Split title treatment
-- Scramble animation for the loading screen
+- Scramble animation for the loading screen with pre-measured layout stabilization
+- Floating top/bottom quick page navigation button with scroll direction tracking
+- Procedural neon mouse cursor trail with WebGL glow on fine-pointer devices
 - Curtain Wipe animation when a game title first enters the viewport
 - Ambient animated background with grid, particles, circuitry, and cyan/purple energy effects
 - Responsive and reduced-motion support
@@ -267,9 +269,27 @@ The Paladins font is loaded from the project's CDN:
 
 ### Loading screen
 
-Loading messages use a Scramble effect.
+Loading messages use a Scramble effect. To prevent line-wrapping jumps and layout jitter on mobile and narrow viewports (such as 320px, 360px, 375px, 390px, and 430px), the scramble animation pre-measures the complete final text layout against the element's computed typography before random character insertion begins.
 
-The loading screen waits for the final scramble to finish, then remains visible briefly before disappearing.
+- **Stable line configuration:** If the target string fits on one line at the current viewport width, one-line dimensions and no-wrap rules are reserved. If the target string naturally requires multiple lines, multi-line dimensions and stable line spans are reserved from the beginning so intermediate random characters cannot temporarily snap between one-line and two-line states.
+- **Zero layout shift:** The browser reserves the exact final dimensions beforehand, ensuring the loader message, progress track, and percentage label remain completely stable.
+- **Uncompromised aesthetics:** Once the animation concludes, the element cleanly restores normal plain text and inline dimensions, matching the intended final cyber-tech typography.
+
+### Page Navigation
+
+GameWall provides a subtle floating navigation button anchored in the lower corner of the viewport for rapid movement:
+- **At the top:** When near the top of the page, the button presents a downward chevron icon for scrolling smoothly to the document end.
+- **After scrolling down:** Once scrolled past a small threshold (300px), the button seamlessly switches to an upward chevron icon for returning to the page top.
+- **Modal awareness:** The navigation button automatically hides whenever the Review modal is active and restores its state upon modal dismissal without affecting scroll locking.
+- **Accessibility & Motion:** Features an accessible minimum 44×44px touch target on mobile devices, requires no hover interaction, and respects `prefers-reduced-motion` with instant scrolling.
+
+### Custom Neon Cursor
+
+On devices equipped with a fine pointing device (such as desktop mice and precision trackpads), GameWall renders an interactive glowing neon cursor effect:
+- **Visual implementation:** Adapted from the `threejs-toys` `neonCursor` reference, producing a fluid glowing bezier trail and a subtle idle elliptical floating motion.
+- **Pointer capability detection:** Enabled exclusively when CSS Media Queries confirm `(pointer: fine)` and `(hover: hover)`. It is never loaded or initialized on mobile phones, touch tablets, or coarse pointers, leaving native touch interaction completely untouched.
+- **Isolated rendering layer:** Rendered on a dedicated, pointer-transparent `<div id="neon-cursor-layer">` canvas with `mix-blend-mode: screen` and `z-index: 150`. It floats cleanly above both the page and the review modal without intercepting clicks or interfering with the underlying procedural background canvas.
+- **Resilient fallback:** Lazy-loads on the first detected fine pointer movement, falling back silently to the native cursor if WebGL or CDN assets are unavailable.
 
 ### Game titles
 
@@ -300,9 +320,11 @@ GameWall uses standard browser APIs including:
 - `fetch`
 - `IntersectionObserver`
 - `ResizeObserver`
-- CSS animations
-- Canvas for the ambient background
-- native lazy loading
+- CSS animations and custom properties
+- Pointer Media Queries (`(pointer: fine)`, `(hover: hover)`)
+- Canvas for the ambient background and WebGL for the custom neon cursor
+- Dynamic ES module import (`import()`) for lightweight on-demand cursor enhancement
+- Native lazy loading
 
 For local testing, use a local HTTP server rather than opening `index.html` directly with `file://`. This allows relative requests such as `games.json` to behave consistently.
 

@@ -70,13 +70,134 @@ const elements = {
   reviewModalCloseBtn: document.querySelector("#review-modal-close-btn"),
   reviewModalShare: document.querySelector("#review-modal-share"),
   reviewShareToast: document.querySelector("#review-share-toast"),
-  mainContent: document.querySelector("#main-content")
+  mainContent: document.querySelector("#main-content"),
+  pageNavBtn: document.querySelector("#page-nav-btn"),
+  neonCursorLayer: document.querySelector("#neon-cursor-layer")
 };
 
 const scrambleTimers = new WeakMap();
 const SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&*+-/<>[]{}01";
 
-function scrambleText(element, target, options = {}) {
+let fontsReadyPromise = null;
+function ensureFontsReady() {
+  if (!fontsReadyPromise) {
+    if (typeof document !== "undefined" && document.fonts && document.fonts.ready) {
+      fontsReadyPromise = Promise.race([
+        document.fonts.ready,
+        new Promise((resolve) => setTimeout(resolve, 350))
+      ]);
+    } else {
+      fontsReadyPromise = Promise.resolve();
+    }
+  }
+  return fontsReadyPromise;
+}
+
+function measureTextLayout(element, targetText) {
+  const parent = element.parentElement || document.body;
+  const parentStyle = window.getComputedStyle(parent);
+  const parentPaddingX = (parseFloat(parentStyle.paddingLeft) || 0) + (parseFloat(parentStyle.paddingRight) || 0);
+  const availableParentWidth = Math.max(0, parent.clientWidth - parentPaddingX);
+
+  const elementStyle = window.getComputedStyle(element);
+  let elementMaxWidth = availableParentWidth;
+  if (elementStyle.maxWidth && elementStyle.maxWidth !== "none") {
+    if (elementStyle.maxWidth.endsWith("px")) {
+      const parsed = parseFloat(elementStyle.maxWidth);
+      if (!isNaN(parsed) && parsed > 0) elementMaxWidth = parsed;
+    } else if (elementStyle.maxWidth.endsWith("%")) {
+      const parsedPct = parseFloat(elementStyle.maxWidth);
+      if (!isNaN(parsedPct) && parsedPct > 0) elementMaxWidth = (parsedPct / 100) * availableParentWidth;
+    }
+  }
+  const maxAllowedWidth = Math.max(0, Math.min(availableParentWidth, elementMaxWidth));
+
+  const clone = document.createElement(element.tagName);
+  clone.className = element.className;
+  clone.style.cssText = `
+    position: absolute !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    left: -9999px !important;
+    top: 0 !important;
+    z-index: -999 !important;
+    opacity: 0 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+  `;
+  const typographyProps = [
+    "fontFamily", "fontSize", "fontWeight", "fontStyle", "fontStretch",
+    "letterSpacing", "lineHeight", "textTransform", "wordSpacing", "textIndent"
+  ];
+  typographyProps.forEach((prop) => {
+    clone.style[prop] = elementStyle[prop];
+  });
+  parent.appendChild(clone);
+
+  // Single-line test
+  clone.style.whiteSpace = "nowrap";
+  clone.style.width = "auto";
+  clone.style.maxWidth = "none";
+  clone.textContent = targetText;
+  const singleLineRect = clone.getBoundingClientRect();
+  const singleLineWidth = singleLineRect.width;
+  const singleLineHeight = singleLineRect.height;
+
+  const fitsOnOneLine = singleLineWidth <= (maxAllowedWidth + 0.5);
+
+  if (fitsOnOneLine) {
+    clone.remove();
+    return {
+      fitsOnOneLine: true,
+      lines: [targetText],
+      width: Math.ceil(Math.min(singleLineWidth, maxAllowedWidth)),
+      height: Math.ceil(singleLineHeight)
+    };
+  }
+
+  // Multi-line measurement
+  clone.style.whiteSpace = elementStyle.whiteSpace || "normal";
+  clone.style.maxWidth = `${maxAllowedWidth}px`;
+  const wrappedRect = clone.getBoundingClientRect();
+
+  const textNode = clone.firstChild;
+  const lines = [];
+  if (textNode && textNode.nodeType === Node.TEXT_NODE) {
+    const range = document.createRange();
+    let currentLineStart = 0;
+    let lastTop = null;
+
+    for (let i = 0; i < targetText.length; i++) {
+      range.setStart(textNode, i);
+      range.setEnd(textNode, i + 1);
+      const rects = range.getClientRects();
+      if (rects.length > 0) {
+        const top = Math.round(rects[0].top);
+        if (lastTop === null) {
+          lastTop = top;
+        } else if (top > lastTop + 4) {
+          lines.push(targetText.slice(currentLineStart, i));
+          currentLineStart = i;
+          lastTop = top;
+        }
+      }
+    }
+    lines.push(targetText.slice(currentLineStart));
+  }
+  clone.remove();
+
+  return {
+    fitsOnOneLine: false,
+    lines: lines.length > 0 ? lines : [targetText],
+    width: Math.ceil(wrappedRect.width),
+    height: Math.ceil(wrappedRect.height)
+  };
+}
+
+async function scrambleText(element, target, options = {}) {
   if (!element) return Promise.resolve();
 
   const text = String(target ?? "");
@@ -90,10 +211,25 @@ function scrambleText(element, target, options = {}) {
     return Promise.resolve();
   }
 
+  await ensureFontsReady();
+
   const intervalMs = options.interval ?? 40;
   const revealEvery = options.revealEvery ?? 3;
 
   element.setAttribute("aria-label", text);
+
+  const layout = measureTextLayout(element, text);
+
+  // Reserve stable dimensions before the first character scrambles
+  element.style.minHeight = `${layout.height}px`;
+  element.style.height = `${layout.height}px`;
+  element.style.minWidth = `${layout.width}px`;
+  element.style.maxWidth = "100%";
+  element.style.boxSizing = "border-box";
+
+  if (layout.fitsOnOneLine) {
+    element.style.whiteSpace = "nowrap";
+  }
 
   let revealed = 0;
   let frame = 0;
@@ -104,35 +240,63 @@ function scrambleText(element, target, options = {}) {
     resolvePromise = resolve;
   });
 
-  const render = () => {
-    let output = "";
-
-    for (let i = 0; i < text.length; i++) {
-      if (text[i] === " ") {
-        output += "\u00A0";
+  const scrambleString = (str, revCount) => {
+    let out = "";
+    for (let i = 0; i < str.length; i++) {
+      if (str[i] === " ") {
+        out += "\u00A0";
         continue;
       }
-
-      output += i < revealed
-        ? text[i]
-        : SCRAMBLE_CHARS[
-        Math.floor(
-          Math.random() * SCRAMBLE_CHARS.length
-        )
-        ];
+      out += i < revCount
+        ? str[i]
+        : SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
     }
+    return out;
+  };
 
-    element.textContent = output;
+  let lineSpans = null;
+  if (!layout.fitsOnOneLine) {
+    element.replaceChildren();
+    lineSpans = layout.lines.map(() => {
+      const span = document.createElement("span");
+      span.className = "scramble-line";
+      element.appendChild(span);
+      return span;
+    });
+  }
+
+  const render = () => {
+    if (layout.fitsOnOneLine) {
+      element.textContent = scrambleString(text, revealed);
+    } else {
+      let count = 0;
+      for (let l = 0; l < layout.lines.length; l++) {
+        const line = layout.lines[l];
+        const lineRev = Math.max(0, Math.min(line.length, revealed - count));
+        count += line.length;
+        lineSpans[l].textContent = scrambleString(line, lineRev);
+      }
+    }
   };
 
   render();
+
+  const cleanupStyles = () => {
+    element.style.minHeight = "";
+    element.style.height = "";
+    element.style.minWidth = "";
+    element.style.maxWidth = "";
+    element.style.whiteSpace = "";
+    element.style.boxSizing = "";
+  };
 
   const finish = () => {
     if (timer) clearInterval(timer);
 
     scrambleTimers.delete(element);
     element.textContent = text;
-    resolvePromise();
+    cleanupStyles();
+    resolvePromise?.();
   };
 
   timer = setInterval(() => {
@@ -332,6 +496,7 @@ async function loadGames() {
 
     hideLoading();
     state.initialized = true;
+    window.__updatePageNav?.();
     checkInitialReviewSlug();
   } catch (error) {
     console.error("GameWall could not load games.json:", error);
@@ -343,6 +508,7 @@ async function loadGames() {
 
     hideLoading();
     state.initialized = true;
+    window.__updatePageNav?.();
   }
 }
 
@@ -1995,9 +2161,11 @@ function openReviewModal(game, identifier, triggerElement, fromPopstate = false)
       requestAnimationFrame(() => {
         elements.reviewModalBackdrop.classList.add("is-open");
         elements.reviewModalClose?.focus();
+        window.__updatePageNav?.();
       });
     } else {
       elements.reviewModalClose?.focus();
+      window.__updatePageNav?.();
     }
   }
 }
@@ -2026,6 +2194,7 @@ function closeReviewModal(fromPopstate = false) {
   elements.mainContent?.removeAttribute("aria-hidden");
 
   window.scrollTo(0, savedScrollY);
+  window.__updatePageNav?.();
 
   reviewCloseTimeout = setTimeout(() => {
     reviewCloseTimeout = null;
@@ -2037,6 +2206,7 @@ function closeReviewModal(fromPopstate = false) {
     if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
       lastFocusedElement.focus();
     }
+    window.__updatePageNav?.();
   }, 250);
 }
 
@@ -2240,11 +2410,180 @@ window.addEventListener("popstate", () => {
   }
 });
 
+function initPageNavigation() {
+  const navBtn = elements.pageNavBtn || document.querySelector("#page-nav-btn");
+  if (!navBtn) return;
+
+  const SCROLL_THRESHOLD = 300;
+
+  const updateState = () => {
+    if (!state.initialized) {
+      navBtn.hidden = true;
+      return;
+    }
+
+    const isModalOpen = document.documentElement.classList.contains("modal-open") ||
+      (elements.reviewModalBackdrop && !elements.reviewModalBackdrop.hidden && elements.reviewModalBackdrop.classList.contains("is-open"));
+
+    if (isModalOpen) {
+      navBtn.hidden = true;
+      return;
+    }
+
+    navBtn.hidden = false;
+
+    const scrollY = window.scrollY || window.pageYOffset || 0;
+    if (scrollY > SCROLL_THRESHOLD) {
+      if (!navBtn.classList.contains("is-top")) {
+        navBtn.classList.remove("is-bottom");
+        navBtn.classList.add("is-top");
+        navBtn.setAttribute("aria-label", "Go to top");
+        navBtn.setAttribute("title", "Go to top");
+      }
+    } else {
+      if (!navBtn.classList.contains("is-bottom")) {
+        navBtn.classList.remove("is-top");
+        navBtn.classList.add("is-bottom");
+        navBtn.setAttribute("aria-label", "Go to bottom");
+        navBtn.setAttribute("title", "Go to bottom");
+      }
+    }
+  };
+
+  navBtn.addEventListener("click", () => {
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const behavior = prefersReduced ? "auto" : "smooth";
+
+    if (navBtn.classList.contains("is-top")) {
+      window.scrollTo({ top: 0, behavior });
+    } else {
+      const scrollHeight = Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight
+      );
+      window.scrollTo({ top: scrollHeight, behavior });
+    }
+  });
+
+  let ticking = false;
+  window.addEventListener("scroll", () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        updateState();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  window.__updatePageNav = updateState;
+}
+
+function shouldEnableCustomCursor() {
+  if (typeof window === "undefined" || !window.matchMedia) return false;
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return false;
+  }
+
+  // Must have a fine pointer and support hover (desktop PC or laptop with mouse/trackpad)
+  const hasFinePointer = window.matchMedia("(pointer: fine)").matches;
+  const canHover = window.matchMedia("(hover: hover)").matches;
+  const isCoarseOnly = window.matchMedia("(pointer: coarse) and not (pointer: fine)").matches;
+
+  return hasFinePointer && canHover && !isCoarseOnly;
+}
+
+function initNeonCursor() {
+  const container = elements.neonCursorLayer || document.querySelector("#neon-cursor-layer");
+  if (!container) return;
+
+  let started = false;
+
+  const startCursor = async (firstEvent) => {
+    if (started) return;
+    if (!shouldEnableCustomCursor()) return;
+    started = true;
+
+    try {
+      const { neonCursor } = await import(
+        "https://unpkg.com/threejs-toys@0.0.8/build/threejs-toys.module.cdn.min.js"
+      );
+
+      neonCursor({
+        el: container,
+        shaderPoints: 16,
+        curvePoints: 80,
+        curveLerp: 0.5,
+        radius1: 3,
+        radius2: 22,
+        velocityTreshold: 10,
+        sleepRadiusX: 50,
+        sleepRadiusY: 50,
+        sleepTimeCoefX: 0.002,
+        sleepTimeCoefY: 0.002
+      });
+
+      container.classList.add("is-active");
+
+      const forwardPointer = (e) => {
+        if (e.pointerType === "touch") return;
+        container.dispatchEvent(
+          new PointerEvent("pointermove", {
+            clientX: e.clientX,
+            clientY: e.clientY,
+            bubbles: true
+          })
+        );
+      };
+
+      window.addEventListener("pointermove", forwardPointer, { passive: true });
+
+      window.addEventListener("pointerleave", () => {
+        container.dispatchEvent(new PointerEvent("pointerleave"));
+      }, { passive: true });
+
+      window.addEventListener("blur", () => {
+        container.dispatchEvent(new PointerEvent("pointerleave"));
+      }, { passive: true });
+
+      if (firstEvent) {
+        forwardPointer(firstEvent);
+      }
+    } catch (err) {
+      console.warn("[GameWall] Custom neon cursor unavailable; falling back to native pointer.", err);
+    }
+  };
+
+  const onPointer = (e) => {
+    if (started) return;
+    if (e.pointerType === "touch") return;
+    if (!shouldEnableCustomCursor()) return;
+
+    window.removeEventListener("pointermove", onPointer);
+    startCursor(e);
+  };
+
+  window.addEventListener("pointermove", onPointer, { passive: true });
+
+  if (window.matchMedia) {
+    try {
+      window.matchMedia("(pointer: fine)").addEventListener("change", (e) => {
+        if (e.matches && !started) {
+          window.addEventListener("pointermove", onPointer, { passive: true });
+        }
+      });
+    } catch {}
+  }
+}
+
 initUrlState();
 initBackgroundCanvas();
 initReviewModalEvents();
 hookHistoryNavigation();
 loadAccessCounter();
+initPageNavigation();
+initNeonCursor();
 
 scrambleText(
   document.querySelector(".loading-screen h1"),
@@ -2252,3 +2591,4 @@ scrambleText(
 );
 
 loadGames();
+
