@@ -276,6 +276,8 @@ Loading messages use a Scramble effect. To prevent line-wrapping jumps and layou
 
 - **Stable line configuration:** If the target string fits on one line at the current viewport width, one-line dimensions and no-wrap rules are reserved. If the target string naturally requires multiple lines, multi-line dimensions and stable line spans are reserved from the beginning so intermediate random characters cannot temporarily snap between one-line and two-line states.
 - **Zero layout shift:** The browser reserves the exact final dimensions beforehand, ensuring the loader message, progress track, and percentage label remain completely stable.
+- **Final initialization message:** The loading sequence smoothly progresses through database connection, archive data verification, and timestamp acquisition, culminating strictly in `DATABASE READY` as the final animated scramble message. The intermediate `BUILDING COLLECTION...` step has been removed.
+- **Error state isolation:** If network failure or parse errors prevent `games.json` from loading, the loading screen transitions to `DATABASE UNAVAILABLE` with diagnostic details in the empty state.
 - **Uncompromised aesthetics:** Once the animation concludes, the element cleanly restores normal plain text and inline dimensions, matching the intended final cyber-tech typography.
 
 ### Page Navigation
@@ -335,18 +337,51 @@ GameWall is engineered to run fluidly on high-refresh-rate displays (144Hz, 165H
 
 ---
 
-## Animation Settings & Reduced Motion
+## Review Modal & External Embed System
 
-GameWall includes a user-facing **ANIMATIONS: ON / OFF** toggle located in the hero topline alongside the archive status:
+GameWall features an integrated Markdown review reader with controlled, sandboxed external media embed support:
 
-- **State Persistence:** User preference is saved to `localStorage` under `gamewall-animations` (`"on"` or `"off"`).
-- **System Preference Detection:** Defaults to `"off"` if the operating system reports `(prefers-reduced-motion: reduce)`, while allowing users to explicitly override and turn animations on.
-- **Instantaneous Disabling:** When animations are turned off:
-  - Background canvas animation loops and RAF scheduling are completely halted.
-  - The custom cursor is hidden and native browser cursors are restored.
-  - Loading screen text scramble animations and delays are bypassed, showing target text immediately.
-  - Stats counters and page top/bottom navigation buttons scroll instantly without animation duration.
-  - Glitch, ambient glow drift, particles, and card entrance transitions are neutralized.
+### Supported Embed Providers
+- **YouTube:** Safe `youtube-nocookie.com` responsive iframes with fullscreen and media controls.
+- **Vimeo:** Safe `player.vimeo.com` responsive iframes.
+- **Instagram:** Controlled official Instagram embeds loaded via safe permalink extraction and official `embed.js` processing.
+- **Markdown formatting:** Supports headers, blockquotes, lists, code blocks, bold, italics, external links, and lazy-loaded screenshots with DOMPurify sanitization.
+
+### Dedicated Embed Loading States
+When a review with external media is opened:
+- Embeds immediately display an indeterminate GameWall cyber-tech loading state with provider tagging (e.g. `[ YOUTUBE ]`, `[ INSTAGRAM ]`, `[ VIMEO ]`), a moving cyan/purple scanning progress bar, and a rotating cyber ring.
+- No fake percentages are shown, keeping progress communication honest and accurate.
+- For iframes, completion is detected via native `load` events. For Instagram, dynamic frame generation is observed via `MutationObserver` and frame readiness before the loading overlay is cleanly dismissed.
+
+### Error Handling & Reload Recovery
+- **Timeout Protection:** Embeds are monitored with a configurable timeout (`EMBED_TIMEOUT_MS = 14000`) so slow or blocked connections never leave a permanently stuck loader.
+- **Cyber-Tech Failure Card:** If an embed fails or times out, its container switches to a cyber-tech failure state displaying an error badge, the provider name, an explanatory message, and a dedicated **RELOAD PAGE** button.
+- **Full Page Reload:** Clicking **RELOAD PAGE** performs a full page reload (`window.location.reload()`) keeping the active review URL intact for an immediate retry.
+- **Failure Isolation:** Each embed operates completely independently. If one embed fails, other embeds and all surrounding review text remain fully functional.
+- **Lifecycle Cleanup:** Direct review-to-review navigation (`Review A → Review B`) cleanly cancels pending timers, disconnects observers, and resets iframe sources (`about:blank`) to avoid background bandwidth usage and memory leaks.
+
+---
+
+## Animation Settings & Reduced Motion Hierarchy
+
+GameWall includes an accessible, persistent **ANIMATIONS: ON / OFF** toggle in the hero topline:
+
+### Preference Hierarchy
+1. **User's Explicit Saved Choice:** If the user has manually toggled animations to `"on"` or `"off"`, this choice is persisted to `localStorage` under `gamewall-animations` and strictly honored across future visits.
+2. **System Preference Default:** On the user's first visit with no stored setting, the site checks `(prefers-reduced-motion: reduce)`. If the operating system requests reduced motion, GameWall defaults to `ANIMATIONS: OFF`. Otherwise, it starts with `ANIMATIONS: ON`.
+3. **Explicit Override Capability:** A system reduced-motion preference is treated strictly as an accessible initial default—not a permanent lock. Users on systems with Windows or browser animation restrictions can explicitly click **ANIMATIONS: ON**, which instantly resumes all animations and saves the override.
+
+### Full Animation Resumption
+When animations are toggled from OFF to ON, every animation system resumes actively rather than freezing on a static frame:
+- **Background Canvas:** Re-requests `requestAnimationFrame` rendering, resizes the viewport buffer, and resumes node velocity movement and circuit pulses.
+- **Custom CPU-Fan Cursor:** Restores fine-pointer tracking, rotates the 5-blade aerodynamic light pattern, updates the circular scroll-progress indicator, and hides the native cursor.
+- **Ambient Elements:** Resumes background grid animation, particles, and floating cyan/purple energy atmosphere drift.
+- **Title Glitch & Scan Lines:** Glitch split animations on the header title and hero/section scanning divider bars re-trigger cleanly.
+- **Card Entrance & Titles:** Newly rendered or filtered game cards animate smoothly into view with staggered entry delays, and viewport titles reveal via the curtain-wipe transition.
+- **Gameplay Marquee:** Long gameplay labels resume continuous horizontal scrolling.
+- **Page Navigation:** Quick top/bottom page navigation transitions smoothly with animated scrolling.
+- **Tab Visibility Integration:** Canvas and cursor loops automatically sleep when `document.hidden === true` and wake up when the tab returns to focus without accumulating duplicate listeners or animation loops.
+- **Non-Destructive Toggling:** Turning animations ON or OFF never reloads `games.json`, rebuilds the database, resets search queries, modifies filters, or dismisses an open review modal.
 
 ---
 

@@ -6,7 +6,7 @@ function getInitialAnimationPreference() {
     if (stored === "on" || stored === "off") {
       return stored === "on";
     }
-  } catch {}
+  } catch { }
   if (typeof window !== "undefined" && window.matchMedia) {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       return false;
@@ -17,9 +17,14 @@ function getInitialAnimationPreference() {
 
 let animationsEnabled = getInitialAnimationPreference();
 
-// Bootstrap no-animations class immediately to avoid layout flicker or premature animations
-if (!animationsEnabled && typeof document !== "undefined" && document.documentElement) {
-  document.documentElement.classList.add("no-animations");
+if (typeof document !== "undefined" && document.documentElement) {
+  if (animationsEnabled) {
+    document.documentElement.classList.remove("no-animations");
+    document.documentElement.classList.add("animations-unlocked");
+  } else {
+    document.documentElement.classList.add("no-animations");
+    document.documentElement.classList.remove("animations-unlocked");
+  }
 }
 
 const state = {
@@ -163,7 +168,6 @@ function measureTextLayout(element, targetText) {
   });
   parent.appendChild(clone);
 
-  // Single-line test
   clone.style.whiteSpace = "nowrap";
   clone.style.width = "auto";
   clone.style.maxWidth = "none";
@@ -184,7 +188,6 @@ function measureTextLayout(element, targetText) {
     };
   }
 
-  // Multi-line measurement
   clone.style.whiteSpace = elementStyle.whiteSpace || "normal";
   clone.style.maxWidth = `${maxAllowedWidth}px`;
   const wrappedRect = clone.getBoundingClientRect();
@@ -231,7 +234,7 @@ async function scrambleText(element, target, options = {}) {
   const previousTimer = scrambleTimers.get(element);
   if (previousTimer?.cancel) previousTimer.cancel();
 
-  if (!animationsEnabled || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  if (!animationsEnabled) {
     element.setAttribute("aria-label", text);
     element.textContent = text;
     return Promise.resolve();
@@ -246,7 +249,6 @@ async function scrambleText(element, target, options = {}) {
 
   const layout = measureTextLayout(element, text);
 
-  // Reserve stable dimensions before the first character scrambles
   element.style.minHeight = `${layout.height}px`;
   element.style.height = `${layout.height}px`;
   element.style.minWidth = `${layout.width}px`;
@@ -444,7 +446,6 @@ function detectConnectionQuality(timing = null) {
     }
   }
 
-  // Fallback estimation using games.json download throughput
   if (timing && typeof timing.bytes === "number" && typeof timing.durationMs === "number" && timing.bytes > 0) {
     if (timing.durationMs >= 200) {
       const durationSeconds = timing.durationMs / 1000;
@@ -512,16 +513,11 @@ async function loadGames() {
       "CHECKING DATABASE TIMESTAMP..."
     );
     await loadDatabaseUpdate();
-    setLoaderProgress(
-      82,
-      "BUILDING COLLECTION..."
-    );
-
+    setLoaderProgress(85);
     updateStatistics();
     renderGames();
     await setLoaderProgress(100, "DATABASE READY");
 
-    // Let the final scramble finish and remain readable for one second.
     await new Promise((resolve) => window.setTimeout(resolve, 1000));
 
     hideLoading();
@@ -1010,8 +1006,7 @@ async function loadDatabaseUpdate() {
 }
 
 function animateValue(element, target, formatter, duration = 520) {
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!animationsEnabled || reduceMotion || target === 0) {
+  if (!animationsEnabled || target === 0) {
     element.textContent = formatter(target);
     return;
   }
@@ -1196,7 +1191,6 @@ function initBackgroundCanvas() {
   if (!context) return;
 
   const mobileQuery = window.matchMedia("(max-width: 760px)");
-  const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   const state = {
     width: 0,
@@ -1263,7 +1257,6 @@ function initBackgroundCanvas() {
 
     state.width = Math.max(1, rect.width);
     state.height = Math.max(1, rect.height);
-    // Cap DPR to 1.0 to eliminate 2K/4K fill-rate bottlenecks
     state.dpr = 1;
 
     canvas.width = Math.round(state.width * state.dpr);
@@ -1278,7 +1271,6 @@ function initBackgroundCanvas() {
       0
     );
 
-    // Pre-cache radial background gradient on resize instead of allocating every frame
     cachedGradient = context.createRadialGradient(
       state.width * .5,
       state.height * .18,
@@ -1346,7 +1338,6 @@ function initBackgroundCanvas() {
     context.lineWidth = 1;
     context.stroke();
 
-    // Small travelling pulse along the 3-point circuit.
     const p = (
       (time * circuit.speed + circuit.phase / (Math.PI * 2)) % 1 + 1
     ) % 1;
@@ -1399,7 +1390,6 @@ function initBackgroundCanvas() {
       return;
     }
 
-    // Pause rendering and RAF scheduling when off-screen or tab hidden
     if (document.hidden || !state.visible) {
       if (state.raf) {
         cancelAnimationFrame(state.raf);
@@ -1417,7 +1407,6 @@ function initBackgroundCanvas() {
       state.height
     );
 
-    // Upper technical field using pre-cached gradient
     if (cachedGradient) {
       context.fillStyle = cachedGradient;
       context.fillRect(
@@ -1433,20 +1422,18 @@ function initBackgroundCanvas() {
     }
 
     const maxDistance = 135;
-    const maxDistanceSq = 135 * 135; // Squared distance check avoids expensive Math.sqrt for distant pairs
+    const maxDistanceSq = 135 * 135;
 
     for (let i = 0; i < state.nodes.length; i++) {
       const node = state.nodes[i];
 
-      if (!motionQuery.matches) {
-        node.x += node.vx * .015;
-        node.y += node.vy * .015;
+      node.x += node.vx * .015;
+      node.y += node.vy * .015;
 
-        if (node.x < -20) node.x = state.width + 20;
-        if (node.x > state.width + 20) node.x = -20;
-        if (node.y < -20) node.y = state.height + 20;
-        if (node.y > state.height + 20) node.y = -20;
-      }
+      if (node.x < -20) node.x = state.width + 20;
+      if (node.x > state.width + 20) node.x = -20;
+      if (node.y < -20) node.y = state.height + 20;
+      if (node.y > state.height + 20) node.y = -20;
 
       const pulse =
         .36 +
@@ -1515,15 +1502,6 @@ function initBackgroundCanvas() {
 
     resize();
 
-    if (motionQuery.matches) {
-      if (state.raf) {
-        cancelAnimationFrame(state.raf);
-        state.raf = 0;
-      }
-      render(0);
-      return;
-    }
-
     if (!state.raf) {
       state.raf = requestAnimationFrame(render);
     }
@@ -1558,7 +1536,6 @@ function initBackgroundCanvas() {
   });
 
   mobileQuery.addEventListener("change", updateAnimationLoop);
-  motionQuery.addEventListener("change", updateAnimationLoop);
 
   window.addEventListener(
     "resize",
@@ -1571,7 +1548,7 @@ function initBackgroundCanvas() {
         context.clearRect(0, 0, state.width, state.height);
       } else {
         resize();
-        if (!state.raf && !motionQuery.matches) {
+        if (!state.raf) {
           state.raf = requestAnimationFrame(render);
         }
       }
@@ -1579,7 +1556,7 @@ function initBackgroundCanvas() {
     { passive: true }
   );
 
-  window.__updateCanvasAnimations = function(enabled) {
+  window.__updateCanvasAnimations = function (enabled) {
     updateAnimationLoop();
   };
 
@@ -1645,13 +1622,11 @@ function validateInstagramUrl(rawUrl) {
 function processInstagramEmbeds(text) {
   if (!text || typeof text !== "string") return "";
 
-  // 1. Discard official Instagram embed.js script tag if present in Markdown
   let cleaned = text.replace(
     /<script\b[^>]*?src=["'](?:https?:)?\/\/(?:www\.)?instagram\.com\/embed\.js["'][^>]*?>\s*(?:<\/script>)?/gi,
     ""
   );
 
-  // 2. Recognize official Instagram blockquote embed code
   const instagramBlockquoteRegex = /<blockquote\b[^>]*\bclass=["'][^"']*\binstagram-media\b[^"']*["'][^>]*>[\s\S]*?<\/blockquote>/gi;
 
   cleaned = cleaned.replace(instagramBlockquoteRegex, (match) => {
@@ -1665,7 +1640,6 @@ function processInstagramEmbeds(text) {
       return "";
     }
 
-    // Replace with safe GameWall placeholder element containing only the validated permalink
     return `\n\n<div class="review-instagram-placeholder" data-instagram-permalink="${escapeHtml(validatedUrl)}"></div>\n\n`;
   });
 
@@ -1679,22 +1653,20 @@ function processSafeEmbeds(markdown) {
   const processed = lines.map((line) => {
     const trimmed = line.trim();
 
-    // Standalone YouTube URL: https://www.youtube.com/watch?v=ID or https://youtu.be/ID or embed/
     const ytMatch = trimmed.match(
       /^(?:https?:)?\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:\S*)?$/i
     );
     if (ytMatch) {
       const videoId = encodeURIComponent(ytMatch[1]);
-      return `<div class="review-video-embed"><iframe src="https://www.youtube-nocookie.com/embed/${videoId}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe></div>`;
+      return `<div class="review-video-embed" data-provider="YOUTUBE"><iframe src="https://www.youtube-nocookie.com/embed/${videoId}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe></div>`;
     }
 
-    // Standalone Vimeo URL: https://vimeo.com/ID
     const vimeoMatch = trimmed.match(
       /^(?:https?:)?\/\/(?:www\.)?vimeo\.com\/(\d+)(?:\S*)?$/i
     );
     if (vimeoMatch) {
       const videoId = encodeURIComponent(vimeoMatch[1]);
-      return `<div class="review-video-embed"><iframe src="https://player.vimeo.com/video/${videoId}" allowfullscreen allow="autoplay; fullscreen; picture-in-picture"></iframe></div>`;
+      return `<div class="review-video-embed" data-provider="VIMEO"><iframe src="https://player.vimeo.com/video/${videoId}" allowfullscreen allow="autoplay; fullscreen; picture-in-picture"></iframe></div>`;
     }
 
     return line;
@@ -1892,7 +1864,7 @@ function renderReviewMarkdown(rawMarkdown) {
   if (window.DOMPurify && typeof window.DOMPurify.sanitize === "function") {
     cleanHtml = window.DOMPurify.sanitize(html, {
       ADD_TAGS: ["iframe"],
-      ADD_ATTR: ["allow", "allowfullscreen", "frameborder", "loading", "data-instagram-permalink"]
+      ADD_ATTR: ["allow", "allowfullscreen", "frameborder", "loading", "data-instagram-permalink", "data-provider"]
     });
   } else {
     cleanHtml = fallbackSanitizeHtml(html);
@@ -2001,36 +1973,270 @@ function createInstagramFallback(permalink) {
   return fallback;
 }
 
-function hydrateInstagramEmbeds(container) {
-  if (!container) return;
-  const placeholders = Array.from(container.querySelectorAll(".review-instagram-placeholder"));
-  if (!placeholders.length) return;
+const EMBED_TIMEOUT_MS = 14000;
+let activeEmbedControllers = [];
 
-  const items = placeholders.map((placeholder) => {
-    const permalink = placeholder.getAttribute("data-instagram-permalink");
-    const validated = validateInstagramUrl(permalink);
-    if (!validated) {
-      placeholder.remove();
-      return null;
+function cleanupActiveEmbeds() {
+  if (activeEmbedControllers.length) {
+    activeEmbedControllers.forEach((controller) => {
+      try {
+        controller.cleanup();
+      } catch (err) {
+        console.warn("[GameWall] Embed cleanup error:", err);
+      }
+    });
+    activeEmbedControllers = [];
+  }
+}
+
+function createEmbedLoadingState(provider) {
+  const loading = document.createElement("div");
+  loading.className = "embed-loading-state";
+  loading.setAttribute("role", "status");
+  loading.setAttribute("aria-live", "polite");
+
+  const badge = document.createElement("div");
+  badge.className = `embed-provider-badge provider-${provider.toLowerCase()}`;
+  badge.textContent = `[ ${provider} ]`;
+
+  const title = document.createElement("p");
+  title.className = "embed-loading-title";
+  title.textContent = `LOADING ${provider} EMBED...`;
+
+  const indicatorWrap = document.createElement("div");
+  indicatorWrap.className = "embed-indicator-wrap";
+  indicatorWrap.setAttribute("aria-hidden", "true");
+
+  const spinner = document.createElement("div");
+  spinner.className = "embed-spinner-ring";
+
+  const progressBar = document.createElement("div");
+  progressBar.className = "embed-progress-bar";
+
+  indicatorWrap.append(spinner, progressBar);
+
+  const subtitle = document.createElement("p");
+  subtitle.className = "embed-loading-subtitle";
+  subtitle.textContent = "INITIALIZING EXTERNAL STREAM";
+
+  loading.append(badge, title, indicatorWrap, subtitle);
+  return loading;
+}
+
+function createEmbedFailureState(provider, permalink = null) {
+  const failure = document.createElement("div");
+  failure.className = "embed-failure-state";
+  failure.setAttribute("role", "alert");
+
+  const badge = document.createElement("div");
+  badge.className = "embed-failure-badge";
+  badge.innerHTML = `
+    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+    </svg>
+    <span>// EXTERNAL SIGNAL LOST // ${provider}</span>
+  `;
+
+  const title = document.createElement("h4");
+  title.className = "embed-failure-title";
+  title.textContent = "EMBED FAILED TO LOAD";
+
+  const message = document.createElement("p");
+  message.className = "embed-failure-message";
+  message.textContent = "The external content could not be loaded.";
+
+  const actions = document.createElement("div");
+  actions.className = "embed-failure-actions";
+
+  const reloadBtn = document.createElement("button");
+  reloadBtn.type = "button";
+  reloadBtn.className = "embed-reload-btn";
+  reloadBtn.setAttribute("aria-label", "Reload current page");
+  reloadBtn.innerHTML = `
+    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="23 4 23 10 17 10"></polyline>
+      <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+    </svg>
+    <span>RELOAD PAGE</span>
+  `;
+  reloadBtn.addEventListener("click", () => {
+    window.location.reload();
+  });
+
+  actions.appendChild(reloadBtn);
+
+  if (permalink) {
+    const extLink = document.createElement("a");
+    extLink.className = "embed-external-link";
+    extLink.href = permalink;
+    extLink.target = "_blank";
+    extLink.rel = "noopener noreferrer";
+    extLink.innerHTML = `<span>VIEW ON ${provider}</span> <span aria-hidden="true">↗</span>`;
+    actions.appendChild(extLink);
+  }
+
+  failure.append(badge, title, message, actions);
+  return failure;
+}
+
+function initVideoEmbed(container) {
+  const provider = (container.getAttribute("data-provider") || "VIDEO").toUpperCase();
+  const iframe = container.querySelector("iframe");
+  if (!iframe) return;
+
+  const loadingOverlay = createEmbedLoadingState(provider);
+  container.appendChild(loadingOverlay);
+
+  let isDone = false;
+  let timer = null;
+
+  const markSuccess = () => {
+    if (isDone) return;
+    isDone = true;
+    if (timer) clearTimeout(timer);
+    container.classList.add("is-loaded");
+    loadingOverlay.classList.add("is-hidden");
+    setTimeout(() => {
+      if (loadingOverlay.parentElement) loadingOverlay.remove();
+    }, 350);
+  };
+
+  const markFailure = () => {
+    if (isDone) return;
+    isDone = true;
+    if (timer) clearTimeout(timer);
+    if (loadingOverlay.parentElement) loadingOverlay.remove();
+    iframe.style.display = "none";
+    try {
+      iframe.src = "about:blank";
+    } catch { }
+    const failureCard = createEmbedFailureState(provider);
+    container.appendChild(failureCard);
+  };
+
+  timer = setTimeout(() => {
+    console.warn(`[GameWall] ${provider} embed timed out after ${EMBED_TIMEOUT_MS}ms`);
+    markFailure();
+  }, EMBED_TIMEOUT_MS);
+
+  const onLoad = () => {
+    markSuccess();
+  };
+
+  const onError = () => {
+    console.warn(`[GameWall] ${provider} iframe fired error event`);
+    markFailure();
+  };
+
+  iframe.addEventListener("load", onLoad);
+  iframe.addEventListener("error", onError);
+
+  activeEmbedControllers.push({
+    cleanup() {
+      if (timer) clearTimeout(timer);
+      iframe.removeEventListener("load", onLoad);
+      iframe.removeEventListener("error", onError);
+      try {
+        iframe.src = "about:blank";
+      } catch { }
     }
+  });
+}
 
-    const wrapper = document.createElement("div");
-    wrapper.className = "review-instagram-wrapper";
+function initInstagramEmbed(placeholder) {
+  const permalink = placeholder.getAttribute("data-instagram-permalink");
+  const validated = validateInstagramUrl(permalink);
+  if (!validated) {
+    placeholder.remove();
+    return;
+  }
 
-    const blockquote = document.createElement("blockquote");
-    blockquote.className = "instagram-media";
-    blockquote.setAttribute("data-instgrm-permalink", validated);
-    blockquote.setAttribute("data-instgrm-version", "14");
+  const wrapper = document.createElement("div");
+  wrapper.className = "review-instagram-wrapper";
 
-    wrapper.appendChild(blockquote);
-    placeholder.replaceWith(wrapper);
-    return { wrapper, blockquote, permalink: validated };
-  }).filter(Boolean);
+  const blockquote = document.createElement("blockquote");
+  blockquote.className = "instagram-media";
+  blockquote.setAttribute("data-instgrm-permalink", validated);
+  blockquote.setAttribute("data-instgrm-version", "14");
 
-  if (!items.length) return;
+  const loadingOverlay = createEmbedLoadingState("INSTAGRAM");
+
+  wrapper.append(blockquote, loadingOverlay);
+  placeholder.replaceWith(wrapper);
+
+  let isDone = false;
+  let timer = null;
+  let checkInterval = null;
+  let observer = null;
+
+  const markSuccess = () => {
+    if (isDone) return;
+    isDone = true;
+    if (timer) clearTimeout(timer);
+    if (checkInterval) clearInterval(checkInterval);
+    if (observer) observer.disconnect();
+    wrapper.classList.add("is-loaded");
+    loadingOverlay.classList.add("is-hidden");
+    setTimeout(() => {
+      if (loadingOverlay.parentElement) loadingOverlay.remove();
+    }, 350);
+  };
+
+  const markFailure = () => {
+    if (isDone) return;
+    isDone = true;
+    if (timer) clearTimeout(timer);
+    if (checkInterval) clearInterval(checkInterval);
+    if (observer) observer.disconnect();
+    if (loadingOverlay.parentElement) loadingOverlay.remove();
+    try {
+      blockquote.remove();
+    } catch { }
+    const existingIframe = wrapper.querySelector("iframe");
+    if (existingIframe) {
+      try { existingIframe.src = "about:blank"; } catch { }
+      existingIframe.remove();
+    }
+    const failureCard = createEmbedFailureState("INSTAGRAM", validated);
+    wrapper.appendChild(failureCard);
+  };
+
+  timer = setTimeout(() => {
+    console.warn(`[GameWall] Instagram embed timed out after ${EMBED_TIMEOUT_MS}ms`);
+    markFailure();
+  }, EMBED_TIMEOUT_MS);
+
+  const checkInstagramRendered = () => {
+    if (isDone) return;
+    const iframe = wrapper.querySelector("iframe");
+    if (iframe) {
+      try {
+        if (iframe.contentDocument && iframe.contentDocument.readyState === "complete") {
+          markSuccess();
+          return;
+        }
+      } catch { }
+      iframe.addEventListener("load", () => {
+        markSuccess();
+      }, { once: true });
+      iframe.addEventListener("error", () => {
+        markFailure();
+      }, { once: true });
+    }
+  };
+
+  observer = new MutationObserver(() => {
+    checkInstagramRendered();
+  });
+  observer.observe(wrapper, { childList: true, subtree: true });
+
+  checkInterval = setInterval(checkInstagramRendered, 150);
 
   loadInstagramScript()
     .then((instgrm) => {
+      if (isDone) return;
       try {
         if (instgrm?.Embeds?.process) {
           instgrm.Embeds.process();
@@ -2042,24 +2248,30 @@ function hydrateInstagramEmbeds(container) {
       }
     })
     .catch((err) => {
-      console.warn("[GameWall] Instagram script load failed, using fallback:", err);
-      items.forEach(({ wrapper, permalink }) => {
-        wrapper.replaceChildren(createInstagramFallback(permalink));
-      });
+      console.warn("[GameWall] Instagram script load failed:", err);
+      markFailure();
     });
 
-  // Watchdog: If after 5 seconds Instagram's script hasn't injected an iframe or rendered content, display fallback
-  setTimeout(() => {
-    items.forEach(({ wrapper, permalink }) => {
-      if (document.contains(wrapper)) {
-        const hasIframe = wrapper.querySelector("iframe");
-        const hasProcessedBlock = wrapper.querySelector(".instagram-media-rendered");
-        if (!hasIframe && !hasProcessedBlock && wrapper.firstElementChild?.tagName === "BLOCKQUOTE") {
-          wrapper.replaceChildren(createInstagramFallback(permalink));
-        }
+  activeEmbedControllers.push({
+    cleanup() {
+      if (timer) clearTimeout(timer);
+      if (checkInterval) clearInterval(checkInterval);
+      if (observer) observer.disconnect();
+      const iframe = wrapper.querySelector("iframe");
+      if (iframe) {
+        try { iframe.src = "about:blank"; } catch { }
       }
-    });
-  }, 5000);
+    }
+  });
+}
+
+function setupReviewEmbeds(container) {
+  if (!container) return;
+  const videoEmbeds = Array.from(container.querySelectorAll(".review-video-embed"));
+  videoEmbeds.forEach(initVideoEmbed);
+
+  const instagramPlaceholders = Array.from(container.querySelectorAll(".review-instagram-placeholder"));
+  instagramPlaceholders.forEach(initInstagramEmbed);
 }
 
 let lastFocusedElement = null;
@@ -2208,15 +2420,16 @@ function openReviewModal(game, identifier, triggerElement, fromPopstate = false)
     elements.reviewModalTitle.textContent = `${game.title} — Review`;
   }
   if (elements.reviewModalBody) {
+    cleanupActiveEmbeds();
     elements.reviewModalBody.querySelectorAll("iframe").forEach((frame) => {
       try {
         frame.src = "about:blank";
-      } catch {}
+      } catch { }
     });
     elements.reviewModalBody.replaceChildren();
     elements.reviewModalBody.innerHTML = renderReviewMarkdown(game.description);
     elements.reviewModalBody.scrollTop = 0;
-    hydrateInstagramEmbeds(elements.reviewModalBody);
+    setupReviewEmbeds(elements.reviewModalBody);
   }
 
   if (elements.reviewModalBackdrop) {
@@ -2237,6 +2450,8 @@ function openReviewModal(game, identifier, triggerElement, fromPopstate = false)
 
 function closeReviewModal(fromPopstate = false) {
   if (!elements.reviewModalBackdrop || elements.reviewModalBackdrop.hidden) return;
+
+  cleanupActiveEmbeds();
 
   if (reviewCloseTimeout) {
     clearTimeout(reviewCloseTimeout);
@@ -2265,6 +2480,7 @@ function closeReviewModal(fromPopstate = false) {
     reviewCloseTimeout = null;
     elements.reviewModalBackdrop.hidden = true;
     elements.reviewModalBackdrop.setAttribute("aria-hidden", "true");
+    cleanupActiveEmbeds();
     if (elements.reviewModalBody) {
       elements.reviewModalBody.innerHTML = "";
     }
@@ -2289,7 +2505,6 @@ function checkInitialReviewSlug() {
       previousSearchUrl = `${window.location.pathname}${buildSearchQueryString()}${window.location.hash}`;
       openReviewModal(game, identifier, null, false);
     } else {
-      // Invalid slug: ignore/remove gracefully without error
       const cleanUrl = `${window.location.pathname}${buildSearchQueryString()}${window.location.hash}`;
       safeHistoryUpdate(() => {
         window.history.replaceState({ type: "search" }, "", cleanUrl);
@@ -2344,13 +2559,13 @@ function hookHistoryNavigation() {
   const originalPushState = window.history.pushState;
   const originalReplaceState = window.history.replaceState;
 
-  window.history.pushState = function(...args) {
+  window.history.pushState = function (...args) {
     const result = originalPushState.apply(this, args);
     handleUrlChange(true);
     return result;
   };
 
-  window.history.replaceState = function(...args) {
+  window.history.replaceState = function (...args) {
     const result = originalReplaceState.apply(this, args);
     handleUrlChange(true);
     return result;
@@ -2428,7 +2643,7 @@ function initReviewModalEvents() {
           navigateToReview(targetSlug, false);
         }
       }
-    } catch {}
+    } catch { }
   });
 }
 
@@ -2516,8 +2731,7 @@ function initPageNavigation() {
   };
 
   navBtn.addEventListener("click", () => {
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const behavior = (!animationsEnabled || prefersReduced) ? "auto" : "smooth";
+    const behavior = !animationsEnabled ? "auto" : "smooth";
 
     if (navBtn.classList.contains("is-top")) {
       window.scrollTo({ top: 0, behavior });
@@ -2555,7 +2769,6 @@ function isFinePointerDevice() {
     return false;
   }
 
-  // Prevent pure touch-screen devices that may report fine pointer erroneously
   if (typeof navigator !== "undefined" && navigator.maxTouchPoints > 0 && !hasFinePointer) {
     return false;
   }
@@ -2584,6 +2797,7 @@ function setCustomCursorEnabled(enabled) {
         cursor.classList.add("is-active");
       }
     }
+    window.__updateCursorProgress?.();
   } else {
     document.documentElement.classList.remove("has-custom-cursor");
     if (cursor) {
@@ -2623,6 +2837,7 @@ function initCustomCursor() {
     }
   };
 
+  window.__updateCursorProgress = updateScrollProgress;
   updateScrollProgress();
 
   let scrollTicking = false;
@@ -2640,9 +2855,6 @@ function initCustomCursor() {
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
 
-  // Instantaneous GPU-accelerated mouse tracking:
-  // ZERO smoothing, ZERO lerp, ZERO layout queries, ZERO delay.
-  // Directly translates on the compositor thread via translate3d.
   window.addEventListener("pointermove", (e) => {
     if (e.pointerType === "touch") return;
     lastPointerX = e.clientX;
@@ -2674,7 +2886,12 @@ function initCustomCursor() {
     cursor.classList.remove("is-active");
   }, { passive: true });
 
-  // Event delegation for interactive hover feedback
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && customCursorActive) {
+      cursor.classList.remove("is-active");
+    }
+  });
+
   const interactiveSelector = `
     a, button, input, select, textarea, label,
     [role="button"], [role="link"], [role="tab"],
@@ -2709,10 +2926,9 @@ function initCustomCursor() {
       window.matchMedia("(hover: hover)").addEventListener("change", () => {
         setCustomCursorEnabled(animationsEnabled);
       });
-    } catch {}
+    } catch { }
   }
 
-  // Set initial custom cursor state based on animationsEnabled and device support
   setCustomCursorEnabled(animationsEnabled);
 }
 
@@ -2721,7 +2937,7 @@ function setAnimationsEnabled(enabled, persist = true) {
   if (persist) {
     try {
       localStorage.setItem(ANIMATION_STORAGE_KEY, enabled ? "on" : "off");
-    } catch {}
+    } catch { }
   }
 
   const btn = elements.animToggleBtn || document.querySelector("#anim-toggle-btn");
@@ -2735,9 +2951,11 @@ function setAnimationsEnabled(enabled, persist = true) {
 
   if (enabled) {
     document.documentElement.classList.remove("no-animations");
+    document.documentElement.classList.add("animations-unlocked");
     window.__updateCanvasAnimations?.(true);
   } else {
     document.documentElement.classList.add("no-animations");
+    document.documentElement.classList.remove("animations-unlocked");
     window.__updateCanvasAnimations?.(false);
   }
 
@@ -2763,10 +2981,10 @@ function initAnimationToggle() {
       window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", (e) => {
         try {
           if (localStorage.getItem(ANIMATION_STORAGE_KEY) !== null) return;
-        } catch {}
+        } catch { }
         setAnimationsEnabled(!e.matches, false);
       });
-    } catch {}
+    } catch { }
   }
 }
 
