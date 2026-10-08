@@ -2389,10 +2389,16 @@ body.modal-open {
   border: 0;
   opacity: 0;
   transition: opacity 0.35s ease;
+  cursor: auto !important;
+}
+
+.review-video-embed:not(.is-loaded) iframe {
+  pointer-events: none;
 }
 
 .review-video-embed.is-loaded iframe {
   opacity: 1;
+  pointer-events: auto;
 }
 
 /* Instagram embed wrapper */
@@ -2437,6 +2443,7 @@ body.modal-open {
   max-width: 100% !important;
   box-sizing: border-box !important;
   border-radius: var(--radius) !important;
+  cursor: auto !important;
 }
 
 /* Common Embed Loading State Overlay */
@@ -2550,6 +2557,7 @@ body.modal-open {
   0% {
     left: -50%;
   }
+
   100% {
     left: 100%;
   }
@@ -2885,6 +2893,11 @@ body.modal-open {
   html.has-custom-cursor:not(.no-animations) [role="button"],
   html.has-custom-cursor:not(.no-animations) * {
     cursor: none !important;
+  }
+
+  html.has-custom-cursor:not(.no-animations) iframe,
+  iframe {
+    cursor: auto !important;
   }
 }
 

@@ -2421,6 +2421,7 @@ function openReviewModal(game, identifier, triggerElement, fromPopstate = false)
   }
   if (elements.reviewModalBody) {
     cleanupActiveEmbeds();
+    resetIframeCursorState();
     elements.reviewModalBody.querySelectorAll("iframe").forEach((frame) => {
       try {
         frame.src = "about:blank";
@@ -2452,6 +2453,7 @@ function closeReviewModal(fromPopstate = false) {
   if (!elements.reviewModalBackdrop || elements.reviewModalBackdrop.hidden) return;
 
   cleanupActiveEmbeds();
+  resetIframeCursorState();
 
   if (reviewCloseTimeout) {
     clearTimeout(reviewCloseTimeout);
@@ -2778,8 +2780,57 @@ function isFinePointerDevice() {
 
 let customCursorActive = false;
 let cursorInitialized = false;
+let isPointerOverIframe = false;
 let lastPointerX = null;
 let lastPointerY = null;
+
+function deactivateCursorForIframe() {
+  if (isPointerOverIframe) return;
+  isPointerOverIframe = true;
+
+  document.documentElement.classList.remove("has-custom-cursor");
+  const cursor = elements.gwCursor || document.querySelector("#gw-cursor");
+  if (cursor) {
+    cursor.classList.remove("is-active", "is-hover");
+    cursor.style.display = "none";
+  }
+}
+
+function activateCursorFromIframe(e) {
+  if (!isPointerOverIframe) return;
+  isPointerOverIframe = false;
+
+  const cursor = elements.gwCursor || document.querySelector("#gw-cursor");
+  if (e && typeof e.clientX === "number" && typeof e.clientY === "number") {
+    lastPointerX = e.clientX;
+    lastPointerY = e.clientY;
+    if (cursor) {
+      cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+    }
+  }
+
+  if (customCursorActive) {
+    document.documentElement.classList.add("has-custom-cursor");
+    if (cursor) {
+      cursor.style.display = "";
+      cursor.classList.add("is-active");
+    }
+    window.__updateCursorProgress?.();
+  }
+}
+
+function resetIframeCursorState() {
+  if (!isPointerOverIframe) return;
+  isPointerOverIframe = false;
+  if (customCursorActive) {
+    document.documentElement.classList.add("has-custom-cursor");
+    const cursor = elements.gwCursor || document.querySelector("#gw-cursor");
+    if (cursor) {
+      cursor.style.display = "";
+    }
+    window.__updateCursorProgress?.();
+  }
+}
 
 function setCustomCursorEnabled(enabled) {
   const cursor = elements.gwCursor || document.querySelector("#gw-cursor");
@@ -2789,15 +2840,17 @@ function setCustomCursorEnabled(enabled) {
   customCursorActive = shouldBeActive;
 
   if (shouldBeActive) {
-    document.documentElement.classList.add("has-custom-cursor");
-    if (cursor) {
-      cursor.style.display = "";
-      if (lastPointerX !== null && lastPointerY !== null) {
-        cursor.style.transform = `translate3d(${lastPointerX}px, ${lastPointerY}px, 0)`;
-        cursor.classList.add("is-active");
+    if (!isPointerOverIframe) {
+      document.documentElement.classList.add("has-custom-cursor");
+      if (cursor) {
+        cursor.style.display = "";
+        if (lastPointerX !== null && lastPointerY !== null) {
+          cursor.style.transform = `translate3d(${lastPointerX}px, ${lastPointerY}px, 0)`;
+          cursor.classList.add("is-active");
+        }
       }
+      window.__updateCursorProgress?.();
     }
-    window.__updateCursorProgress?.();
   } else {
     document.documentElement.classList.remove("has-custom-cursor");
     if (cursor) {
@@ -2857,6 +2910,16 @@ function initCustomCursor() {
 
   window.addEventListener("pointermove", (e) => {
     if (e.pointerType === "touch") return;
+
+    if (e.target && e.target.tagName === "IFRAME") {
+      deactivateCursorForIframe();
+      return;
+    }
+
+    if (isPointerOverIframe) {
+      activateCursorFromIframe(e);
+    }
+
     lastPointerX = e.clientX;
     lastPointerY = e.clientY;
 
@@ -2874,7 +2937,15 @@ function initCustomCursor() {
   }, { passive: true });
 
   window.addEventListener("pointerenter", (e) => {
-    if (e.pointerType === "touch" || !customCursorActive) return;
+    if (e.pointerType === "touch") return;
+    if (e.target && e.target.tagName === "IFRAME") {
+      deactivateCursorForIframe();
+      return;
+    }
+    if (isPointerOverIframe) {
+      activateCursorFromIframe(e);
+    }
+    if (!customCursorActive) return;
     lastPointerX = e.clientX;
     lastPointerY = e.clientY;
     cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
@@ -2902,14 +2973,33 @@ function initCustomCursor() {
   `;
 
   document.addEventListener("pointerover", (e) => {
-    if (!customCursorActive) return;
+    if (e.pointerType === "touch") return;
+    if (e.target && e.target.tagName === "IFRAME") {
+      deactivateCursorForIframe();
+      return;
+    }
+    if (!customCursorActive || isPointerOverIframe) return;
     if (e.target && e.target.closest && e.target.closest(interactiveSelector)) {
       cursor.classList.add("is-hover");
     }
   }, { passive: true });
 
+  document.addEventListener("pointerenter", (e) => {
+    if (e.pointerType === "touch") return;
+    if (e.target && e.target.tagName === "IFRAME") {
+      deactivateCursorForIframe();
+    }
+  }, true);
+
   document.addEventListener("pointerout", (e) => {
-    if (!customCursorActive) return;
+    if (e.pointerType === "touch") return;
+    if (e.target && e.target.tagName === "IFRAME") {
+      if (e.relatedTarget && document.documentElement.contains(e.relatedTarget)) {
+        activateCursorFromIframe(e);
+      }
+      return;
+    }
+    if (!customCursorActive || isPointerOverIframe) return;
     if (e.target && e.target.closest && e.target.closest(interactiveSelector)) {
       if (e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest(interactiveSelector)) {
         return;
@@ -2917,6 +3007,15 @@ function initCustomCursor() {
       cursor.classList.remove("is-hover");
     }
   }, { passive: true });
+
+  document.addEventListener("pointerleave", (e) => {
+    if (e.pointerType === "touch") return;
+    if (e.target && e.target.tagName === "IFRAME") {
+      if (e.relatedTarget && document.documentElement.contains(e.relatedTarget)) {
+        activateCursorFromIframe(e);
+      }
+    }
+  }, true);
 
   if (window.matchMedia) {
     try {
