@@ -473,8 +473,6 @@ function normaliseGame(game, index) {
     platforms: normalizePlatforms(game.platforms),
     url: isSafeUrl(game.url) ? game.url : "#",
     description: typeof game.description === "string" ? game.description.trim() : "",
-    steamReviewText: typeof game.steamReviewText === "string" ? game.steamReviewText.trim() : "",
-    steamReviewUrl: isSafeUrl(game.steamReviewUrl) ? game.steamReviewUrl : "",
     originalIndex: index
   };
 }
@@ -2359,8 +2357,32 @@ async function shareCurrentReview() {
   }
 }
 
-function appendSteamReviewCard(game, container) {
-  if (!container || !game?.steamReviewText || !game?.steamReviewUrl) return;
+const STEAM_REVIEW_PLACEHOLDER = "GW_STEAM_REVIEW_EMBED_PLACEHOLDER";
+
+function extractSteamReviewShortcode(rawDescription) {
+  const description = typeof rawDescription === "string" ? rawDescription : "";
+  const shortcodePattern = /\\[steamreview\\]([\\s\\S]*?)\\[\\/steamreview\\]\\((https?:\\/\\/[^\\s)]+)\\)/i;
+  const match = description.match(shortcodePattern);
+
+  if (!match) {
+    return { markdown: description, steamReview: null };
+  }
+
+  const text = match[1].trim();
+  const url = match[2].trim();
+
+  if (!text || !isSafeUrl(url)) {
+    return { markdown: description, steamReview: null };
+  }
+
+  return {
+    markdown: description.replace(match[0], `\\n\\n${STEAM_REVIEW_PLACEHOLDER}\\n\\n`),
+    steamReview: { text, url }
+  };
+}
+
+function createSteamReviewCard(steamReview) {
+  if (!steamReview?.text || !isSafeUrl(steamReview.url)) return null;
 
   const card = document.createElement("section");
   card.className = "steam-review-card";
@@ -2372,26 +2394,43 @@ function appendSteamReviewCard(game, container) {
 
   const title = document.createElement("h3");
   title.className = "steam-review-title";
-  title.textContent = "My ARC Raiders Review";
+  title.textContent = "My Steam Review";
 
   const quote = document.createElement("blockquote");
   quote.className = "steam-review-quote";
-  quote.textContent = game.steamReviewText;
+  quote.textContent = steamReview.text;
 
   const note = document.createElement("p");
   note.className = "steam-review-note";
-  note.textContent = "Original review excerpt, linked to my Steam post.";
+  note.textContent = "Original review excerpt, linked to the full post on Steam.";
 
   const link = document.createElement("a");
   link.className = "steam-review-link";
-  link.href = game.steamReviewUrl;
+  link.href = steamReview.url;
   link.target = "_blank";
   link.rel = "noopener noreferrer";
   link.textContent = "READ MY REVIEW DIRECTLY ON STEAM ↗";
-  link.setAttribute("aria-label", "Read the original ARC Raiders review on Steam (opens in a new tab)");
+  link.setAttribute("aria-label", "Read the original Steam review (opens in a new tab)");
 
   card.append(label, title, quote, note, link);
-  container.append(card);
+  return card;
+}
+
+function renderSteamReviewShortcode(container, steamReview) {
+  if (!container || !steamReview) return;
+
+  const card = createSteamReviewCard(steamReview);
+  if (!card) return;
+
+  const placeholder = Array.from(container.querySelectorAll("p")).find(
+    (paragraph) => paragraph.textContent.trim() === STEAM_REVIEW_PLACEHOLDER
+  );
+
+  if (placeholder) {
+    placeholder.replaceWith(card);
+  } else {
+    container.append(card);
+  }
 }
 
 function openReviewModal(game, identifier, triggerElement, fromPopstate = false) {
@@ -2465,8 +2504,9 @@ function openReviewModal(game, identifier, triggerElement, fromPopstate = false)
       } catch { }
     });
     elements.reviewModalBody.replaceChildren();
-    elements.reviewModalBody.innerHTML = renderReviewMarkdown(game.description);
-    appendSteamReviewCard(game, elements.reviewModalBody);
+    const reviewContent = extractSteamReviewShortcode(game.description);
+    elements.reviewModalBody.innerHTML = renderReviewMarkdown(reviewContent.markdown);
+    renderSteamReviewShortcode(elements.reviewModalBody, reviewContent.steamReview);
     elements.reviewModalBody.scrollTop = 0;
     setupReviewEmbeds(elements.reviewModalBody);
   }
