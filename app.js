@@ -2361,7 +2361,7 @@ const STEAM_REVIEW_PLACEHOLDER = "GW_STEAM_REVIEW_EMBED_PLACEHOLDER";
 
 function extractSteamReviewShortcode(rawDescription) {
   const description = typeof rawDescription === "string" ? rawDescription : "";
-  const shortcodePattern = /\\[steamreview\\]([\\s\\S]*?)\\[\\/steamreview\\]\\((https?:\\/\\/[^\\s)]+)\\)/i;
+  const shortcodePattern = /\[steamreview\]([\s\S]*?)\[\/steamreview\]\((https?:\/\/[^\s)]+)\)/i;
   const match = description.match(shortcodePattern);
 
   if (!match) {
@@ -2376,7 +2376,7 @@ function extractSteamReviewShortcode(rawDescription) {
   }
 
   return {
-    markdown: description.replace(match[0], `\\n\\n${STEAM_REVIEW_PLACEHOLDER}\\n\\n`),
+    markdown: description.replace(match[0], \`\n\n\${STEAM_REVIEW_PLACEHOLDER}\n\n\`),
     steamReview: { text, url }
   };
 }
