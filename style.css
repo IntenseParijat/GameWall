@@ -3047,3 +3047,92 @@ html.no-animations .gw-cursor {
   display: none !important;
   opacity: 0 !important;
 }
+
+/* Steam review card rendered natively in the review modal.
+   This replaces the Steam iframe, which Steam does not permit on external origins. */
+.steam-review-card {
+  position: relative;
+  margin: 2rem 0 .5rem;
+  padding: clamp(1.1rem, 3vw, 1.6rem);
+  overflow: hidden;
+  border: 1px solid rgba(138, 92, 255, .42);
+  border-radius: 10px;
+  background:
+    linear-gradient(135deg, rgba(138, 92, 255, .09), transparent 44%),
+    linear-gradient(155deg, rgba(17, 23, 37, .98), rgba(8, 11, 18, .98));
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .2), inset 0 0 25px rgba(138, 92, 255, .035);
+}
+
+.steam-review-card::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  content: "";
+  background: linear-gradient(var(--neon-purple), var(--neon-cyan));
+  opacity: .9;
+}
+
+.steam-review-label {
+  margin-bottom: .65rem;
+  color: var(--neon-purple);
+  font: 700 .64rem/1.4 Inter, sans-serif;
+  letter-spacing: .16em;
+}
+
+.steam-review-title {
+  margin: 0 0 1rem;
+  color: var(--text-primary);
+  font: 700 clamp(1.25rem, 2vw, 1.65rem)/1 Rajdhani, sans-serif;
+  letter-spacing: .035em;
+}
+
+.steam-review-quote {
+  margin: 0;
+  padding: .85rem 1rem;
+  border-left: 2px solid var(--neon-cyan);
+  background: rgba(0, 240, 255, .035);
+  color: var(--text-primary);
+  font: 600 1rem/1.7 Inter, sans-serif;
+  overflow-wrap: anywhere;
+}
+
+.steam-review-note {
+  margin: .8rem 0 0;
+  color: var(--text-secondary);
+  font: 500 .72rem/1.6 Inter, sans-serif;
+}
+
+.steam-review-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  margin-top: 1rem;
+  padding: .75rem .95rem;
+  border: 1px solid rgba(0, 240, 255, .38);
+  background: rgba(0, 240, 255, .045);
+  color: var(--neon-cyan);
+  font: 700 .68rem/1.35 Rajdhani, sans-serif;
+  letter-spacing: .1em;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  transition: color .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease;
+}
+
+.steam-review-link:hover,
+.steam-review-link:focus-visible {
+  border-color: var(--neon-cyan);
+  background: var(--neon-cyan);
+  color: #061116;
+  box-shadow: 0 0 18px rgba(0, 240, 255, .22);
+}
+
+@media (max-width: 520px) {
+  .steam-review-link {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+  }
+}
