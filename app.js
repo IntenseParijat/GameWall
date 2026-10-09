@@ -2376,7 +2376,7 @@ function extractSteamReviewShortcode(rawDescription) {
   }
 
   return {
-    markdown: description.replace(match[0], \`\n\n\${STEAM_REVIEW_PLACEHOLDER}\n\n\`),
+    markdown: description.replace(match[0], `\n\n${STEAM_REVIEW_PLACEHOLDER}\n\n`),
     steamReview: { text, url }
   };
 }
