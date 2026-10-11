@@ -24,6 +24,7 @@ if (typeof document !== "undefined" && document.documentElement) {
   } else {
     document.documentElement.classList.add("no-animations");
     document.documentElement.classList.remove("animations-unlocked");
+    document.documentElement.classList.remove("gw-booting");
   }
 }
 
@@ -106,8 +107,18 @@ const elements = {
   animToggleBtn: document.querySelector("#anim-toggle-btn")
 };
 
-const scrambleTimers = new WeakMap();
+const scrambleControllers = new WeakMap();
 const SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&*+-/<>[]{}01";
+let scrambleCallSequence = 0;
+
+const textLayoutCache = new WeakMap();
+const activeLayoutCaches = [];
+
+if (typeof window !== "undefined") {
+  window.addEventListener("resize", () => {
+    activeLayoutCaches.forEach((cache) => cache.clear());
+  }, { passive: true });
+}
 
 let fontsReadyPromise = null;
 function ensureFontsReady() {
@@ -124,7 +135,14 @@ function ensureFontsReady() {
   return fontsReadyPromise;
 }
 
-function measureTextLayout(element, targetText) {
+function getCachedTextLayout(element, targetText) {
+  let cache = textLayoutCache.get(element);
+  if (!cache) {
+    cache = new Map();
+    textLayoutCache.set(element, cache);
+    activeLayoutCaches.push(cache);
+  }
+
   const parent = element.parentElement || document.body;
   const parentStyle = window.getComputedStyle(parent);
   const parentPaddingX = (parseFloat(parentStyle.paddingLeft) || 0) + (parseFloat(parentStyle.paddingRight) || 0);
@@ -142,6 +160,26 @@ function measureTextLayout(element, targetText) {
     }
   }
   const maxAllowedWidth = Math.max(0, Math.min(availableParentWidth, elementMaxWidth));
+  const cacheKey = `${targetText}__${Math.round(maxAllowedWidth)}`;
+
+  if (cache.has(cacheKey)) {
+    return cache.get(cacheKey);
+  }
+
+  const layout = measureTextLayout(element, targetText, maxAllowedWidth, elementStyle, parent);
+  cache.set(cacheKey, layout);
+  return layout;
+}
+
+function measureTextLayout(element, targetText, maxAllowedWidth, elementStyle, parent) {
+  if (!targetText) {
+    return {
+      fitsOnOneLine: true,
+      lines: [""],
+      width: 0,
+      height: 0
+    };
+  }
 
   const clone = document.createElement(element.tagName);
   clone.className = element.className;
@@ -230,24 +268,59 @@ async function scrambleText(element, target, options = {}) {
   if (!element) return Promise.resolve();
 
   const text = String(target ?? "");
+  const callId = ++scrambleCallSequence;
 
-  const previousTimer = scrambleTimers.get(element);
-  if (previousTimer?.cancel) previousTimer.cancel();
+  // Immediately cancel any previous scramble for this element synchronously
+  const prev = scrambleControllers.get(element);
+  if (prev) {
+    prev.cancelled = true;
+    if (prev.timer) {
+      clearInterval(prev.timer);
+      prev.timer = null;
+    }
+    prev.cleanupStyles?.();
+    prev.resolve?.();
+  }
+
+  let resolvePromise;
+  const promise = new Promise((resolve) => {
+    resolvePromise = resolve;
+  });
+
+  const controller = {
+    callId,
+    cancelled: false,
+    timer: null,
+    cleanupStyles: null,
+    resolve: resolvePromise
+  };
+  scrambleControllers.set(element, controller);
 
   if (!animationsEnabled) {
     element.setAttribute("aria-label", text);
     element.textContent = text;
-    return Promise.resolve();
+    resolvePromise();
+    return promise;
   }
 
   await ensureFontsReady();
+
+  // If superseded while waiting for fonts, bail immediately without DOM writes or intervals
+  if (controller.cancelled || scrambleControllers.get(element) !== controller) {
+    return promise;
+  }
 
   const intervalMs = options.interval ?? 40;
   const revealEvery = options.revealEvery ?? 3;
 
   element.setAttribute("aria-label", text);
 
-  const layout = measureTextLayout(element, text);
+  const layout = getCachedTextLayout(element, text);
+
+  // If superseded during measurement, exit
+  if (controller.cancelled || scrambleControllers.get(element) !== controller) {
+    return promise;
+  }
 
   element.style.minHeight = `${layout.height}px`;
   element.style.height = `${layout.height}px`;
@@ -261,12 +334,6 @@ async function scrambleText(element, target, options = {}) {
 
   let revealed = 0;
   let frame = 0;
-  let timer = null;
-  let resolvePromise;
-
-  const promise = new Promise((resolve) => {
-    resolvePromise = resolve;
-  });
 
   const scrambleString = (str, revCount) => {
     let out = "";
@@ -317,17 +384,31 @@ async function scrambleText(element, target, options = {}) {
     element.style.whiteSpace = "";
     element.style.boxSizing = "";
   };
+  controller.cleanupStyles = cleanupStyles;
 
   const finish = () => {
-    if (timer) clearInterval(timer);
-
-    scrambleTimers.delete(element);
+    if (controller.timer) {
+      clearInterval(controller.timer);
+      controller.timer = null;
+    }
+    if (scrambleControllers.get(element) === controller) {
+      scrambleControllers.delete(element);
+    }
     element.textContent = text;
     cleanupStyles();
-    resolvePromise?.();
+    resolvePromise();
   };
 
-  timer = setInterval(() => {
+  controller.timer = setInterval(() => {
+    if (controller.cancelled || scrambleControllers.get(element) !== controller) {
+      if (controller.timer) {
+        clearInterval(controller.timer);
+        controller.timer = null;
+      }
+      cleanupStyles();
+      return;
+    }
+
     frame++;
 
     if (frame % revealEvery === 0) {
@@ -340,10 +421,6 @@ async function scrambleText(element, target, options = {}) {
       finish();
     }
   }, intervalMs);
-
-  scrambleTimers.set(element, {
-    cancel: finish
-  });
 
   return promise;
 }
@@ -361,6 +438,9 @@ function setLoaderProgress(value, message) {
 }
 
 function hideLoading() {
+  document.documentElement.classList.remove("gw-booting");
+  window.__resumeCanvasAnimations?.();
+
   if (!animationsEnabled) {
     elements.loadingScreen.classList.add("is-hidden");
     return;
@@ -515,10 +595,10 @@ async function loadGames() {
     await loadDatabaseUpdate();
     setLoaderProgress(85);
     updateStatistics();
-    renderGames();
+    await renderGames();
     await setLoaderProgress(100, "DATABASE READY");
 
-    await new Promise((resolve) => window.setTimeout(resolve, 1000));
+    await decelerateCursorFan();
 
     hideLoading();
     state.initialized = true;
@@ -531,7 +611,7 @@ async function loadGames() {
 
     await setLoaderProgress(100, "DATABASE UNAVAILABLE");
 
-    await new Promise((resolve) => window.setTimeout(resolve, 1000));
+    await decelerateCursorFan();
 
     hideLoading();
     state.initialized = true;
@@ -642,20 +722,63 @@ function getVisibleGames() {
   }
 }
 
+let activeRenderToken = 0;
+
 function renderGames() {
+  const token = ++activeRenderToken;
   const games = getVisibleGames();
   elements.grid.replaceChildren();
   elements.resultCount.textContent = `${games.length} ${games.length === 1 ? "ENTRY" : "ENTRIES"}`;
 
   if (games.length === 0) {
     showEmptyState(state.games.length === 0 ? "database" : "search");
-    return;
+    return Promise.resolve();
   }
 
   elements.emptyState.hidden = true;
-  const fragment = document.createDocumentFragment();
-  games.forEach((game, index) => fragment.append(createGameCard(game, index)));
-  elements.grid.append(fragment);
+
+  const BATCH_SIZE = 28;
+  if (games.length <= BATCH_SIZE) {
+    const fragment = document.createDocumentFragment();
+    games.forEach((game, index) => fragment.append(createGameCard(game, index)));
+    elements.grid.append(fragment);
+    return Promise.resolve();
+  }
+
+  return new Promise((resolve) => {
+    let currentIndex = 0;
+
+    function renderNextBatch() {
+      if (token !== activeRenderToken) {
+        resolve();
+        return;
+      }
+
+      const endIndex = Math.min(currentIndex + BATCH_SIZE, games.length);
+      const fragment = document.createDocumentFragment();
+
+      for (let i = currentIndex; i < endIndex; i++) {
+        fragment.append(createGameCard(games[i], i));
+      }
+
+      elements.grid.append(fragment);
+      currentIndex = endIndex;
+
+      if (currentIndex < games.length) {
+        if (typeof window.requestAnimationFrame === "function") {
+          window.requestAnimationFrame(() => {
+            setTimeout(renderNextBatch, 0);
+          });
+        } else {
+          setTimeout(renderNextBatch, 0);
+        }
+      } else {
+        resolve();
+      }
+    }
+
+    renderNextBatch();
+  });
 }
 
 function renderPlatforms(container, platforms, gameTitle) {
@@ -787,15 +910,15 @@ function createGameCard(game, position) {
   rating.textContent = formatRating(game.rating);
   title.textContent = game.title;
   title.setAttribute("aria-label", game.title);
-  requestAnimationFrame(() => {
+  if (!animationsEnabled) {
+    titleCurtain.classList.add("is-revealed");
     fitText(title, 0.85, 1.35);
+  } else {
     observeGameTitle(titleCurtain);
-  });
+  }
   gameplay.textContent = game.gameplay;
-  requestAnimationFrame(() => {
-    setupGameplayMarquee(gameplay);
-    observeGameplayBadge(gameplay);
-  });
+  setupGameplayMarquee(gameplay);
+  observeGameplayBadge(gameplay);
   posterLink.href = game.url;
   posterLink.setAttribute("aria-label", `Open ${game.title} in a new tab`);
   viewLink.href = game.url;
@@ -1046,26 +1169,34 @@ function fitText(element, minSize, maxSize) {
   if (!element) return;
   element.style.fontSize = `${maxSize}rem`;
   const maxHeight = element.clientHeight;
-  let size = maxSize;
-  while (
-    (
-      element.scrollWidth > element.clientWidth ||
-      element.scrollHeight > maxHeight
-    ) &&
-    size > minSize
-  ) {
-    size -= 0.025;
-    element.style.fontSize = `${size}rem`;
+  if (element.scrollWidth <= element.clientWidth && element.scrollHeight <= maxHeight) {
+    return;
   }
+
+  let low = minSize;
+  let high = maxSize;
+  let best = minSize;
+  while (high - low > 0.03) {
+    const mid = Math.round(((low + high) / 2) * 40) / 40;
+    element.style.fontSize = `${mid}rem`;
+    if (element.scrollWidth <= element.clientWidth && element.scrollHeight <= maxHeight) {
+      best = mid;
+      low = mid;
+    } else {
+      high = mid - 0.025;
+    }
+  }
+  element.style.fontSize = `${best}rem`;
 }
 
 const gameplayObserver =
-  new ResizeObserver(() => {
-    document
-      .querySelectorAll(".gameplay-text")
-      .forEach((textElement) => {
+  new ResizeObserver((entries) => {
+    entries.forEach((entry) => {
+      const textElement = entry.target.querySelector(".gameplay-text");
+      if (textElement) {
         setupGameplayMarquee(textElement);
-      });
+      }
+    });
   });
 
 function observeGameplayBadge(textElement) {
@@ -1200,7 +1331,8 @@ function initBackgroundCanvas() {
     circuits: [],
     raf: 0,
     lastTime: 0,
-    visible: true
+    visible: true,
+    bootPaused: true
   };
 
   let cachedGradient = null;
@@ -1381,7 +1513,7 @@ function initBackgroundCanvas() {
   }
 
   function render(time) {
-    if (mobileQuery.matches || !animationsEnabled) {
+    if (state.bootPaused || mobileQuery.matches || !animationsEnabled) {
       if (state.raf) {
         cancelAnimationFrame(state.raf);
         state.raf = 0;
@@ -1483,6 +1615,14 @@ function initBackgroundCanvas() {
   }
 
   function updateAnimationLoop() {
+    if (state.bootPaused) {
+      if (state.raf) {
+        cancelAnimationFrame(state.raf);
+        state.raf = 0;
+      }
+      return;
+    }
+
     if (mobileQuery.matches || !animationsEnabled) {
       if (state.raf) {
         cancelAnimationFrame(state.raf);
@@ -1557,6 +1697,11 @@ function initBackgroundCanvas() {
   );
 
   window.__updateCanvasAnimations = function (enabled) {
+    updateAnimationLoop();
+  };
+
+  window.__resumeCanvasAnimations = function () {
+    state.bootPaused = false;
     updateAnimationLoop();
   };
 
@@ -2274,6 +2419,130 @@ function setupReviewEmbeds(container) {
   instagramPlaceholders.forEach(initInstagramEmbed);
 }
 
+let activeReviewImageControllers = [];
+
+function cleanupActiveReviewImages() {
+  activeReviewImageControllers.forEach((controller) => {
+    try {
+      controller.cleanup();
+    } catch { }
+  });
+  activeReviewImageControllers = [];
+}
+
+function setupReviewImages(container) {
+  if (!container) return;
+  const images = Array.from(container.querySelectorAll("img"));
+
+  images.forEach((img) => {
+    if (img.closest(".review-image-frame, .steam-review-card, .review-video-embed, .review-instagram-placeholder")) {
+      return;
+    }
+
+    img.classList.add("review-image");
+
+    const frame = document.createElement("figure");
+    frame.className = "review-image-frame is-loading";
+
+    const loader = document.createElement("div");
+    loader.className = "review-image-loader";
+    loader.setAttribute("aria-hidden", "true");
+
+    const spinner = document.createElement("div");
+    spinner.className = "review-image-spinner";
+
+    const scan = document.createElement("div");
+    scan.className = "review-image-scan";
+
+    const text = document.createElement("small");
+    text.className = "review-image-text";
+    text.textContent = "LOADING IMAGE...";
+
+    loader.append(spinner, scan, text);
+
+    const errorDiv = document.createElement("div");
+    errorDiv.className = "review-image-error";
+    errorDiv.setAttribute("role", "alert");
+
+    const errorIcon = document.createElement("span");
+    errorIcon.className = "review-image-error-icon";
+    errorIcon.setAttribute("aria-hidden", "true");
+    errorIcon.textContent = "⚠";
+
+    const errorText = document.createElement("span");
+    errorText.className = "review-image-error-text";
+    errorText.textContent = "IMAGE FAILED TO LOAD";
+
+    errorDiv.append(errorIcon, errorText);
+
+    const altText = (img.getAttribute("alt") || "").trim();
+    if (altText) {
+      const errorAlt = document.createElement("span");
+      errorAlt.className = "review-image-error-alt";
+      errorAlt.textContent = `[${altText}]`;
+      errorDiv.append(errorAlt);
+    }
+
+    const parent = img.parentElement;
+    if (parent && parent.tagName === "P" && parent.childNodes.length === 1) {
+      parent.replaceWith(frame);
+    } else if (parent) {
+      parent.insertBefore(frame, img);
+    }
+    frame.append(img, loader, errorDiv);
+
+    let finished = false;
+    let timeoutId = null;
+
+    const onLoad = () => {
+      if (finished) return;
+      finished = true;
+      if (timeoutId) clearTimeout(timeoutId);
+      frame.classList.remove("is-loading");
+      frame.classList.add("is-loaded");
+      setTimeout(() => {
+        try { loader.remove(); } catch { }
+      }, 350);
+    };
+
+    const onError = () => {
+      if (finished) return;
+      finished = true;
+      if (timeoutId) clearTimeout(timeoutId);
+      frame.classList.remove("is-loading");
+      frame.classList.add("is-error");
+      try { loader.remove(); } catch { }
+    };
+
+    if (img.complete) {
+      if (img.naturalWidth > 0) {
+        onLoad();
+        return;
+      } else if (img.src) {
+        onError();
+        return;
+      }
+    }
+
+    img.addEventListener("load", onLoad, { once: true });
+    img.addEventListener("error", onError, { once: true });
+
+    timeoutId = setTimeout(() => {
+      if (!finished && (!img.complete || img.naturalWidth === 0)) {
+        onError();
+      }
+    }, 15000);
+
+    activeReviewImageControllers.push({
+      cleanup() {
+        if (timeoutId) clearTimeout(timeoutId);
+        img.removeEventListener("load", onLoad);
+        img.removeEventListener("error", onError);
+      }
+    });
+  });
+}
+
 let lastFocusedElement = null;
 let savedScrollY = 0;
 let currentReviewGame = null;
@@ -2497,6 +2766,7 @@ function openReviewModal(game, identifier, triggerElement, fromPopstate = false)
   }
   if (elements.reviewModalBody) {
     cleanupActiveEmbeds();
+    cleanupActiveReviewImages();
     resetIframeCursorState();
     elements.reviewModalBody.querySelectorAll("iframe").forEach((frame) => {
       try {
@@ -2509,6 +2779,7 @@ function openReviewModal(game, identifier, triggerElement, fromPopstate = false)
     renderSteamReviewShortcode(elements.reviewModalBody, reviewContent.steamReview);
     elements.reviewModalBody.scrollTop = 0;
     setupReviewEmbeds(elements.reviewModalBody);
+    setupReviewImages(elements.reviewModalBody);
   }
 
   if (elements.reviewModalBackdrop) {
@@ -2531,6 +2802,7 @@ function closeReviewModal(fromPopstate = false) {
   if (!elements.reviewModalBackdrop || elements.reviewModalBackdrop.hidden) return;
 
   cleanupActiveEmbeds();
+  cleanupActiveReviewImages();
   resetIframeCursorState();
 
   if (reviewCloseTimeout) {
@@ -2561,6 +2833,7 @@ function closeReviewModal(fromPopstate = false) {
     elements.reviewModalBackdrop.hidden = true;
     elements.reviewModalBackdrop.setAttribute("aria-hidden", "true");
     cleanupActiveEmbeds();
+    cleanupActiveReviewImages();
     if (elements.reviewModalBody) {
       elements.reviewModalBody.innerHTML = "";
     }
@@ -2938,6 +3211,309 @@ function setCustomCursorEnabled(enabled) {
   }
 }
 
+function getElementRotation(element) {
+  try {
+    const st = window.getComputedStyle(element);
+    const tr = st.transform || st.webkitTransform;
+    if (!tr || tr === "none") return 0;
+    if (tr.startsWith("matrix3d")) {
+      const values = tr.slice(9, -1).split(",");
+      const a = parseFloat(values[0]);
+      const b = parseFloat(values[1]);
+      let deg = Math.atan2(b, a) * (180 / Math.PI);
+      if (deg < 0) deg += 360;
+      return deg;
+    }
+    if (tr.startsWith("matrix")) {
+      const values = tr.slice(7, -1).split(",");
+      const a = parseFloat(values[0]);
+      const b = parseFloat(values[1]);
+      let deg = Math.atan2(b, a) * (180 / Math.PI);
+      if (deg < 0) deg += 360;
+      return deg;
+    }
+    return 0;
+  } catch {
+    return 0;
+  }
+}
+
+let fanStartupDone = false;
+let fanStartupTimeouts = [];
+let fanActiveAnimations = [];
+let fanReadyForDecelResolve = null;
+const fanReadyForDecelPromise = new Promise((resolve) => {
+  fanReadyForDecelResolve = resolve;
+});
+let fanHighSpeedAnimation = null;
+let fanDecelerating = false;
+let fanDecelerationPromise = null;
+
+function cancelCursorFanStartup() {
+  fanStartupTimeouts.forEach((t) => clearTimeout(t));
+  fanStartupTimeouts = [];
+
+  fanActiveAnimations.forEach((anim) => {
+    try {
+      anim.cancel();
+    } catch { }
+  });
+  fanActiveAnimations = [];
+
+  if (fanHighSpeedAnimation) {
+    try {
+      fanHighSpeedAnimation.cancel();
+    } catch { }
+    fanHighSpeedAnimation = null;
+  }
+
+  document.documentElement.classList.remove("gw-booting");
+  fanStartupDone = true;
+  if (fanReadyForDecelResolve) {
+    fanReadyForDecelResolve();
+  }
+
+  const fan = document.querySelector(".gw-cursor-fan");
+  if (fan) {
+    fan.style.transform = "";
+    const deploys = fan.querySelectorAll(".gw-blade-deploy");
+    deploys.forEach((d) => (d.style.transform = ""));
+    const greys = fan.querySelectorAll(".gw-blade-grey");
+    greys.forEach((g) => (g.style.opacity = ""));
+    const neons = fan.querySelectorAll(".gw-blade-neon");
+    neons.forEach((n) => (n.style.opacity = ""));
+  }
+  const hubCore = document.querySelector(".gw-cursor-hub-core");
+  if (hubCore) {
+    hubCore.style.opacity = "";
+    hubCore.style.filter = "";
+  }
+}
+
+function initCursorFanStartup() {
+  if (fanStartupDone) return;
+  if (!animationsEnabled || !isFinePointerDevice()) {
+    fanStartupDone = true;
+    document.documentElement.classList.remove("gw-booting");
+    if (fanReadyForDecelResolve) fanReadyForDecelResolve();
+    return;
+  }
+
+  const fan = document.querySelector(".gw-cursor-fan");
+  if (!fan) {
+    fanStartupDone = true;
+    document.documentElement.classList.remove("gw-booting");
+    if (fanReadyForDecelResolve) fanReadyForDecelResolve();
+    return;
+  }
+
+  const bladeWraps = Array.from(fan.querySelectorAll(".gw-blade-wrap"));
+  const hubCore = document.querySelector(".gw-cursor-hub-core");
+
+  // Phase A - Staggered mechanical blade assembly
+  const bladeDeployDuration = 320;
+  const bladeStaggerDelay = 110;
+
+  bladeWraps.forEach((wrap, i) => {
+    const deployGroup = wrap.querySelector(".gw-blade-deploy");
+    if (!deployGroup) return;
+
+    const t = setTimeout(() => {
+      if (fanStartupDone) return;
+      const anim = deployGroup.animate(
+        [
+          { transform: "scale(0)" },
+          { transform: "scale(1)" }
+        ],
+        {
+          duration: bladeDeployDuration,
+          easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+          fill: "forwards"
+        }
+      );
+      fanActiveAnimations.push(anim);
+    }, i * bladeStaggerDelay);
+    fanStartupTimeouts.push(t);
+  });
+
+  // Phase B - Power-on illumination
+  const illuminationStart = (bladeWraps.length - 1) * bladeStaggerDelay + 200;
+  const illuminationStagger = 80;
+  const fadeDuration = 260;
+
+  bladeWraps.forEach((wrap, i) => {
+    const greyUse = wrap.querySelector(".gw-blade-grey");
+    const neonUse = wrap.querySelector(".gw-blade-neon");
+    if (!greyUse || !neonUse) return;
+
+    const t = setTimeout(() => {
+      if (fanStartupDone) return;
+      const greyAnim = greyUse.animate(
+        [{ opacity: 1 }, { opacity: 0 }],
+        { duration: fadeDuration, easing: "ease-in-out", fill: "forwards" }
+      );
+      const neonAnim = neonUse.animate(
+        [{ opacity: 0 }, { opacity: 1 }],
+        { duration: fadeDuration, easing: "ease-in-out", fill: "forwards" }
+      );
+      fanActiveAnimations.push(greyAnim, neonAnim);
+    }, illuminationStart + i * illuminationStagger);
+    fanStartupTimeouts.push(t);
+  });
+
+  const tHub = setTimeout(() => {
+    if (fanStartupDone || !hubCore) return;
+    const hubAnim = hubCore.animate(
+      [
+        { opacity: 0.4, filter: "none" },
+        { opacity: 1, filter: "drop-shadow(0 0 2px #00f0ff)" }
+      ],
+      { duration: 360, easing: "ease-in-out", fill: "forwards" }
+    );
+    fanActiveAnimations.push(hubAnim);
+  }, illuminationStart);
+  fanStartupTimeouts.push(tHub);
+
+  // Phase C - Accelerate rotation to maximum speed
+  const accelStart = illuminationStart + 300;
+  const accelDuration = 700;
+
+  const tAccel = setTimeout(() => {
+    if (fanStartupDone) return;
+
+    const accelAnim = fan.animate(
+      [
+        { transform: "rotate(0deg)" },
+        { transform: "rotate(1080deg)" }
+      ],
+      {
+        duration: accelDuration,
+        easing: "cubic-bezier(0.4, 0, 1, 1)",
+        fill: "forwards"
+      }
+    );
+    fanActiveAnimations.push(accelAnim);
+
+    accelAnim.finished.then(() => {
+      if (fanStartupDone || fanDecelerating) return;
+
+      fanHighSpeedAnimation = fan.animate(
+        [
+          { transform: "rotate(0deg)" },
+          { transform: "rotate(360deg)" }
+        ],
+        {
+          duration: 180,
+          iterations: Infinity,
+          easing: "linear"
+        }
+      );
+
+      if (fanReadyForDecelResolve) {
+        fanReadyForDecelResolve();
+      }
+    }).catch(() => { });
+  }, accelStart);
+  fanStartupTimeouts.push(tAccel);
+}
+
+async function decelerateCursorFan() {
+  if (fanDecelerationPromise) return fanDecelerationPromise;
+
+  fanDecelerationPromise = (async () => {
+    if (fanStartupDone || !animationsEnabled || !isFinePointerDevice()) {
+      document.documentElement.classList.remove("gw-booting");
+      fanStartupDone = true;
+      return;
+    }
+
+    fanDecelerating = true;
+
+    // Await achievement of high-speed state so user sees full sequence
+    await Promise.race([
+      fanReadyForDecelPromise,
+      new Promise((r) => setTimeout(r, 2200))
+    ]);
+
+    if (fanStartupDone || !animationsEnabled) {
+      document.documentElement.classList.remove("gw-booting");
+      fanStartupDone = true;
+      return;
+    }
+
+    // Spin at high-speed peak for a moment before decelerating
+    await new Promise((r) => setTimeout(r, 250));
+
+    const fan = document.querySelector(".gw-cursor-fan");
+    if (!fan) {
+      cancelCursorFanStartup();
+      return;
+    }
+
+    // Phase D - Gradually decelerate to normal idle speed without angle jump
+    const currentAngle = getElementRotation(fan);
+
+    if (fanHighSpeedAnimation) {
+      try {
+        fanHighSpeedAnimation.cancel();
+      } catch { }
+      fanHighSpeedAnimation = null;
+    }
+
+    // Target angle is calculated to end at an exact multiple of 360deg (0 mod 360)
+    // Ensures zero angle jump when handing off to CSS animation gw-fan-spin starting at 0deg
+    const remainingTo360 = (360 - (currentAngle % 360)) % 360;
+    const deltaAngle = remainingTo360 + 720;
+    const targetAngle = currentAngle + deltaAngle;
+
+    const decelDuration = 750;
+    const decelAnim = fan.animate(
+      [
+        { transform: `rotate(${currentAngle}deg)` },
+        { transform: `rotate(${targetAngle}deg)` }
+      ],
+      {
+        duration: decelDuration,
+        easing: "cubic-bezier(0.2, 0.8, 0.4, 1)",
+        fill: "forwards"
+      }
+    );
+
+    try {
+      await decelAnim.finished;
+    } catch { }
+
+    document.documentElement.classList.remove("gw-booting");
+    fanStartupDone = true;
+
+    try {
+      decelAnim.cancel();
+    } catch { }
+
+    fanActiveAnimations.forEach((a) => {
+      try {
+        a.cancel();
+      } catch { }
+    });
+    fanActiveAnimations = [];
+
+    fan.style.transform = "";
+    const deploys = fan.querySelectorAll(".gw-blade-deploy");
+    deploys.forEach((d) => (d.style.transform = ""));
+    const greys = fan.querySelectorAll(".gw-blade-grey");
+    greys.forEach((g) => (g.style.opacity = ""));
+    const neons = fan.querySelectorAll(".gw-blade-neon");
+    neons.forEach((n) => (n.style.opacity = ""));
+    const hubCore = document.querySelector(".gw-cursor-hub-core");
+    if (hubCore) {
+      hubCore.style.opacity = "";
+      hubCore.style.filter = "";
+    }
+  })();
+
+  return fanDecelerationPromise;
+}
+
 function initCustomCursor() {
   if (cursorInitialized) return;
   cursorInitialized = true;
@@ -3107,10 +3683,14 @@ function initCustomCursor() {
   }
 
   setCustomCursorEnabled(animationsEnabled);
+  initCursorFanStartup();
 }
 
 function setAnimationsEnabled(enabled, persist = true) {
   animationsEnabled = enabled;
+  if (!enabled) {
+    cancelCursorFanStartup();
+  }
   if (persist) {
     try {
       localStorage.setItem(ANIMATION_STORAGE_KEY, enabled ? "on" : "off");

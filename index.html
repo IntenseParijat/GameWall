@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="gw-booting">
 
 <head>
   <meta charset="utf-8">
@@ -342,17 +342,47 @@
             <stop offset="55%" stop-color="#b026ff" stop-opacity="0.8" />
             <stop offset="100%" stop-color="#00f0ff" stop-opacity="0.25" />
           </linearGradient>
+          <linearGradient id="gw-fan-grad-grey" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#8a99a8" stop-opacity="0.85" />
+            <stop offset="55%" stop-color="#4a5568" stop-opacity="0.75" />
+            <stop offset="100%" stop-color="#1e293b" stop-opacity="0.35" />
+          </linearGradient>
           <path id="gw-blade-path"
             d="M 0.0,-12.0 Q 3.3,-24.8 9.9,-36.7 A 38,38 0 0,1 28.5,-25.9 Q 19.3,-15.8 4.2,-11.2 A 12,12 0 0,0 0.0,-12.0 Z" />
         </defs>
         <path class="gw-cursor-track" d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
         <path class="gw-cursor-fill" id="gw-cursor-progress-fill" d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
         <g class="gw-cursor-fan">
-          <use href="#gw-blade-path" fill="url(#gw-fan-grad)" transform="translate(50,50) rotate(0)" />
-          <use href="#gw-blade-path" fill="url(#gw-fan-grad)" transform="translate(50,50) rotate(72)" />
-          <use href="#gw-blade-path" fill="url(#gw-fan-grad)" transform="translate(50,50) rotate(144)" />
-          <use href="#gw-blade-path" fill="url(#gw-fan-grad)" transform="translate(50,50) rotate(216)" />
-          <use href="#gw-blade-path" fill="url(#gw-fan-grad)" transform="translate(50,50) rotate(288)" />
+          <g class="gw-blade-wrap gw-blade-0" transform="translate(50,50) rotate(0)">
+            <g class="gw-blade-deploy">
+              <use class="gw-blade-grey" href="#gw-blade-path" fill="url(#gw-fan-grad-grey)" />
+              <use class="gw-blade-neon" href="#gw-blade-path" fill="url(#gw-fan-grad)" />
+            </g>
+          </g>
+          <g class="gw-blade-wrap gw-blade-1" transform="translate(50,50) rotate(72)">
+            <g class="gw-blade-deploy">
+              <use class="gw-blade-grey" href="#gw-blade-path" fill="url(#gw-fan-grad-grey)" />
+              <use class="gw-blade-neon" href="#gw-blade-path" fill="url(#gw-fan-grad)" />
+            </g>
+          </g>
+          <g class="gw-blade-wrap gw-blade-2" transform="translate(50,50) rotate(144)">
+            <g class="gw-blade-deploy">
+              <use class="gw-blade-grey" href="#gw-blade-path" fill="url(#gw-fan-grad-grey)" />
+              <use class="gw-blade-neon" href="#gw-blade-path" fill="url(#gw-fan-grad)" />
+            </g>
+          </g>
+          <g class="gw-blade-wrap gw-blade-3" transform="translate(50,50) rotate(216)">
+            <g class="gw-blade-deploy">
+              <use class="gw-blade-grey" href="#gw-blade-path" fill="url(#gw-fan-grad-grey)" />
+              <use class="gw-blade-neon" href="#gw-blade-path" fill="url(#gw-fan-grad)" />
+            </g>
+          </g>
+          <g class="gw-blade-wrap gw-blade-4" transform="translate(50,50) rotate(288)">
+            <g class="gw-blade-deploy">
+              <use class="gw-blade-grey" href="#gw-blade-path" fill="url(#gw-fan-grad-grey)" />
+              <use class="gw-blade-neon" href="#gw-blade-path" fill="url(#gw-fan-grad)" />
+            </g>
+          </g>
         </g>
         <circle class="gw-cursor-hub" cx="50" cy="50" r="10" />
         <circle class="gw-cursor-hub-core" cx="50" cy="50" r="2.5" />

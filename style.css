@@ -1658,7 +1658,6 @@ body::after {
 }
 
 .loading-screen .scramble-text {
-  will-change: contents;
   max-width: 100%;
   box-sizing: border-box;
 }
@@ -2342,6 +2341,162 @@ body.modal-open {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
 }
 
+/* ==========================================================================
+   Review Photos: Loading Frame, Spinner & Error States
+   ========================================================================== */
+.review-image-frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 1.6rem auto;
+  padding: 0;
+  border-radius: var(--radius);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  background: rgba(10, 14, 22, 0.7);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  box-sizing: border-box;
+  overflow: hidden;
+  min-height: 200px;
+  transition: min-height 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+}
+
+.review-image-frame.is-loaded {
+  min-height: 0;
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.review-image-frame.is-error {
+  min-height: 120px;
+  background: rgba(26, 12, 18, 0.7);
+  border-color: rgba(255, 75, 75, 0.35);
+}
+
+.review-image-frame .review-image {
+  display: block;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  border-radius: var(--radius);
+  border: 1px solid rgba(168, 176, 192, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: auto;
+}
+
+.review-image-frame.is-loaded .review-image {
+  opacity: 1;
+}
+
+.review-image-frame.is-error .review-image {
+  display: none !important;
+}
+
+.review-image-loader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  background: radial-gradient(circle at center, rgba(16, 22, 36, 0.92) 0%, rgba(8, 12, 20, 0.96) 100%);
+  z-index: 2;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.review-image-frame.is-loaded .review-image-loader {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.review-image-frame.is-error .review-image-loader {
+  display: none !important;
+}
+
+.review-image-spinner {
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 2px solid rgba(0, 240, 255, 0.22);
+  border-top-color: var(--neon-cyan);
+  border-right-color: var(--neon-purple);
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.2);
+  animation: poster-loader-spin 0.9s linear infinite;
+}
+
+.review-image-scan {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-purple), transparent);
+  opacity: 0.65;
+  animation: review-scan-sweep 2.2s ease-in-out infinite alternate;
+}
+
+@keyframes review-scan-sweep {
+  0% { transform: translateY(0); opacity: 0.2; }
+  50% { opacity: 0.75; }
+  100% { transform: translateY(198px); opacity: 0.2; }
+}
+
+.review-image-text {
+  color: var(--text-secondary);
+  font: 600 0.68rem/1 Rajdhani, sans-serif;
+  letter-spacing: 0.16em;
+}
+
+.review-image-error {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  color: #ff6b6b;
+  font-family: Rajdhani, sans-serif;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.review-image-frame.is-error .review-image-error {
+  display: flex;
+}
+
+.review-image-error-icon {
+  font-size: 1.4rem;
+  color: #ff6b6b;
+  line-height: 1;
+}
+
+.review-image-error-text {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #ff8585;
+}
+
+.review-image-error-alt {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  font-family: Inter, sans-serif;
+  max-width: 85%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .review-modal-body code {
   padding: .15rem .4rem;
   background: rgba(255, 255, 255, 0.08);
@@ -2967,6 +3122,7 @@ body.modal-open {
 
 /* Inner rotating CPU fan light pattern */
 .gw-cursor-fan {
+  transform-box: view-box;
   transform-origin: 50px 50px;
   animation: gw-fan-spin 2.6s linear infinite;
   will-change: transform;
@@ -2974,6 +3130,56 @@ body.modal-open {
 
 .gw-cursor.is-hover .gw-cursor-fan {
   animation-duration: 1.3s;
+}
+
+/* Fan Blades: Assembly & Illumination */
+.gw-blade-deploy {
+  transform-box: view-box;
+  transform-origin: 0px 0px;
+  transform: scale(1);
+}
+
+.gw-blade-grey {
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+
+.gw-blade-neon {
+  opacity: 1;
+  transition: opacity .35s ease;
+}
+
+/* Boot State: blades collapsed in grey, fan stationary, background work paused */
+html.gw-booting .gw-cursor-fan {
+  animation: none !important;
+}
+
+html.gw-booting .gw-blade-deploy {
+  transform: scale(0);
+  transition: none !important;
+}
+
+html.gw-booting .gw-blade-grey {
+  opacity: 1;
+  transition: none !important;
+}
+
+html.gw-booting .gw-blade-neon {
+  opacity: 0;
+  transition: none !important;
+}
+
+html.gw-booting .gw-cursor-hub-core {
+  opacity: .4;
+  filter: none;
+  transition: none !important;
+}
+
+html.gw-booting .ambient,
+html.gw-booting .background-particles,
+html.gw-booting .background-particles i,
+html.gw-booting .background-grid {
+  animation-play-state: paused !important;
 }
 
 @keyframes gw-fan-spin {
@@ -2993,6 +3199,26 @@ body.modal-open {
 
   html:not(.animations-unlocked) .gw-cursor-inner {
     transition: none !important;
+  }
+
+  html:not(.animations-unlocked) .gw-blade-deploy {
+    transform: scale(1) !important;
+  }
+
+  html:not(.animations-unlocked) .gw-blade-neon {
+    opacity: 1 !important;
+  }
+
+  html:not(.animations-unlocked) .gw-blade-grey {
+    opacity: 0 !important;
+  }
+
+  html:not(.animations-unlocked) .review-image-spinner {
+    animation: none !important;
+  }
+
+  html:not(.animations-unlocked) .review-image-scan {
+    display: none !important;
   }
 }
 
@@ -3039,8 +3265,13 @@ html.no-animations .gw-cursor-fan,
 html.no-animations .gameplay-track.is-scrolling,
 html.no-animations .poster-loader span,
 html.no-animations .embed-spinner-ring,
-html.no-animations .embed-progress-bar::after {
+html.no-animations .embed-progress-bar::after,
+html.no-animations .review-image-spinner {
   animation: none !important;
+}
+
+html.no-animations .review-image-scan {
+  display: none !important;
 }
 
 html.no-animations .gw-cursor {
