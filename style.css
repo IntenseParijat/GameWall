@@ -1620,7 +1620,8 @@ body::after {
   padding: 1.25rem;
   background: var(--bg-primary);
   text-align: center;
-  transition: opacity .5s ease, visibility .5s ease;
+  overflow: hidden;
+  transition: opacity .55s cubic-bezier(0.2, 0.8, 0.25, 1), visibility .55s cubic-bezier(0.2, 0.8, 0.25, 1);
   pointer-events: auto;
 }
 
@@ -1630,43 +1631,192 @@ body::after {
   pointer-events: none;
 }
 
-.loading-screen.is-fading .loading-status {
-  opacity: 0;
-  transition: opacity .35s ease-out;
-}
-
 .loading-screen.is-hidden {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
 }
 
-.loading-status {
+/* Faint technical cyber grid & vignette */
+.loading-bg-grid {
   position: absolute;
-  top: calc(50% + (var(--gw-loading-fan-size) / 2) + 1.35rem);
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 240, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.04) 1px, transparent 1px);
+  background-size: 38px 38px;
+  background-position: center center;
+  mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, #000 25%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, #000 25%, transparent 80%);
+  pointer-events: none;
+}
+
+/* Subtle cyan/purple radial glow behind the fan */
+.loading-fan-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(var(--gw-loading-fan-size) * 1.55);
+  height: calc(var(--gw-loading-fan-size) * 1.55);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 240, 255, 0.14) 0%, rgba(176, 38, 255, 0.09) 45%, transparent 72%);
+  filter: blur(12px);
+  pointer-events: none;
+}
+
+/* Minimal HUD framing around the loading area */
+.loading-hud-frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(var(--gw-loading-fan-size) + 48px);
+  height: calc(var(--gw-loading-fan-size) + 48px);
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+.loading-hud-corner {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: rgba(0, 240, 255, 0.45);
+  border-style: solid;
+}
+
+.loading-hud-corner.tl { top: 0; left: 0; border-width: 1.5px 0 0 1.5px; }
+.loading-hud-corner.tr { top: 0; right: 0; border-width: 1.5px 1.5px 0 0; }
+.loading-hud-corner.bl { bottom: 0; left: 0; border-width: 0 0 1.5px 1.5px; }
+.loading-hud-corner.br { bottom: 0; right: 0; border-width: 0 1.5px 1.5px 0; }
+
+.loading-hud-ring {
+  position: absolute;
+  inset: -12px;
+  border: 1px dashed rgba(0, 240, 255, 0.12);
+  border-radius: 50%;
+  animation: loading-hud-spin 36s linear infinite;
+}
+
+@keyframes loading-hud-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Boot-sequence label above the fan */
+.loading-header {
+  position: absolute;
+  bottom: calc(50% + (var(--gw-loading-fan-size) / 2) + 1.45rem);
   left: 50%;
   transform: translateX(-50%);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.loading-header-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--neon-cyan);
+  font: 600 clamp(0.72rem, 1.6vw, 0.82rem)/1 'Rajdhani', ui-monospace, monospace;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+}
+
+.loading-header-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--neon-cyan);
+  box-shadow: 0 0 6px var(--neon-cyan);
+  animation: loading-dot-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes loading-dot-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.15); box-shadow: 0 0 10px var(--neon-cyan); }
+}
+
+.loading-header-sub {
+  color: rgba(194, 248, 255, 0.45);
+  font: 500 clamp(0.62rem, 1.2vw, 0.7rem)/1 'Rajdhani', ui-monospace, monospace;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Central loading status and supporting detail */
+.loading-content {
+  position: absolute;
+  top: calc(50% + (var(--gw-loading-fan-size) / 2) + 1.25rem);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.loading-status {
+  position: static;
+  transform: none;
   margin: 0;
   padding: 0;
   color: #c2f8ff;
   font: 600 clamp(0.78rem, 1.8vw, 0.92rem)/1.2 'Rajdhani', ui-monospace, monospace;
   letter-spacing: 0.16em;
-  white-space: nowrap;
-  pointer-events: none;
-  user-select: none;
   text-shadow: 0 0 10px rgba(0, 240, 255, 0.45);
   font-variant-numeric: tabular-nums;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity .35s ease;
+}
+
+.loading-detail {
+  margin: 0;
+  padding: 0;
+  color: rgba(0, 240, 255, 0.65);
+  font: 600 clamp(0.68rem, 1.4vw, 0.78rem)/1.2 'Rajdhani', ui-monospace, monospace;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.35);
+  transition: color 0.3s ease;
+}
+
+.loading-detail.is-ready {
+  color: #39ff14;
+  text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+}
+
+.loading-detail.is-error {
+  color: #ff3366;
+  text-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
 }
 
 @media (max-height: 480px) {
-  .loading-status {
-    top: calc(50% + (var(--gw-loading-fan-size) / 2) + 0.75rem);
-    font-size: 0.75rem;
+  .loading-header {
+    bottom: calc(50% + (var(--gw-loading-fan-size) / 2) + 0.65rem);
+    gap: 0.15rem;
   }
+  .loading-header-tag { font-size: 0.68rem; }
+  .loading-header-sub { font-size: 0.58rem; }
+  .loading-content {
+    top: calc(50% + (var(--gw-loading-fan-size) / 2) + 0.65rem);
+    gap: 0.2rem;
+  }
+  .loading-status { font-size: 0.75rem; }
+  .loading-detail { font-size: 0.65rem; }
 }
 
 .loading-status-text {
@@ -3160,26 +3310,26 @@ html.gw-booting .gw-cursor-fill,
 }
 
 /* Boot State: blades collapsed in grey, fan stationary, background work paused */
-html.gw-booting:not(.no-animations) .gw-cursor-fan {
+html.gw-booting .gw-cursor-fan {
   animation: none !important;
 }
 
-html.gw-booting:not(.no-animations) .gw-blade-deploy {
+html.gw-booting .gw-blade-deploy {
   transform: scale(0);
   transition: none !important;
 }
 
-html.gw-booting:not(.no-animations) .gw-blade-grey {
+html.gw-booting .gw-blade-grey {
   opacity: 1;
   transition: none !important;
 }
 
-html.gw-booting:not(.no-animations) .gw-blade-neon {
+html.gw-booting .gw-blade-neon {
   opacity: 0;
   transition: none !important;
 }
 
-html.gw-booting:not(.no-animations) .gw-cursor-hub-core {
+html.gw-booting .gw-cursor-hub-core {
   opacity: .4;
   filter: none;
   transition: none !important;
@@ -3203,33 +3353,24 @@ html.gw-booting .background-grid {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html:not(.animations-unlocked) .gw-cursor-fan {
+  html:not(.animations-unlocked):not(.gw-booting) .gw-cursor-fan {
     animation: none !important;
   }
 
-  html:not(.animations-unlocked) .gw-cursor-inner {
+  html:not(.animations-unlocked):not(.gw-booting) .gw-cursor-inner {
     transition: none !important;
   }
 
-  html:not(.animations-unlocked) .gw-blade-deploy {
+  html:not(.animations-unlocked):not(.gw-booting) .gw-blade-deploy {
     transform: scale(1) !important;
   }
 
-  html:not(.animations-unlocked) .gw-blade-neon {
+  html:not(.animations-unlocked):not(.gw-booting) .gw-blade-neon {
     opacity: 1 !important;
   }
 
-  html:not(.animations-unlocked) .gw-blade-grey {
+  html:not(.animations-unlocked):not(.gw-booting) .gw-blade-grey {
     opacity: 0 !important;
-  }
-
-  html:not(.animations-unlocked).gw-booting .gw-cursor-hub-core {
-    opacity: 1 !important;
-    filter: drop-shadow(0 0 2px #00f0ff) !important;
-  }
-
-  html:not(.animations-unlocked) .loading-status-cursor {
-    animation: none !important;
   }
 
   html:not(.animations-unlocked) .review-image-spinner {
@@ -3256,9 +3397,9 @@ html.gw-booting .background-grid {
 /* ==========================================================================
    Animations Disabled State (User Setting or System Preference)
    ========================================================================== */
-html.no-animations *,
-html.no-animations *::before,
-html.no-animations *::after {
+html.no-animations :not(.loading-screen, .loading-screen *, #gw-cursor, #gw-cursor *),
+html.no-animations :not(.loading-screen, .loading-screen *, #gw-cursor, #gw-cursor *)::before,
+html.no-animations :not(.loading-screen, .loading-screen *, #gw-cursor, #gw-cursor *)::after {
   animation-duration: 0.001ms !important;
   animation-iteration-count: 1 !important;
   transition-duration: 0.001ms !important;
@@ -3280,7 +3421,7 @@ html.no-animations .hero-topline::after,
 html.no-animations .section-heading::after,
 html.no-animations .system-status i,
 html.no-animations .footer-status i,
-html.no-animations .gw-cursor-fan,
+html.no-animations:not(.gw-booting) .gw-cursor-fan,
 html.no-animations .gameplay-track.is-scrolling,
 html.no-animations .poster-loader span,
 html.no-animations .embed-spinner-ring,
@@ -3293,33 +3434,7 @@ html.no-animations .review-image-scan {
   display: none !important;
 }
 
-html.no-animations .loading-status-cursor {
-  animation: none !important;
-  opacity: 0.8;
-}
-
-html.no-animations.gw-booting .gw-cursor-fan {
-  animation: none !important;
-}
-
-html.no-animations.gw-booting .gw-blade-deploy {
-  transform: scale(1) !important;
-}
-
-html.no-animations.gw-booting .gw-blade-neon {
-  opacity: 1 !important;
-}
-
-html.no-animations.gw-booting .gw-blade-grey {
-  opacity: 0 !important;
-}
-
-html.no-animations.gw-booting .gw-cursor-hub-core {
-  opacity: 1 !important;
-  filter: drop-shadow(0 0 2px #00f0ff) !important;
-}
-
-html.no-animations .gw-cursor-fill {
+html.no-animations:not(.gw-booting) .gw-cursor-fill {
   transition: none !important;
 }
 

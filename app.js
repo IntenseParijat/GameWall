@@ -89,6 +89,7 @@ const elements = {
   loadingScreen: document.querySelector("#loading-screen"),
   loadingStatus: document.querySelector("#loading-status"),
   loadingStatusText: document.querySelector("#loading-status-text"),
+  loadingDetail: document.querySelector("#loading-detail"),
   reviewModalBackdrop: document.querySelector("#review-modal-backdrop"),
   reviewModal: document.querySelector("#review-modal"),
   reviewModalTitle: document.querySelector("#review-modal-title"),
@@ -442,6 +443,22 @@ function setLoaderProgress(value, message) {
     }
   }
 
+  const statusDetail = elements.loadingDetail || document.querySelector("#loading-detail");
+  if (statusDetail) {
+    if (message) {
+      statusDetail.textContent = `[ ${message} ]`;
+      if (message === "DATABASE UNAVAILABLE") {
+        statusDetail.classList.add("is-error");
+        statusDetail.classList.remove("is-ready");
+      } else if (message === "DATABASE READY") {
+        statusDetail.classList.add("is-ready");
+        statusDetail.classList.remove("is-error");
+      } else {
+        statusDetail.classList.remove("is-ready", "is-error");
+      }
+    }
+  }
+
   return Promise.resolve();
 }
 
@@ -455,6 +472,7 @@ function hideLoading() {
   }
 
   if (!isFinePointerDevice() || !animationsEnabled) {
+    document.documentElement.classList.remove("has-custom-cursor");
     const cursor = elements.gwCursor || document.querySelector("#gw-cursor");
     if (cursor) {
       cursor.style.display = "none";
@@ -609,7 +627,7 @@ async function loadGames() {
       "CHECKING DATABASE TIMESTAMP..."
     );
     await loadDatabaseUpdate();
-    setLoaderProgress(85);
+    setLoaderProgress(85, "SYNCHRONIZING CACHE...");
     updateStatistics();
     await renderGames();
     await setLoaderProgress(100, "DATABASE READY");
@@ -3185,6 +3203,7 @@ function activateCursorFromIframe(e) {
     document.documentElement.classList.add("has-custom-cursor");
     if (cursor) {
       cursor.style.display = "";
+      cursor.style.opacity = "";
       cursor.classList.add("is-active");
     }
     window.__updateCursorProgress?.();
@@ -3199,6 +3218,7 @@ function resetIframeCursorState() {
     const cursor = elements.gwCursor || document.querySelector("#gw-cursor");
     if (cursor) {
       cursor.style.display = "";
+      cursor.style.opacity = "";
     }
     window.__updateCursorProgress?.();
   }
@@ -3217,12 +3237,37 @@ function setCustomCursorEnabled(enabled) {
 
   if (shouldBeActive) {
     if (!isPointerOverIframe) {
-      document.documentElement.classList.add("has-custom-cursor");
       if (cursor) {
+        cursor.classList.remove("is-loading");
         cursor.style.display = "";
-        if (lastPointerX !== null && lastPointerY !== null) {
+        cursor.style.opacity = "";
+      }
+      if (lastPointerX !== null && lastPointerY !== null) {
+        if (cursor) {
           cursor.style.transform = `translate3d(${lastPointerX}px, ${lastPointerY}px, 0)`;
           cursor.classList.add("is-active");
+          const interactiveSelector = `
+            a, button, input, select, textarea, label,
+            [role="button"], [role="link"], [role="tab"],
+            .game-card, .poster-link, .review-button, .view-game,
+            .filter-chip, .filter-chip-btn, .page-nav-btn,
+            .review-modal-close, .review-modal-share, .review-modal-close-btn,
+            .anim-toggle-btn
+          `;
+          try {
+            const hoveredElem = document.elementFromPoint(lastPointerX, lastPointerY);
+            if (hoveredElem && hoveredElem.closest && hoveredElem.closest(interactiveSelector)) {
+              cursor.classList.add("is-hover");
+            } else {
+              cursor.classList.remove("is-hover");
+            }
+          } catch { }
+        }
+        document.documentElement.classList.add("has-custom-cursor");
+      } else {
+        document.documentElement.classList.remove("has-custom-cursor");
+        if (cursor) {
+          cursor.classList.remove("is-active");
         }
       }
       window.__updateCursorProgress?.();
@@ -3232,6 +3277,7 @@ function setCustomCursorEnabled(enabled) {
     if (cursor) {
       cursor.classList.remove("is-active", "is-hover");
       cursor.style.display = "none";
+      cursor.style.opacity = "0";
     }
   }
 }
@@ -3318,10 +3364,6 @@ function cancelCursorFanStartup() {
 
 function initCursorFanStartup() {
   if (fanStartupDone) return;
-  if (!animationsEnabled) {
-    cancelCursorFanStartup();
-    return;
-  }
 
   const fan = document.querySelector(".gw-cursor-fan");
   if (!fan) {
@@ -3449,18 +3491,6 @@ async function decelerateCursorFan() {
     const fan = document.querySelector(".gw-cursor-fan");
     const isDesktopPointer = isFinePointerDevice();
 
-    if (!animationsEnabled) {
-      document.documentElement.classList.remove("gw-booting");
-      fanStartupDone = true;
-      isBooting = false;
-      if (cursor) {
-        cursor.classList.remove("is-loading");
-        cursor.style.display = "none";
-        cursor.style.opacity = "0";
-      }
-      return;
-    }
-
     fanTransitionRequested = true;
 
     // Await achievement of continuous high-speed state so user sees full sequence
@@ -3469,15 +3499,9 @@ async function decelerateCursorFan() {
       new Promise((r) => setTimeout(r, 4000))
     ]);
 
-    if (!animationsEnabled || fanStartupDone) {
+    if (fanStartupDone) {
       document.documentElement.classList.remove("gw-booting");
-      fanStartupDone = true;
       isBooting = false;
-      if (cursor) {
-        cursor.classList.remove("is-loading");
-        cursor.style.display = "none";
-        cursor.style.opacity = "0";
-      }
       return;
     }
 
@@ -3534,13 +3558,14 @@ async function decelerateCursorFan() {
       }
     );
 
-    // 2. Positional and sizing transformation (desktop fine-pointer only)
+    // 2. Positional and sizing transformation vs fade out dismissal
     let cursorAnim = null;
     let targetX = null;
     let targetY = null;
     const hasKnownPointer = (lastPointerX !== null && lastPointerY !== null);
+    const shouldEnableCustomCursor = Boolean(animationsEnabled && isDesktopPointer);
 
-    if (isDesktopPointer) {
+    if (shouldEnableCustomCursor) {
       const startX = window.innerWidth / 2;
       const startY = window.innerHeight / 2;
       targetX = hasKnownPointer ? lastPointerX : startX;
@@ -3622,22 +3647,28 @@ async function decelerateCursorFan() {
       hubCore.style.filter = "";
     }
 
-    if (isDesktopPointer) {
+    if (animationsEnabled && isDesktopPointer) {
       cursor.style.display = "";
       cursor.style.opacity = "";
       if (hasKnownPointer) {
         cursor.style.transform = `translate3d(${targetX}px, ${targetY}px, 0)`;
         cursor.classList.add("is-active");
+        if (!isPointerOverIframe) {
+          document.documentElement.classList.add("has-custom-cursor");
+        }
       } else {
         cursor.style.transform = `translate3d(${window.innerWidth / 2}px, ${window.innerHeight / 2}px, 0)`;
         cursor.classList.remove("is-active");
+        document.documentElement.classList.remove("has-custom-cursor");
       }
-      setCustomCursorEnabled(animationsEnabled);
+      setCustomCursorEnabled(true);
       window.__updateCursorProgress?.();
     } else {
+      document.documentElement.classList.remove("has-custom-cursor");
+      cursor.classList.remove("is-active", "is-hover");
       cursor.style.display = "none";
       cursor.style.opacity = "0";
-      cursor.classList.remove("is-active");
+      setCustomCursorEnabled(false);
     }
   })();
 
@@ -3711,9 +3742,14 @@ function initCustomCursor() {
 
     if (!customCursorActive) return;
 
+    cursor.style.display = "";
+    cursor.style.opacity = "";
     cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
     if (!cursor.classList.contains("is-active")) {
       cursor.classList.add("is-active");
+    }
+    if (!document.documentElement.classList.contains("has-custom-cursor")) {
+      document.documentElement.classList.add("has-custom-cursor");
     }
   }, { passive: true });
 
@@ -3736,8 +3772,13 @@ function initCustomCursor() {
 
     if (isBooting || !customCursorActive) return;
 
+    cursor.style.display = "";
+    cursor.style.opacity = "";
     cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
     cursor.classList.add("is-active");
+    if (!document.documentElement.classList.contains("has-custom-cursor")) {
+      document.documentElement.classList.add("has-custom-cursor");
+    }
   }, { passive: true });
 
   window.addEventListener("blur", () => {
@@ -3822,9 +3863,6 @@ function initCustomCursor() {
 
 function setAnimationsEnabled(enabled, persist = true) {
   animationsEnabled = enabled;
-  if (!enabled) {
-    cancelCursorFanStartup();
-  }
   if (persist) {
     try {
       localStorage.setItem(ANIMATION_STORAGE_KEY, enabled ? "on" : "off");
