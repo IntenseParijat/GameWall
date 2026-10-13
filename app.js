@@ -3271,6 +3271,8 @@ const fanReadyForDecelPromise = new Promise((resolve) => {
   fanReadyForDecelResolve = resolve;
 });
 let fanHighSpeedAnimation = null;
+let fanHighSpeedStartTime = 0;
+let fanTransitionRequested = false;
 let fanDecelerating = false;
 let fanDecelerationPromise = null;
 
@@ -3340,7 +3342,7 @@ function initCursorFanStartup() {
     if (!deployGroup) return;
 
     const t = setTimeout(() => {
-      if (fanStartupDone) return;
+      if (fanStartupDone || fanDecelerating) return;
       const anim = deployGroup.animate(
         [
           { transform: "scale(0)" },
@@ -3368,7 +3370,7 @@ function initCursorFanStartup() {
     if (!greyUse || !neonUse) return;
 
     const t = setTimeout(() => {
-      if (fanStartupDone) return;
+      if (fanStartupDone || fanDecelerating) return;
       const greyAnim = greyUse.animate(
         [{ opacity: 1 }, { opacity: 0 }],
         { duration: fadeDuration, easing: "ease-in-out", fill: "forwards" }
@@ -3383,7 +3385,7 @@ function initCursorFanStartup() {
   });
 
   const tHub = setTimeout(() => {
-    if (fanStartupDone || !hubCore) return;
+    if (fanStartupDone || fanDecelerating || !hubCore) return;
     const hubAnim = hubCore.animate(
       [
         { opacity: 0.4, filter: "none" },
@@ -3400,7 +3402,7 @@ function initCursorFanStartup() {
   const accelDuration = 700;
 
   const tAccel = setTimeout(() => {
-    if (fanStartupDone) return;
+    if (fanStartupDone || fanDecelerating) return;
 
     const accelAnim = fan.animate(
       [
@@ -3429,6 +3431,7 @@ function initCursorFanStartup() {
           easing: "linear"
         }
       );
+      fanHighSpeedStartTime = performance.now();
 
       if (fanReadyForDecelResolve) {
         fanReadyForDecelResolve();
@@ -3458,15 +3461,15 @@ async function decelerateCursorFan() {
       return;
     }
 
-    fanDecelerating = true;
+    fanTransitionRequested = true;
 
-    // Await achievement of high-speed state so user sees full sequence
+    // Await achievement of continuous high-speed state so user sees full sequence
     await Promise.race([
       fanReadyForDecelPromise,
-      new Promise((r) => setTimeout(r, 2200))
+      new Promise((r) => setTimeout(r, 4000))
     ]);
 
-    if (!animationsEnabled) {
+    if (!animationsEnabled || fanStartupDone) {
       document.documentElement.classList.remove("gw-booting");
       fanStartupDone = true;
       isBooting = false;
@@ -3478,8 +3481,16 @@ async function decelerateCursorFan() {
       return;
     }
 
-    // Spin at high-speed peak for a moment before decelerating
-    await new Promise((r) => setTimeout(r, 250));
+    // Ensure the fan has completed at least a brief cruising period at high speed (200ms)
+    // so peak rotation is visually appreciated even if DB loading completed instantly.
+    // If the DB took longer than spin-up, elapsed is already >= 200ms, resulting in 0ms delay.
+    if (fanHighSpeedStartTime > 0) {
+      const elapsed = performance.now() - fanHighSpeedStartTime;
+      const minCruisingTime = 200;
+      if (elapsed < minCruisingTime) {
+        await new Promise((r) => setTimeout(r, minCruisingTime - elapsed));
+      }
+    }
 
     if (!fan || !cursor) {
       cancelCursorFanStartup();
@@ -3487,6 +3498,11 @@ async function decelerateCursorFan() {
       isBooting = false;
       return;
     }
+
+    // Deceleration officially begins now
+    fanDecelerating = true;
+    fanStartupTimeouts.forEach((t) => clearTimeout(t));
+    fanStartupTimeouts = [];
 
     // Phase D - Coordinated transition sequence
     const decelDuration = 750;
