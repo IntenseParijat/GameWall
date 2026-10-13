@@ -56,12 +56,9 @@
   <canvas class="background-canvas" id="background-canvas" aria-hidden="true"></canvas>
 
   <div class="loading-screen" id="loading-screen" role="status" aria-live="polite">
-    <div class="loader-mark" aria-hidden="true"><span></span></div>
-    <p class="eyebrow">System boot sequence</p>
-    <h1 class="scramble-text" data-scramble>INITIALIZING GAME WALL</h1>
-    <p class="loader-message scramble-text" id="loader-message" data-scramble>LOADING DATABASE...</p>
-    <div class="loader-track" aria-hidden="true"><span id="loader-bar"></span></div>
-    <p class="loader-percent" id="loader-percent">0%</p>
+    <p class="loading-status" id="loading-status">
+      <span class="loading-status-text" id="loading-status-text">&gt; Loading Database... 0%</span><span class="loading-status-cursor" aria-hidden="true">_</span>
+    </p>
   </div>
 
   <main class="site-shell" id="main-content">
@@ -346,6 +343,11 @@
             <stop offset="0%" stop-color="#8a99a8" stop-opacity="0.85" />
             <stop offset="55%" stop-color="#4a5568" stop-opacity="0.75" />
             <stop offset="100%" stop-color="#1e293b" stop-opacity="0.35" />
+          </linearGradient>
+          <linearGradient id="gw-ring-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#00f0ff" />
+            <stop offset="50%" stop-color="#b026ff" />
+            <stop offset="100%" stop-color="#00f0ff" />
           </linearGradient>
           <path id="gw-blade-path"
             d="M 0.0,-12.0 Q 3.3,-24.8 9.9,-36.7 A 38,38 0 0,1 28.5,-25.9 Q 19.3,-15.8 4.2,-11.2 A 12,12 0 0,0 0.0,-12.0 Z" />

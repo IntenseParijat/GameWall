@@ -29,7 +29,9 @@ The project is designed for GitHub Pages and can also be embedded inside a Blogg
 - Highest-rated game statistic
 - Staggered card entrance animation
 - Glitch Split title treatment
-- Scramble animation for the loading screen with pre-measured layout stabilization
+- Full-screen animated CPU fan loading screen with circular progress ring representing database load progress
+- Terminal-style loading status line (`> Loading Database... 0%`) with layout-stabilized tabular numerals and blinking caret
+- Seamless mechanical transition morphing the large central loading fan into the 44px custom mouse cursor on desktop
 - Floating top/bottom quick page navigation button with scroll direction tracking
 - High-performance custom circular CPU-fan mouse cursor with scroll-progress indicator on fine-pointer devices (hardware-accelerated `translate3d` tracking tested up to 240Hz and 2K/4K displays)
 - User-configurable **Animations ON/OFF** toggle setting with `localStorage` persistence and automatic `prefers-reduced-motion` integration
@@ -272,13 +274,16 @@ The Paladins font is loaded from the project's CDN:
 
 ### Loading screen
 
-Loading messages use a Scramble effect. To prevent line-wrapping jumps and layout jitter on mobile and narrow viewports (such as 320px, 360px, 375px, 390px, and 430px), the scramble animation pre-measures the complete final text layout against the element's computed typography before random character insertion begins.
+The startup loading screen is built around GameWall's signature 5-blade cyan and purple CPU cooling fan (`#gw-cursor`), creating a unified, high-tech loading presentation across all devices:
 
-- **Stable line configuration:** If the target string fits on one line at the current viewport width, one-line dimensions and no-wrap rules are reserved. If the target string naturally requires multiple lines, multi-line dimensions and stable line spans are reserved from the beginning so intermediate random characters cannot temporarily snap between one-line and two-line states.
-- **Zero layout shift:** The browser reserves the exact final dimensions beforehand, ensuring the loader message, progress track, and percentage label remain completely stable.
-- **Final initialization message:** The loading sequence smoothly progresses through database connection, archive data verification, and timestamp acquisition, culminating strictly in `DATABASE READY` as the final animated scramble message. The intermediate `BUILDING COLLECTION...` step has been removed.
-- **Error state isolation:** If network failure or parse errors prevent `games.json` from loading, the loading screen transitions to `DATABASE UNAVAILABLE` with diagnostic details in the empty state.
-- **Uncompromised aesthetics:** Once the animation concludes, the element cleanly restores normal plain text and inline dimensions, matching the intended final cyber-tech typography.
+- **Central Animated CPU Fan:** Positioned prominently at the center of the viewport during startup. It is responsively scaled (`clamp(140px, min(24vw, 26vh), 210px)`) to provide an impactful desktop and mobile presentation without overflowing smaller viewports or landscape screens.
+- **Circular Loading Progress Ring:** The outer circular SVG track (`#gw-cursor-progress-fill`) is dynamically repurposed during startup to visualize the database load lifecycle (fetching `games.json`, verifying records, retrieving GitHub commit timestamps, and rendering game cards). Progress advances smoothly from 0% to 100% with cyan/purple gradient illumination.
+- **Terminal Status Line:** Directly below the fan, a single cyberpunk terminal line (`> Loading Database... 0%` through `100%`) displays real-time progress alongside a blinking cursor caret (`_`). The readout uses fixed monospace typography and tabular numbers (`font-variant-numeric: tabular-nums`) to prevent layout shifts or line jumps as numbers change.
+- **Error State Handling:** If `games.json` fails to load due to network or parse errors, the status line clearly reports `> Database Unavailable... 100%` before transitioning to the diagnostic empty state, maintaining full diagnostic visibility.
+- **Desktop Cursor Transformation:** Once loading reaches 100% on fine-pointer devices, the large fan smoothly decelerates from high-speed rotation down to idle speed, shrinks from its expanded loading size to its 44px cursor size, and translates gracefully from the screen center to the user's latest recorded mouse coordinates (over ~750ms). Once complete, normal zero-latency cursor tracking resumes and the outer ring switches to displaying page scroll progress.
+- **Mouse Movement Immunity During Boot:** Pointer movement during startup updates the buffered mouse coordinates without dislodging the centered loading fan. If no pointer movement occurs during loading, the cursor gracefully activates at the pointer's first recorded location upon user interaction.
+- **Mobile & Touch Isolation:** On touch-only and mobile devices, the central animated fan, circular progress ring, and terminal status line provide a full startup presentation. Upon reaching 100%, the loading screen cleanly fades out and the fan is completely dismissed without leaving a floating element or enabling an unwanted custom cursor.
+- **Animation & Motion Preferences:** When reduced motion is preferred or animations are turned off via the hero toggle, the fan remains stationary in its centered, deployed state with no high-speed spinning or scaling transitions, providing an accessible and quiet loading experience.
 
 ### Page Navigation
 
@@ -291,6 +296,7 @@ GameWall provides a subtle floating navigation button anchored in the lower corn
 ### Custom CPU Fan Progress Cursor
 
 On devices equipped with a fine pointing device (such as desktop mice and precision trackpads), GameWall renders a cyber-tech circular hardware cursor:
+- **Dual-Phase Lifecycle:** A single unified SVG element (`#gw-cursor`) serves as both the prominent centered startup loading indicator and the interactive 44px mouse cursor, delivering a seamless mechanical morph when the database finishes initializing.
 - **Instant tracking:** The cursor tracks native mouse coordinates with zero delay, zero lerping, and zero interpolation, providing immediate, precision feedback.
 - **Circular scroll-progress ring:** An outer SVG ring continuously visualizes document scroll progress from 0% at the page top to 100% at the footer.
 - **Rotating CPU fan light pattern:** The interior features a smooth, continuous rotating 5-blade aerodynamic light pattern illuminated in neon cyan and neon purple around a dark hub, visually evocative of an RGB PC cooling fan.

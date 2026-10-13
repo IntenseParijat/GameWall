@@ -24,7 +24,6 @@ if (typeof document !== "undefined" && document.documentElement) {
   } else {
     document.documentElement.classList.add("no-animations");
     document.documentElement.classList.remove("animations-unlocked");
-    document.documentElement.classList.remove("gw-booting");
   }
 }
 
@@ -88,9 +87,8 @@ const elements = {
   highestRated: document.querySelector("#highest-rated"),
   highestRatedDetail: document.querySelector("#highest-rated-detail"),
   loadingScreen: document.querySelector("#loading-screen"),
-  loaderBar: document.querySelector("#loader-bar"),
-  loaderPercent: document.querySelector("#loader-percent"),
-  loaderMessage: document.querySelector("#loader-message"),
+  loadingStatus: document.querySelector("#loading-status"),
+  loadingStatusText: document.querySelector("#loading-status-text"),
   reviewModalBackdrop: document.querySelector("#review-modal-backdrop"),
   reviewModal: document.querySelector("#review-modal"),
   reviewModalTitle: document.querySelector("#review-modal-title"),
@@ -427,11 +425,21 @@ async function scrambleText(element, target, options = {}) {
 
 function setLoaderProgress(value, message) {
   const progress = Math.max(0, Math.min(100, Math.round(value)));
-  elements.loaderBar.style.width = `${progress}%`;
-  elements.loaderPercent.textContent = `${progress}%`;
 
-  if (message) {
-    return scrambleText(elements.loaderMessage, message);
+  const progressFill = elements.gwCursorProgressFill || document.querySelector("#gw-cursor-progress-fill");
+  if (progressFill) {
+    const pathLength = 307.88;
+    const offset = (pathLength * (1 - progress / 100)).toFixed(2);
+    progressFill.style.strokeDashoffset = `${offset}`;
+  }
+
+  const statusText = elements.loadingStatusText || document.querySelector("#loading-status-text");
+  if (statusText) {
+    if (message === "DATABASE UNAVAILABLE") {
+      statusText.textContent = `> Database Unavailable... ${progress}%`;
+    } else {
+      statusText.textContent = `> Loading Database... ${progress}%`;
+    }
   }
 
   return Promise.resolve();
@@ -441,11 +449,19 @@ function hideLoading() {
   document.documentElement.classList.remove("gw-booting");
   window.__resumeCanvasAnimations?.();
 
-  if (!animationsEnabled) {
+  if (elements.loadingScreen) {
+    elements.loadingScreen.classList.remove("is-fading");
     elements.loadingScreen.classList.add("is-hidden");
-    return;
   }
-  setTimeout(() => elements.loadingScreen.classList.add("is-hidden"), 250);
+
+  if (!isFinePointerDevice() || !animationsEnabled) {
+    const cursor = elements.gwCursor || document.querySelector("#gw-cursor");
+    if (cursor) {
+      cursor.style.display = "none";
+      cursor.style.opacity = "0";
+      cursor.classList.remove("is-active", "is-hover", "is-loading");
+    }
+  }
 }
 
 function normalizePlatform(value) {
@@ -598,6 +614,8 @@ async function loadGames() {
     await renderGames();
     await setLoaderProgress(100, "DATABASE READY");
 
+    await new Promise((r) => setTimeout(r, 200));
+
     await decelerateCursorFan();
 
     hideLoading();
@@ -610,6 +628,8 @@ async function loadGames() {
     showError();
 
     await setLoaderProgress(100, "DATABASE UNAVAILABLE");
+
+    await new Promise((r) => setTimeout(r, 200));
 
     await decelerateCursorFan();
 
@@ -3129,6 +3149,7 @@ function isFinePointerDevice() {
   return true;
 }
 
+let isBooting = true;
 let customCursorActive = false;
 let cursorInitialized = false;
 let isPointerOverIframe = false;
@@ -3160,7 +3181,7 @@ function activateCursorFromIframe(e) {
     }
   }
 
-  if (customCursorActive) {
+  if (customCursorActive && !isBooting) {
     document.documentElement.classList.add("has-custom-cursor");
     if (cursor) {
       cursor.style.display = "";
@@ -3173,7 +3194,7 @@ function activateCursorFromIframe(e) {
 function resetIframeCursorState() {
   if (!isPointerOverIframe) return;
   isPointerOverIframe = false;
-  if (customCursorActive) {
+  if (customCursorActive && !isBooting) {
     document.documentElement.classList.add("has-custom-cursor");
     const cursor = elements.gwCursor || document.querySelector("#gw-cursor");
     if (cursor) {
@@ -3189,6 +3210,10 @@ function setCustomCursorEnabled(enabled) {
   const shouldBeActive = Boolean(enabled && isSupported);
 
   customCursorActive = shouldBeActive;
+
+  if (isBooting) {
+    return;
+  }
 
   if (shouldBeActive) {
     if (!isPointerOverIframe) {
@@ -3267,7 +3292,6 @@ function cancelCursorFanStartup() {
     fanHighSpeedAnimation = null;
   }
 
-  document.documentElement.classList.remove("gw-booting");
   fanStartupDone = true;
   if (fanReadyForDecelResolve) {
     fanReadyForDecelResolve();
@@ -3277,32 +3301,29 @@ function cancelCursorFanStartup() {
   if (fan) {
     fan.style.transform = "";
     const deploys = fan.querySelectorAll(".gw-blade-deploy");
-    deploys.forEach((d) => (d.style.transform = ""));
+    deploys.forEach((d) => (d.style.transform = "scale(1)"));
     const greys = fan.querySelectorAll(".gw-blade-grey");
-    greys.forEach((g) => (g.style.opacity = ""));
+    greys.forEach((g) => (g.style.opacity = "0"));
     const neons = fan.querySelectorAll(".gw-blade-neon");
-    neons.forEach((n) => (n.style.opacity = ""));
+    neons.forEach((n) => (n.style.opacity = "1"));
   }
   const hubCore = document.querySelector(".gw-cursor-hub-core");
   if (hubCore) {
-    hubCore.style.opacity = "";
-    hubCore.style.filter = "";
+    hubCore.style.opacity = "1";
+    hubCore.style.filter = "drop-shadow(0 0 2px #00f0ff)";
   }
 }
 
 function initCursorFanStartup() {
   if (fanStartupDone) return;
-  if (!animationsEnabled || !isFinePointerDevice()) {
-    fanStartupDone = true;
-    document.documentElement.classList.remove("gw-booting");
-    if (fanReadyForDecelResolve) fanReadyForDecelResolve();
+  if (!animationsEnabled) {
+    cancelCursorFanStartup();
     return;
   }
 
   const fan = document.querySelector(".gw-cursor-fan");
   if (!fan) {
     fanStartupDone = true;
-    document.documentElement.classList.remove("gw-booting");
     if (fanReadyForDecelResolve) fanReadyForDecelResolve();
     return;
   }
@@ -3421,9 +3442,19 @@ async function decelerateCursorFan() {
   if (fanDecelerationPromise) return fanDecelerationPromise;
 
   fanDecelerationPromise = (async () => {
-    if (fanStartupDone || !animationsEnabled || !isFinePointerDevice()) {
+    const cursor = elements.gwCursor || document.querySelector("#gw-cursor");
+    const fan = document.querySelector(".gw-cursor-fan");
+    const isDesktopPointer = isFinePointerDevice();
+
+    if (!animationsEnabled) {
       document.documentElement.classList.remove("gw-booting");
       fanStartupDone = true;
+      isBooting = false;
+      if (cursor) {
+        cursor.classList.remove("is-loading");
+        cursor.style.display = "none";
+        cursor.style.opacity = "0";
+      }
       return;
     }
 
@@ -3435,24 +3466,33 @@ async function decelerateCursorFan() {
       new Promise((r) => setTimeout(r, 2200))
     ]);
 
-    if (fanStartupDone || !animationsEnabled) {
+    if (!animationsEnabled) {
       document.documentElement.classList.remove("gw-booting");
       fanStartupDone = true;
+      isBooting = false;
+      if (cursor) {
+        cursor.classList.remove("is-loading");
+        cursor.style.display = "none";
+        cursor.style.opacity = "0";
+      }
       return;
     }
 
     // Spin at high-speed peak for a moment before decelerating
     await new Promise((r) => setTimeout(r, 250));
 
-    const fan = document.querySelector(".gw-cursor-fan");
-    if (!fan) {
+    if (!fan || !cursor) {
       cancelCursorFanStartup();
+      document.documentElement.classList.remove("gw-booting");
+      isBooting = false;
       return;
     }
 
-    // Phase D - Gradually decelerate to normal idle speed without angle jump
-    const currentAngle = getElementRotation(fan);
+    // Phase D - Coordinated transition sequence
+    const decelDuration = 750;
 
+    // 1. Rotation deceleration on .gw-cursor-fan
+    const currentAngle = getElementRotation(fan);
     if (fanHighSpeedAnimation) {
       try {
         fanHighSpeedAnimation.cancel();
@@ -3466,7 +3506,6 @@ async function decelerateCursorFan() {
     const deltaAngle = remainingTo360 + 720;
     const targetAngle = currentAngle + deltaAngle;
 
-    const decelDuration = 750;
     const decelAnim = fan.animate(
       [
         { transform: `rotate(${currentAngle}deg)` },
@@ -3479,16 +3518,73 @@ async function decelerateCursorFan() {
       }
     );
 
+    // 2. Positional and sizing transformation (desktop fine-pointer only)
+    let cursorAnim = null;
+    let targetX = null;
+    let targetY = null;
+    const hasKnownPointer = (lastPointerX !== null && lastPointerY !== null);
+
+    if (isDesktopPointer) {
+      const startX = window.innerWidth / 2;
+      const startY = window.innerHeight / 2;
+      targetX = hasKnownPointer ? lastPointerX : startX;
+      targetY = hasKnownPointer ? lastPointerY : startY;
+
+      const currentRect = cursor.getBoundingClientRect();
+      const currentWidth = currentRect.width || 200;
+      const scaleRatio = 44 / currentWidth;
+
+      cursorAnim = cursor.animate(
+        [
+          { transform: `translate3d(${startX}px, ${startY}px, 0) scale(1)` },
+          { transform: `translate3d(${targetX}px, ${targetY}px, 0) scale(${scaleRatio})` }
+        ],
+        {
+          duration: decelDuration,
+          easing: "cubic-bezier(0.2, 0.8, 0.4, 1)",
+          fill: "forwards"
+        }
+      );
+
+      if (elements.loadingScreen) {
+        elements.loadingScreen.classList.add("is-fading");
+      }
+    } else {
+      if (elements.loadingScreen) {
+        elements.loadingScreen.classList.add("is-fading");
+      }
+      cursorAnim = cursor.animate(
+        [
+          { opacity: 1 },
+          { opacity: 0 }
+        ],
+        {
+          duration: decelDuration,
+          easing: "ease-out",
+          fill: "forwards"
+        }
+      );
+    }
+
     try {
-      await decelAnim.finished;
+      const promises = [decelAnim.finished];
+      if (cursorAnim) promises.push(cursorAnim.finished);
+      await Promise.all(promises);
     } catch { }
 
     document.documentElement.classList.remove("gw-booting");
+    cursor.classList.remove("is-loading");
     fanStartupDone = true;
+    isBooting = false;
 
     try {
       decelAnim.cancel();
     } catch { }
+    if (cursorAnim) {
+      try {
+        cursorAnim.cancel();
+      } catch { }
+    }
 
     fanActiveAnimations.forEach((a) => {
       try {
@@ -3509,6 +3605,24 @@ async function decelerateCursorFan() {
       hubCore.style.opacity = "";
       hubCore.style.filter = "";
     }
+
+    if (isDesktopPointer) {
+      cursor.style.display = "";
+      cursor.style.opacity = "";
+      if (hasKnownPointer) {
+        cursor.style.transform = `translate3d(${targetX}px, ${targetY}px, 0)`;
+        cursor.classList.add("is-active");
+      } else {
+        cursor.style.transform = `translate3d(${window.innerWidth / 2}px, ${window.innerHeight / 2}px, 0)`;
+        cursor.classList.remove("is-active");
+      }
+      setCustomCursorEnabled(animationsEnabled);
+      window.__updateCursorProgress?.();
+    } else {
+      cursor.style.display = "none";
+      cursor.style.opacity = "0";
+      cursor.classList.remove("is-active");
+    }
   })();
 
   return fanDecelerationPromise;
@@ -3528,7 +3642,7 @@ function initCustomCursor() {
 
   let lastProgressOffset = pathLength;
   const updateScrollProgress = () => {
-    if (!customCursorActive) return;
+    if (!customCursorActive || isBooting) return;
     const scroll = window.scrollY || window.pageYOffset || 0;
     const docHeight = Math.max(
       document.body.scrollHeight,
@@ -3549,7 +3663,7 @@ function initCustomCursor() {
 
   let scrollTicking = false;
   const onScroll = () => {
-    if (!customCursorActive) return;
+    if (!customCursorActive || isBooting) return;
     if (!scrollTicking) {
       window.requestAnimationFrame(() => {
         updateScrollProgress();
@@ -3577,6 +3691,8 @@ function initCustomCursor() {
     lastPointerX = e.clientX;
     lastPointerY = e.clientY;
 
+    if (isBooting) return;
+
     if (!customCursorActive) return;
 
     cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
@@ -3586,7 +3702,7 @@ function initCustomCursor() {
   }, { passive: true });
 
   window.addEventListener("pointerleave", () => {
-    if (!customCursorActive) return;
+    if (isBooting || !customCursorActive) return;
     cursor.classList.remove("is-active");
   }, { passive: true });
 
@@ -3599,9 +3715,11 @@ function initCustomCursor() {
     if (isPointerOverIframe) {
       activateCursorFromIframe(e);
     }
-    if (!customCursorActive) return;
     lastPointerX = e.clientX;
     lastPointerY = e.clientY;
+
+    if (isBooting || !customCursorActive) return;
+
     cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
     cursor.classList.add("is-active");
   }, { passive: true });
@@ -3632,7 +3750,7 @@ function initCustomCursor() {
       deactivateCursorForIframe();
       return;
     }
-    if (!customCursorActive || isPointerOverIframe) return;
+    if (isBooting || !customCursorActive || isPointerOverIframe) return;
     if (e.target && e.target.closest && e.target.closest(interactiveSelector)) {
       cursor.classList.add("is-hover");
     }
@@ -3653,7 +3771,7 @@ function initCustomCursor() {
       }
       return;
     }
-    if (!customCursorActive || isPointerOverIframe) return;
+    if (isBooting || !customCursorActive || isPointerOverIframe) return;
     if (e.target && e.target.closest && e.target.closest(interactiveSelector)) {
       if (e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest(interactiveSelector)) {
         return;
@@ -3753,11 +3871,6 @@ hookHistoryNavigation();
 loadAccessCounter();
 initPageNavigation();
 initCustomCursor();
-
-scrambleText(
-  document.querySelector(".loading-screen h1"),
-  "INITIALIZING GAME WALL"
-);
 
 loadGames();
 
