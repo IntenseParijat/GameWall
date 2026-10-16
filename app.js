@@ -463,7 +463,9 @@ function setLoaderProgress(value, message) {
 }
 
 function hideLoading() {
-  document.documentElement.classList.remove("gw-booting");
+  document.documentElement.classList.remove("gw-booting", "background-entering");
+  document.documentElement.classList.add("background-ready");
+  isBooting = false;
   window.__resumeCanvasAnimations?.();
 
   if (elements.loadingScreen) {
@@ -601,6 +603,46 @@ function isSafeUrl(value) {
   }
 }
 
+async function coordinateStartupReadiness({ success = true } = {}) {
+  // 1. Ensure essential fonts have loaded or bounded wait expires (max 400ms)
+  try {
+    if (document.fonts && document.fonts.ready) {
+      await Promise.race([
+        document.fonts.ready,
+        new Promise((resolve) => setTimeout(resolve, 400))
+      ]);
+    }
+  } catch { }
+
+  // 2. Ensure background canvas has initialized its buffer and rendered a valid initial frame
+  window.__ensureCanvasReady?.();
+
+  // 3. Begin background entrance: unpause CSS animations and resume canvas animation loop
+  document.documentElement.classList.remove("background-muted");
+  document.documentElement.classList.add("background-entering");
+  window.__resumeCanvasAnimations?.();
+
+  // 4. Bounded paint-settling step: allow browser to commit initial layout & canvas frame
+  await new Promise((resolve) => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(resolve);
+    });
+  });
+
+  // 5. Coordinated fan transition & overlay fade out
+  await decelerateCursorFan();
+
+  // 6. Dismiss loading overlay and finalize readiness state
+  hideLoading();
+
+  state.initialized = true;
+  window.__updatePageNav?.();
+  window.__updateCursorProgress?.();
+  if (success) {
+    checkInitialReviewSlug();
+  }
+}
+
 async function loadGames() {
   setLoaderProgress(18, "CONNECTING TO DATABASE...");
   try {
@@ -632,29 +674,13 @@ async function loadGames() {
     await renderGames();
     await setLoaderProgress(100, "DATABASE READY");
 
-    await new Promise((r) => setTimeout(r, 200));
-
-    await decelerateCursorFan();
-
-    hideLoading();
-    state.initialized = true;
-    window.__updatePageNav?.();
-    window.__updateCursorProgress?.();
-    checkInitialReviewSlug();
+    await coordinateStartupReadiness({ success: true });
   } catch (error) {
     console.error("GameWall could not load games.json:", error);
     showError();
 
     await setLoaderProgress(100, "DATABASE UNAVAILABLE");
-
-    await new Promise((r) => setTimeout(r, 200));
-
-    await decelerateCursorFan();
-
-    hideLoading();
-    state.initialized = true;
-    window.__updatePageNav?.();
-    window.__updateCursorProgress?.();
+    await coordinateStartupReadiness({ success: false });
   }
 }
 
@@ -1550,8 +1576,70 @@ function initBackgroundCanvas() {
     context.shadowBlur = 0;
   }
 
+  function drawStaticFrame(seconds = 0) {
+    if (mobileQuery.matches || !animationsEnabled) {
+      context.clearRect(0, 0, state.width, state.height);
+      return;
+    }
+
+    if (!state.width || !state.height) {
+      resize();
+    }
+
+    context.clearRect(0, 0, state.width, state.height);
+
+    if (cachedGradient) {
+      context.fillStyle = cachedGradient;
+      context.fillRect(0, 0, state.width, state.height);
+    }
+
+    for (const circuit of state.circuits) {
+      drawCircuit(circuit, seconds);
+    }
+
+    const maxDistance = 135;
+    const maxDistanceSq = 135 * 135;
+
+    for (let i = 0; i < state.nodes.length; i++) {
+      const node = state.nodes[i];
+      const pulse = .36 + (Math.sin(seconds * .7 + node.phase) + 1) * .10;
+
+      for (let j = i + 1; j < state.nodes.length; j++) {
+        const other = state.nodes[j];
+        const dx = node.x - other.x;
+        const dy = node.y - other.y;
+        const distSq = dx * dx + dy * dy;
+
+        if (distSq > maxDistanceSq) continue;
+
+        const distance = Math.sqrt(distSq);
+        const opacity = (1 - distance / maxDistance) * .085;
+
+        context.beginPath();
+        context.moveTo(node.x, node.y);
+        context.lineTo(other.x, other.y);
+        context.strokeStyle = color(node.hue, opacity);
+        context.lineWidth = .7;
+        context.stroke();
+      }
+
+      context.beginPath();
+      context.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+      context.fillStyle = color(node.hue, pulse * node.pulse);
+      context.fill();
+    }
+  }
+
   function render(time) {
-    if (state.bootPaused || mobileQuery.matches || !animationsEnabled) {
+    if (state.bootPaused) {
+      if (state.raf) {
+        cancelAnimationFrame(state.raf);
+        state.raf = 0;
+      }
+      return;
+    }
+
+    if (mobileQuery.matches || !animationsEnabled) {
       if (state.raf) {
         cancelAnimationFrame(state.raf);
         state.raf = 0;
@@ -1678,7 +1766,9 @@ function initBackgroundCanvas() {
       return;
     }
 
-    resize();
+    if (!state.width || !state.height) {
+      resize();
+    }
 
     if (!state.raf) {
       state.raf = requestAnimationFrame(render);
@@ -1726,13 +1816,23 @@ function initBackgroundCanvas() {
         context.clearRect(0, 0, state.width, state.height);
       } else {
         resize();
-        if (!state.raf) {
+        if (!state.bootPaused && !state.raf) {
           state.raf = requestAnimationFrame(render);
+        } else if (state.bootPaused) {
+          drawStaticFrame(0);
         }
       }
     },
     { passive: true }
   );
+
+  window.__ensureCanvasReady = function () {
+    if (mobileQuery.matches || !animationsEnabled) return;
+    if (!state.width || !state.height) {
+      resize();
+    }
+    drawStaticFrame(performance.now() * 0.001);
+  };
 
   window.__updateCanvasAnimations = function (enabled) {
     updateAnimationLoop();
@@ -1743,7 +1843,8 @@ function initBackgroundCanvas() {
     updateAnimationLoop();
   };
 
-  updateAnimationLoop();
+  resize();
+  drawStaticFrame(0);
 }
 
 let accessCounterLoaded = false;
@@ -3397,6 +3498,14 @@ function initCursorFanStartup() {
         }
       );
       fanActiveAnimations.push(anim);
+      anim.finished.then(() => {
+        if (!fanStartupDone && !fanDecelerating) {
+          deployGroup.style.transform = "scale(1)";
+          try { anim.cancel(); } catch { }
+          const idx = fanActiveAnimations.indexOf(anim);
+          if (idx !== -1) fanActiveAnimations.splice(idx, 1);
+        }
+      }).catch(() => { });
     }, i * bladeStaggerDelay);
     fanStartupTimeouts.push(t);
   });
@@ -3422,6 +3531,19 @@ function initCursorFanStartup() {
         { duration: fadeDuration, easing: "ease-in-out", fill: "forwards" }
       );
       fanActiveAnimations.push(greyAnim, neonAnim);
+
+      Promise.all([greyAnim.finished, neonAnim.finished]).then(() => {
+        if (!fanStartupDone && !fanDecelerating) {
+          greyUse.style.opacity = "0";
+          neonUse.style.opacity = "1";
+          try { greyAnim.cancel(); } catch { }
+          try { neonAnim.cancel(); } catch { }
+          const gIdx = fanActiveAnimations.indexOf(greyAnim);
+          if (gIdx !== -1) fanActiveAnimations.splice(gIdx, 1);
+          const nIdx = fanActiveAnimations.indexOf(neonAnim);
+          if (nIdx !== -1) fanActiveAnimations.splice(nIdx, 1);
+        }
+      }).catch(() => { });
     }, illuminationStart + i * illuminationStagger);
     fanStartupTimeouts.push(t);
   });
@@ -3461,6 +3583,10 @@ function initCursorFanStartup() {
 
     accelAnim.finished.then(() => {
       if (fanStartupDone || fanDecelerating) return;
+
+      try { accelAnim.cancel(); } catch { }
+      const aIdx = fanActiveAnimations.indexOf(accelAnim);
+      if (aIdx !== -1) fanActiveAnimations.splice(aIdx, 1);
 
       fanHighSpeedAnimation = fan.animate(
         [
@@ -3532,7 +3658,12 @@ async function decelerateCursorFan() {
     const decelDuration = 750;
 
     // 1. Rotation deceleration on .gw-cursor-fan
-    const currentAngle = getElementRotation(fan);
+    let currentAngle = 0;
+    if (fanHighSpeedAnimation && typeof fanHighSpeedAnimation.currentTime === "number") {
+      currentAngle = ((fanHighSpeedAnimation.currentTime % 180) / 180) * 360;
+    } else {
+      currentAngle = getElementRotation(fan);
+    }
     if (fanHighSpeedAnimation) {
       try {
         fanHighSpeedAnimation.cancel();
@@ -3565,13 +3696,14 @@ async function decelerateCursorFan() {
     const hasKnownPointer = (lastPointerX !== null && lastPointerY !== null);
     const shouldEnableCustomCursor = Boolean(animationsEnabled && isDesktopPointer);
 
+    const currentRect = cursor.getBoundingClientRect();
+    const startX = currentRect.left + currentRect.width / 2;
+    const startY = currentRect.top + currentRect.height / 2;
+
     if (shouldEnableCustomCursor) {
-      const startX = window.innerWidth / 2;
-      const startY = window.innerHeight / 2;
       targetX = hasKnownPointer ? lastPointerX : startX;
       targetY = hasKnownPointer ? lastPointerY : startY;
 
-      const currentRect = cursor.getBoundingClientRect();
       const currentWidth = currentRect.width || 200;
       const scaleRatio = 44 / currentWidth;
 

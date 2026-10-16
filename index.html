@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="gw-booting">
+<html lang="en" class="gw-booting background-muted">
 
 <head>
   <meta charset="utf-8">
@@ -57,23 +57,27 @@
 
   <div class="loading-screen" id="loading-screen" role="status" aria-live="polite">
     <div class="loading-bg-grid" aria-hidden="true"></div>
-    <div class="loading-fan-glow" aria-hidden="true"></div>
-    <div class="loading-hud-frame" aria-hidden="true">
-      <span class="loading-hud-corner tl"></span>
-      <span class="loading-hud-corner tr"></span>
-      <span class="loading-hud-corner bl"></span>
-      <span class="loading-hud-corner br"></span>
-      <div class="loading-hud-ring"></div>
-    </div>
-    <div class="loading-header" aria-hidden="true">
-      <span class="loading-header-tag"><i class="loading-header-dot"></i>GAMEWALL // SYSTEM INITIALIZATION</span>
-      <span class="loading-header-sub">ARCHIVE REPOSITORY CORE v4.0.2</span>
-    </div>
-    <div class="loading-content">
-      <p class="loading-status" id="loading-status">
-        <span class="loading-status-text" id="loading-status-text">&gt; Loading Database... 0%</span><span class="loading-status-cursor" aria-hidden="true">_</span>
-      </p>
-      <p class="loading-detail" id="loading-detail">[ INITIALIZING SUBSYSTEMS ]</p>
+    <div class="loading-stage">
+      <div class="loading-header" aria-hidden="true">
+        <span class="loading-header-tag"><i class="loading-header-dot"></i>GAMEWALL // SYSTEM INITIALIZATION</span>
+        <span class="loading-header-sub">ARCHIVE REPOSITORY CORE v4.0.2</span>
+      </div>
+      <div class="loading-fan-assembly">
+        <div class="loading-fan-glow" aria-hidden="true"></div>
+        <div class="loading-hud-frame" aria-hidden="true">
+          <span class="loading-hud-corner tl"></span>
+          <span class="loading-hud-corner tr"></span>
+          <span class="loading-hud-corner bl"></span>
+          <span class="loading-hud-corner br"></span>
+          <div class="loading-hud-ring"></div>
+        </div>
+      </div>
+      <div class="loading-content">
+        <p class="loading-status" id="loading-status">
+          <span class="loading-status-text" id="loading-status-text">&gt; Loading Database... 0%</span><span class="loading-status-cursor" aria-hidden="true">_</span>
+        </p>
+        <p class="loading-detail" id="loading-detail">[ INITIALIZING SUBSYSTEMS ]</p>
+      </div>
     </div>
   </div>
 
