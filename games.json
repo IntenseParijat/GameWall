@@ -485,7 +485,7 @@
     "abbreviations": "racing, arcade racing, driving, single player, singleplayer, multiplayer",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -521,7 +521,7 @@
     "abbreviations": "racing, arcade racing, driving, single player, singleplayer, multiplayer",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -539,7 +539,7 @@
     "abbreviations": "racing, arcade racing, driving, single player, singleplayer, multiplayer",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -1156,7 +1156,7 @@
     "abbreviations": "ff, battle royale, TPS, third person shooter, shooter, survival, multiplayer, online",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -1174,7 +1174,7 @@
     "abbreviations": "ffmax, battle royale, TPS, third person shooter, shooter, survival, multiplayer, online",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -1192,7 +1192,7 @@
     "abbreviations": "CODM, COD Mobile, CODMobile, callofduty, FPS, first person shooter, TPS, third person shooter, shooter, battle royale, multiplayer, online, competitive, single player, singleplayer",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -1245,7 +1245,7 @@
     "abbreviations": "pubg, pubgmobile, battle royale, TPS, third person shooter, FPS, first person shooter, shooter, survival, multiplayer, online",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -1262,7 +1262,7 @@
     "abbreviations": "pubg, pubgmobilelite, pubgmlite, pubgm lite, pubg lite, pubglite, battle royale, TPS, third person shooter, FPS, first person shooter, shooter, survival, multiplayer, online",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -1280,7 +1280,7 @@
     "abbreviations": "pubg, pubgmobile, battle royale, TPS, third person shooter, FPS, first person shooter, shooter, survival, multiplayer, online",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -1519,7 +1519,7 @@
     "abbreviations": "COC, strategy, mobile strategy, base building, management, multiplayer, online",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -2657,7 +2657,7 @@
     "abbreviations": "party, action, arcade, multiplayer, local multiplayer, online",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -2814,7 +2814,7 @@
     "abbreviations": "casual, sandbox, physics, simulation, arcade, single player, singleplayer",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -2894,7 +2894,7 @@
     "abbreviations": "puzzle, physics, casual, arcade, single player, singleplayer",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -2911,7 +2911,7 @@
     "abbreviations": "puzzle, physics, casual, arcade, single player, singleplayer",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -2928,7 +2928,7 @@
     "abbreviations": "puzzle, physics, casual, arcade, single player, singleplayer",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -2964,7 +2964,7 @@
     "abbreviations": "puzzle, physics, casual, arcade, single player, singleplayer, multiplayer",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -3176,7 +3176,7 @@
     "abbreviations": "endless runner, runner, arcade, casual, single player, singleplayer",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -3193,7 +3193,7 @@
     "abbreviations": "endless runner, runner, arcade, casual, single player, singleplayer",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -3211,7 +3211,7 @@
     "abbreviations": "endless runner, runner, arcade, casual, single player, singleplayer",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -3290,7 +3290,7 @@
     "abbreviations": "racing, arcade, driving, endless, casual, single player, singleplayer",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -3325,7 +3325,7 @@
     "abbreviations": "arcade, action, flight, shooter, casual, single player, singleplayer",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -3554,7 +3554,7 @@
     "abbreviations": "arcade, casual, action, single player, singleplayer",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -3586,7 +3586,7 @@
     "abbreviations": "racing, arcade, driving, physics, casual, single player, singleplayer",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -3604,7 +3604,7 @@
     "abbreviations": "racing, arcade, driving, physics, casual, multiplayer, single player, singleplayer",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -3621,7 +3621,7 @@
     "abbreviations": "racing, arcade racing, driving, casual, single player, singleplayer, multiplayer",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -3638,7 +3638,7 @@
     "abbreviations": "racing, arcade racing, driving, casual, single player, singleplayer, multiplayer",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {
@@ -3655,7 +3655,7 @@
     "abbreviations": "casual, simulation, virtual pet, life simulation, single player, singleplayer",
     "posterBadge": {
       "type": "custom",
-      "text": "? DAYS"
+      "text": "? HOURS"
     }
   },
   {

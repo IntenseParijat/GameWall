@@ -709,6 +709,106 @@ function normalisePosterBadge(badge) {
   return null;
 }
 
+function isUnknownHoursBadge(badge) {
+  if (!badge || badge.type !== "custom") return false;
+  const text = typeof badge.text === "string" ? badge.text : badge.label;
+  if (!text) return false;
+  return /^\s*\?\s+hours\s*$/i.test(text);
+}
+
+function renderBadgeText(container, text) {
+  container.textContent = "";
+  if (!text) return;
+  const parts = text.split("~");
+  for (let i = 0; i < parts.length; i++) {
+    if (parts[i]) {
+      container.appendChild(document.createTextNode(parts[i]));
+    }
+    if (i < parts.length - 1) {
+      const tildeSpan = document.createElement("span");
+      tildeSpan.className = "badge-tilde";
+      tildeSpan.textContent = "~";
+      tildeSpan.setAttribute("aria-hidden", "true");
+      container.appendChild(tildeSpan);
+    }
+  }
+}
+
+const activeGlitchElements = new Set();
+let glitchTimerId = null;
+
+function getRandomGlitchDigits() {
+  return String(Math.floor(Math.random() * 1000)).padStart(3, "0");
+}
+
+function updateGlitchBadges() {
+  if (!animationsEnabled || document.visibilityState === "hidden") {
+    return;
+  }
+  if (activeGlitchElements.size === 0) {
+    stopGlitchTicker();
+    return;
+  }
+
+  activeGlitchElements.forEach((el) => {
+    if (!el.isConnected) {
+      activeGlitchElements.delete(el);
+      return;
+    }
+    el.textContent = getRandomGlitchDigits();
+    if (Math.random() < 0.25) {
+      el.classList.add("is-flickering");
+    } else {
+      el.classList.remove("is-flickering");
+    }
+  });
+}
+
+function startGlitchTicker() {
+  if (glitchTimerId || !animationsEnabled) return;
+  glitchTimerId = setInterval(updateGlitchBadges, 85);
+}
+
+function stopGlitchTicker() {
+  if (glitchTimerId) {
+    clearInterval(glitchTimerId);
+    glitchTimerId = null;
+  }
+}
+
+function syncGlitchBadgesAnimationState() {
+  if (animationsEnabled) {
+    activeGlitchElements.forEach((el) => {
+      if (el.isConnected) {
+        el.textContent = getRandomGlitchDigits();
+      } else {
+        activeGlitchElements.delete(el);
+      }
+    });
+    if (activeGlitchElements.size > 0 && document.visibilityState !== "hidden") {
+      startGlitchTicker();
+    }
+  } else {
+    stopGlitchTicker();
+    activeGlitchElements.forEach((el) => {
+      if (el.isConnected) {
+        el.textContent = "???";
+        el.classList.remove("is-flickering");
+      } else {
+        activeGlitchElements.delete(el);
+      }
+    });
+  }
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") {
+    stopGlitchTicker();
+  } else if (animationsEnabled && activeGlitchElements.size > 0) {
+    startGlitchTicker();
+  }
+});
+
 function normaliseGame(game, index) {
   const rating = Number(game.rating);
   return {
@@ -967,6 +1067,7 @@ function getVisibleGames() {
 let activeRenderToken = 0;
 
 function renderGames() {
+  activeGlitchElements.clear();
   const token = ++activeRenderToken;
   const games = getVisibleGames();
   elements.grid.replaceChildren();
@@ -1150,10 +1251,39 @@ function createGameCard(game, position) {
   if (posterBadge) {
     if (game.posterBadge) {
       posterBadge.hidden = false;
-      posterBadge.textContent = game.posterBadge.label;
       posterBadge.className = `poster-badge badge-${game.posterBadge.type}`;
-      posterBadge.setAttribute("aria-label", `Progress status: ${game.posterBadge.label}`);
-      posterBadge.title = `Progress status: ${game.posterBadge.label}`;
+      posterBadge.textContent = "";
+
+      if (isUnknownHoursBadge(game.posterBadge)) {
+        posterBadge.classList.add("badge-glitch-hours");
+        posterBadge.setAttribute("aria-label", "Unknown hours played");
+        posterBadge.title = "Unknown hours played";
+
+        const glitchWrap = document.createElement("span");
+        glitchWrap.className = "badge-glitch-wrap";
+        glitchWrap.setAttribute("aria-hidden", "true");
+
+        const numSpan = document.createElement("span");
+        numSpan.className = "badge-glitch-num";
+        numSpan.textContent = animationsEnabled ? getRandomGlitchDigits() : "???";
+        activeGlitchElements.add(numSpan);
+
+        const labelSpan = document.createElement("span");
+        labelSpan.className = "badge-glitch-label";
+        labelSpan.textContent = " HOURS";
+
+        glitchWrap.appendChild(numSpan);
+        glitchWrap.appendChild(labelSpan);
+        posterBadge.appendChild(glitchWrap);
+
+        if (animationsEnabled) {
+          startGlitchTicker();
+        }
+      } else {
+        posterBadge.setAttribute("aria-label", `Progress status: ${game.posterBadge.label}`);
+        posterBadge.title = `Progress status: ${game.posterBadge.label}`;
+        renderBadgeText(posterBadge, game.posterBadge.label);
+      }
     } else {
       posterBadge.hidden = true;
       posterBadge.remove();
@@ -4496,6 +4626,7 @@ function setAnimationsEnabled(enabled, persist = true) {
   }
 
   setCustomCursorEnabled(enabled);
+  syncGlitchBadgesAnimationState();
 }
 
 function initAnimationToggle() {
@@ -4532,77 +4663,77 @@ const tutorialSteps = [
   {
     target: ".title-lockup",
     title: "WELCOME TO GAMEWALL",
-    desc: "A personal cyber-themed video game archive tracking lifetime titles, personal ratings, and detailed game reviews."
+    desc: "Welcome to Parijat's personal game collection. Here you can explore the games I've played, check my ratings and progress, and read my reviews."
   },
   {
     target: ".stats",
-    title: "ARCHIVE METRICS",
-    desc: "Live collection statistics: total archived games, personal rating average, database update timestamp, and the highest-rated game title."
+    title: "COLLECTION OVERVIEW",
+    desc: "An overview of the archive: total games cataloged, my average personal score, when the collection was last updated, and my highest-rated game."
   },
   {
     target: ".system-status",
     fallbackTarget: "#access-counter",
     title: "ARCHIVE ACCESS COUNTER",
-    desc: "Located at the upper-left of the terminal, this live counter tracks the total shared visit count and global access logs across all visitor sessions."
+    desc: "Shows the archive's access count, giving you an idea of how often the collection is visited."
   },
   {
     target: "#anim-toggle-btn",
-    title: "SYSTEM ANIMATIONS",
-    desc: "Toggle ambient background particles, cyber circuit canvas, and custom cursor animations. The startup CPU fan loader always animates independently."
+    title: "VISUAL EFFECTS TOGGLE",
+    desc: "Turn background effects and custom cursor animations on or off depending on your preference or device performance."
   },
   {
     target: "#game-search",
     title: "INSTANT SEARCH",
-    desc: "Search across the database in real-time. Matches update the collection immediately as you type. Use the clear button to wipe your search instantly."
+    desc: "Type any keyword to instantly filter the collection as you type. Use the clear button to reset your search."
   },
   {
     target: "#search-mode",
     title: "SEARCH SCOPES",
-    desc: "Target your search by Game Title (and abbreviations), Gameplay status, Reviews, Platforms, Poster Badges, or Everything across all fields."
+    desc: "Target your search by specific fields: game title, personal gameplay notes, written reviews, platform, or poster badges."
   },
   {
     target: "#filter-toggle-btn",
     title: "ADVANCED FILTERS",
-    desc: "Combine independent filters with AND logic: platforms (PC, Mobile, Console), poster status, review availability, rating range (0-10), and gameplay completion."
+    desc: "Narrow down games by platform (PC, Mobile, Console), completion status, review availability, personal rating range, or 100% completion."
   },
   {
     target: "#sort-games",
     title: "COLLECTION SORTING",
-    desc: "Order titles by personal rating (highest or lowest first), title alphabetically (A-Z or Z-A), or original data entry order."
+    desc: "Sort the collection by my personal rating, alphabetically by title, or by original data entry order."
   },
   {
     target: "#reset-filters-btn",
-    title: "RESET TO DEFAULTS",
-    desc: "Quickly reset all advanced filters and sort order back to default without affecting your active search query."
+    title: "RESET FILTERS",
+    desc: "Resets all active filters and sort options back to their defaults while keeping your current search query intact."
   },
   {
     target: ".poster-frame",
     fallbackTarget: ".library",
     title: "POSTER STATUS BADGES",
-    desc: "Posters feature distinct status indicators: Green for COMPLETED (100%), Red for DROPPED with percentage, White for CUSTOM labels (e.g. ENDLESS MODE), or no badge if unassigned."
+    desc: "Posters show quick status badges: green for completed games, red for dropped titles with my percentage reached, or custom labels like total playtime."
   },
   {
     target: ".poster-meta",
     fallbackTarget: ".library",
     title: "RATINGS & PLATFORMS",
-    desc: "Inspect personal scores out of 10 and platform icons indicating PC, Mobile, or Console support."
+    desc: "Check my personal rating out of 10 along with platform icons showing where I played each game."
   },
   {
     target: ".gameplay-row",
     fallbackTarget: ".library",
     title: "GAMEPLAY STATUS",
-    desc: "An independent personal status label for each game. If text is long, it automatically scrolls horizontally."
+    desc: "My personal status note for each game, detailing my current playthrough progress or playstyle."
   },
   {
     target: ".card-actions",
     fallbackTarget: ".library",
-    title: "VIEWING & REVIEWS",
-    desc: "Clicking a poster or 'VIEW GAME' opens the game's official site. Click 'REVIEW' to read detailed reviews, screenshots, and copy shareable links."
+    title: "OFFICIAL LINKS & REVIEWS",
+    desc: "Click the poster or 'VIEW GAME' to open the game's official website. Click 'REVIEW' to read my thoughts, screenshots, and copy a direct link."
   },
   {
     target: "#page-nav-btn",
     title: "QUICK PAGE NAVIGATION",
-    desc: "Use the floating navigation button in the lower corner to warp quickly between the top and bottom of the page."
+    desc: "Use this button to quickly jump between the top and bottom of the collection."
   }
 ];
 
@@ -4885,6 +5016,13 @@ function initTutorial() {
     }
   }
 
+  function preventMiddleClick(e) {
+    if (!isTutorialOpen) return;
+    if (e.button === 1 || e.which === 2) {
+      e.preventDefault();
+    }
+  }
+
   function openTour() {
     isTutorialOpen = true;
     overlay.hidden = false;
@@ -4893,6 +5031,8 @@ function initTutorial() {
 
     window.addEventListener("wheel", preventManualScroll, { passive: false });
     window.addEventListener("touchmove", preventManualScroll, { passive: false });
+    window.addEventListener("mousedown", preventMiddleClick, true);
+    window.addEventListener("auxclick", preventMiddleClick, true);
     document.addEventListener("keydown", onTourKeyDown, true);
 
     positionTourStep(0);
@@ -4910,6 +5050,8 @@ function initTutorial() {
 
     window.removeEventListener("wheel", preventManualScroll, { passive: false });
     window.removeEventListener("touchmove", preventManualScroll, { passive: false });
+    window.removeEventListener("mousedown", preventMiddleClick, true);
+    window.removeEventListener("auxclick", preventMiddleClick, true);
     document.removeEventListener("keydown", onTourKeyDown, true);
 
     overlay.hidden = true;

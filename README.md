@@ -51,10 +51,11 @@ Posters can display an upper-left status badge:
   ```json
   "posterBadge": { "type": "dropped", "percentage": 45 }
   ```
-- **Custom badge (White // custom text):**
+- **Custom badge (Neutral outline // custom text):**
   ```json
   "posterBadge": { "type": "custom", "text": "ENDLESS MODE" }
   ```
+  *(Setting `"text": "? HOURS"` displays a decorative glitching playtime counter for unknown hours).*
 - **No badge (or missing field):**
   ```json
   "posterBadge": null

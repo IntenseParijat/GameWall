@@ -462,7 +462,7 @@ body::after {
   background: rgba(8, 14, 26, 0.75);
   border: 1px solid var(--border);
   border-radius: 3px;
-  padding: 0.32rem 0.65rem;
+  padding: 0 0.65rem;
   font: 600 0.68rem/1 Rajdhani, sans-serif;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -489,6 +489,7 @@ body::after {
 
 .anim-toggle-dot {
   display: block;
+  flex-shrink: 0;
   width: 0.45rem;
   height: 0.45rem;
   border-radius: 50%;
@@ -507,6 +508,14 @@ body::after {
   border-color: rgba(168, 176, 192, 0.1);
 }
 
+.anim-toggle-text {
+  display: block;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  margin-right: -0.12em;
+  transform: translateY(0.5px);
+}
+
 .help-btn {
   display: inline-flex;
   align-items: center;
@@ -515,7 +524,7 @@ body::after {
   background: rgba(8, 14, 26, 0.75);
   border: 1px solid var(--border);
   border-radius: 3px;
-  padding: 0.32rem 0.65rem;
+  padding: 0 0.65rem;
   font: 600 0.68rem/1 Rajdhani, sans-serif;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -541,16 +550,19 @@ body::after {
 }
 
 .help-btn-svg {
-  display: inline-block;
+  display: block;
   flex-shrink: 0;
-  width: 12px;
-  height: 12px;
+  width: 13px;
+  height: 13px;
   stroke: currentColor;
 }
 
 .help-btn-text {
-  display: inline-block;
+  display: block;
   line-height: 1;
+  letter-spacing: 0.12em;
+  margin-right: -0.12em;
+  transform: translateY(0.5px);
 }
 
 .title-lockup {
@@ -1521,7 +1533,7 @@ body::after {
   z-index: 2;
   top: .7rem;
   left: .7rem;
-  padding: .28rem .45rem;
+  padding: .28rem .5rem;
   font: 700 .58rem/1.2 Rajdhani, sans-serif;
   letter-spacing: .12em;
   text-transform: uppercase;
@@ -1529,8 +1541,8 @@ body::after {
   max-width: calc(100% - 1.4rem);
   word-break: break-word;
   white-space: normal;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   transition: opacity .3s ease, transform .3s ease;
 }
 
@@ -1539,24 +1551,69 @@ body::after {
 }
 
 .poster-badge.badge-completed {
-  background: #123B2E;
-  border: 1px solid #35B981;
-  color: #83F5BA;
-  box-shadow: 0 0 10px rgba(53, 185, 129, 0.18);
+  background: rgba(10, 30, 22, 0.42);
+  border: 1px solid rgba(53, 185, 129, 0.85);
+  color: #a3f7cb;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 0 8px rgba(53, 185, 129, 0.32), inset 0 0 6px rgba(53, 185, 129, 0.12);
 }
 
 .poster-badge.badge-dropped {
-  background: #431B24;
-  border: 1px solid #F06B79;
-  color: #FF9BA3;
-  box-shadow: 0 0 10px rgba(240, 107, 121, 0.18);
+  background: rgba(35, 12, 16, 0.42);
+  border: 1px solid rgba(240, 107, 121, 0.85);
+  color: #ffb3ba;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 0 8px rgba(240, 107, 121, 0.32), inset 0 0 6px rgba(240, 107, 121, 0.12);
 }
 
 .poster-badge.badge-custom {
-  background: #FFFFFF;
-  border: 1px solid #D7DCE5;
-  color: #111827;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.18);
+  background: rgba(12, 16, 26, 0.45);
+  border: 1px solid rgba(220, 226, 235, 0.7);
+  color: #f1f5f9;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+}
+
+.badge-tilde {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  display: inline-block;
+  line-height: 1;
+  vertical-align: middle;
+  transform: translateY(-0.06em);
+  padding: 0 0.06em;
+}
+
+.poster-badge.badge-glitch-hours {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+.badge-glitch-wrap {
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-glitch-num {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  min-width: 2.2ch;
+  text-align: right;
+  letter-spacing: .06em;
+  user-select: none;
+  transition: opacity .04s ease, text-shadow .04s ease;
+}
+
+.badge-glitch-num.is-flickering {
+  opacity: 0.85;
+  text-shadow: -1px 0 rgba(0, 240, 255, 0.7), 1px 0 rgba(255, 59, 92, 0.7);
+}
+
+.badge-glitch-label {
+  display: inline-block;
+  user-select: none;
+  white-space: pre;
 }
 
 .poster-meta {
@@ -2480,6 +2537,11 @@ html.gw-low-power .game-title-curtain:not(.is-revealed) .game-title {
   }
 
   .hero-topline {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .hero-topline-right {
     flex-wrap: wrap;
     gap: 0.5rem;
   }
