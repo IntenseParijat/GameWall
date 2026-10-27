@@ -76,6 +76,7 @@ Posters can display an upper-left status badge:
 
 - **Search Scopes:** `title` (default, checks title & abbreviations), `gameplay`, `review`, `platform`, `badge`, and `everything`.
 - **Advanced Filters:** Combine platform checkboxes (PC, Mobile, Console), poster status (Any, Completed, Dropped, Custom, No Badge), review availability, personal rating range (0–10), and gameplay 100% marker using AND logic.
+- **Search Clear vs Reset:** Dedicated clear button inside the search field wipes the active query. The **RESET** button resets advanced filters and sorting to defaults while preserving your active search text.
 - **Canonical URL Parameters:**
   - `q`: Search query string
   - `scope`: Search scope (omitted if `title`)
@@ -87,7 +88,7 @@ Posters can display an upper-left status badge:
   - `sort`: Ordering (`rating-desc` (default), `rating-asc`, `title-asc`, `title-desc`, `default`)
   - `review`: Direct link to open a game's review modal (e.g. `?review=minecraft`)
   - *Legacy URL compatibility:* Incoming `s`, `p1`, and `p2` parameters are automatically parsed and mapped.
-- **Interactive Tutorial:** Click the **HELP / GUIDE** button in the header for an on-demand, step-by-step walkthrough.
+- **Interactive Tutorial:** Click the **HELP / GUIDE** button in the header for an on-demand, 14-step guided walkthrough.
 
 ---
 

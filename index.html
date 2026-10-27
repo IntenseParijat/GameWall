@@ -88,7 +88,12 @@
         <div class="hero-topline-right">
           <button type="button" class="help-btn" id="tutorial-btn" aria-label="Open interactive guide"
             title="Open interactive guide">
-            <span class="help-btn-icon" aria-hidden="true">?</span>
+            <svg class="help-btn-svg" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor"
+              stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
             <span class="help-btn-text">HELP / GUIDE</span>
           </button>
           <button type="button" class="anim-toggle-btn" id="anim-toggle-btn" aria-label="Toggle site animations"
@@ -148,6 +153,14 @@
             <label for="game-search">Search database</label>
             <input id="game-search" type="search" placeholder="SEARCH GAMES..." autocomplete="off">
             <span class="search-icon" aria-hidden="true"></span>
+            <button type="button" class="search-clear-btn" id="search-clear-btn" aria-label="Clear search query"
+              title="Clear search" hidden>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
           </div>
           <div class="select-field search-mode-field">
             <label for="search-mode">Search in</label>
@@ -181,7 +194,7 @@
               <span class="active-filter-badge" id="active-filter-badge" hidden>0</span>
             </button>
             <button type="button" class="toolbar-btn reset-filters-btn" id="reset-filters-btn"
-              title="Reset all search and filters to default">
+              title="Reset filters and sorting to default">
               <svg class="reset-icon" viewBox="0 0 24 24" width="13" height="13" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
@@ -463,6 +476,16 @@
             <stop offset="50%" stop-color="#b026ff" />
             <stop offset="100%" stop-color="#00f0ff" />
           </linearGradient>
+          <linearGradient id="gw-fan-grad-danger" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ff3b5c" stop-opacity="0.95" />
+            <stop offset="55%" stop-color="#ff1744" stop-opacity="0.85" />
+            <stop offset="100%" stop-color="#b026ff" stop-opacity="0.3" />
+          </linearGradient>
+          <linearGradient id="gw-ring-grad-danger" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ff3b5c" />
+            <stop offset="50%" stop-color="#ff1744" />
+            <stop offset="100%" stop-color="#ff3b5c" />
+          </linearGradient>
           <path id="gw-blade-path"
             d="M 0.0,-12.0 Q 3.3,-24.8 9.9,-36.7 A 38,38 0 0,1 28.5,-25.9 Q 19.3,-15.8 4.2,-11.2 A 12,12 0 0,0 0.0,-12.0 Z" />
         </defs>
@@ -532,7 +555,7 @@
     <div class="tutorial-dialog" id="tutorial-dialog" role="dialog" aria-modal="true" aria-labelledby="tutorial-step-title"
       aria-describedby="tutorial-step-desc" tabindex="-1">
       <div class="tutorial-dialog-header">
-        <span class="tutorial-step-badge" id="tutorial-step-badge">STEP 01 // 13</span>
+        <span class="tutorial-step-badge" id="tutorial-step-badge">STEP 01 // 14</span>
         <button type="button" class="tutorial-close-btn" id="tutorial-close-btn" aria-label="Close tutorial">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"
             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
