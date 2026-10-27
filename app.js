@@ -31,7 +31,12 @@ const state = {
   games: [],
   query: "",
   searchMode: "title",
-  filterMode: "none",
+  platforms: [],
+  badgeStatus: "any",
+  reviewAvailability: "any",
+  minRating: 0,
+  maxRating: 10,
+  gameplayProgress: "any",
   sortMode: "rating-desc",
   connectionMode: "good",
   initialized: false
@@ -74,8 +79,16 @@ const elements = {
   template: document.querySelector("#game-card-template"),
   search: document.querySelector("#game-search"),
   searchMode: document.querySelector("#search-mode"),
-  filter: document.querySelector("#filter-games"),
   sort: document.querySelector("#sort-games"),
+  filterToggleBtn: document.querySelector("#filter-toggle-btn"),
+  activeFilterBadge: document.querySelector("#active-filter-badge"),
+  resetFiltersBtn: document.querySelector("#reset-filters-btn"),
+  advancedFiltersPanel: document.querySelector("#advanced-filters-panel"),
+  filterBadge: document.querySelector("#filter-badge"),
+  filterReview: document.querySelector("#filter-review"),
+  filterMinRating: document.querySelector("#filter-min-rating"),
+  filterMaxRating: document.querySelector("#filter-max-rating"),
+  filterGameplay: document.querySelector("#filter-gameplay"),
   emptyState: document.querySelector("#empty-state"),
   emptyTitle: document.querySelector("#empty-title"),
   emptyMessage: document.querySelector("#empty-message"),
@@ -103,7 +116,20 @@ const elements = {
   pageNavBtn: document.querySelector("#page-nav-btn"),
   gwCursor: document.querySelector("#gw-cursor"),
   gwCursorProgressFill: document.querySelector("#gw-cursor-progress-fill"),
-  animToggleBtn: document.querySelector("#anim-toggle-btn")
+  animToggleBtn: document.querySelector("#anim-toggle-btn"),
+  tutorialBtn: document.querySelector("#tutorial-btn"),
+  tutorialOverlay: document.querySelector("#tutorial-overlay"),
+  tutorialSpotlightCutout: document.querySelector("#tutorial-spotlight-cutout"),
+  tutorialSpotlightBox: document.querySelector("#tutorial-spotlight-box"),
+  tutorialDialog: document.querySelector("#tutorial-dialog"),
+  tutorialStepBadge: document.querySelector("#tutorial-step-badge"),
+  tutorialCloseBtn: document.querySelector("#tutorial-close-btn"),
+  tutorialStepTitle: document.querySelector("#tutorial-step-title"),
+  tutorialStepDesc: document.querySelector("#tutorial-step-desc"),
+  tutorialBtnPrev: document.querySelector("#tutorial-btn-prev"),
+  tutorialBtnNext: document.querySelector("#tutorial-btn-next"),
+  tutorialDots: document.querySelector("#tutorial-dots"),
+  tutorialLiveRegion: document.querySelector("#tutorial-live-region")
 };
 
 const scrambleControllers = new WeakMap();
@@ -577,6 +603,111 @@ function detectConnectionQuality(timing = null) {
   return "good";
 }
 
+let isLowPowerDevice = false;
+let rAFSamples = [];
+let perfRafHandle = null;
+let lastRafTime = 0;
+
+function startPerformanceSampling() {
+  lastRafTime = performance.now();
+  function sample(now) {
+    const delta = now - lastRafTime;
+    lastRafTime = now;
+    if (delta > 0 && delta < 500) {
+      rAFSamples.push(delta);
+    }
+    if (rAFSamples.length < 45 && isBooting) {
+      perfRafHandle = requestAnimationFrame(sample);
+    }
+  }
+  perfRafHandle = requestAnimationFrame(sample);
+}
+
+function evaluateDeviceCapability() {
+  if (perfRafHandle) {
+    cancelAnimationFrame(perfRafHandle);
+    perfRafHandle = null;
+  }
+
+  let slowSignalCount = 0;
+
+  const cores = navigator.hardwareConcurrency;
+  if (typeof cores === "number" && cores > 0 && cores <= 2) {
+    slowSignalCount += 2;
+  }
+
+  const memory = navigator.deviceMemory;
+  if (typeof memory === "number" && memory > 0 && memory <= 1) {
+    slowSignalCount += 2;
+  }
+
+  const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  if (conn?.saveData || conn?.effectiveType === "2g" || conn?.effectiveType === "slow-2g") {
+    slowSignalCount += 1;
+  }
+
+  if (rAFSamples.length >= 10) {
+    const droppedFrames = rAFSamples.filter((t) => t > 38).length;
+    const droppedRatio = droppedFrames / rAFSamples.length;
+    const avgFrame = rAFSamples.reduce((a, b) => a + b, 0) / rAFSamples.length;
+
+    if (droppedRatio > 0.35 || avgFrame > 35) {
+      slowSignalCount += 2;
+    }
+  }
+
+  const isTouchOnly = !isFinePointerDevice();
+  if (isTouchOnly && slowSignalCount >= 2) {
+    isLowPowerDevice = true;
+  } else if (slowSignalCount >= 4) {
+    isLowPowerDevice = true;
+  } else {
+    isLowPowerDevice = false;
+  }
+
+  if (isLowPowerDevice) {
+    document.documentElement.classList.add("gw-low-power");
+    console.log("[GameWall] Adaptive performance: low-power mode active (title curtain reveal disabled)");
+  } else {
+    document.documentElement.classList.remove("gw-low-power");
+    console.log("[GameWall] Adaptive performance: standard mode active");
+  }
+}
+
+function normalisePosterBadge(badge) {
+  if (!badge || typeof badge !== "object") return null;
+  const type = typeof badge.type === "string" ? badge.type.trim().toLowerCase() : "";
+  if (type === "completed") {
+    return {
+      type: "completed",
+      label: "COMPLETED // 100%"
+    };
+  }
+  if (type === "dropped") {
+    const rawPct = Number(badge.percentage);
+    if (Number.isInteger(rawPct) && rawPct >= 0 && rawPct <= 99) {
+      return {
+        type: "dropped",
+        percentage: rawPct,
+        label: `DROPPED // ${rawPct}%`
+      };
+    }
+    return null;
+  }
+  if (type === "custom") {
+    const text = typeof badge.text === "string" ? badge.text.trim() : "";
+    if (text) {
+      return {
+        type: "custom",
+        text,
+        label: text
+      };
+    }
+    return null;
+  }
+  return null;
+}
+
 function normaliseGame(game, index) {
   const rating = Number(game.rating);
   return {
@@ -587,6 +718,7 @@ function normaliseGame(game, index) {
     rating: Number.isFinite(rating) ? Math.max(0, Math.min(10, rating)) : 0,
     gameplay: typeof game.gameplay === "string" && game.gameplay.trim() ? game.gameplay.trim() : "Unspecified",
     platforms: normalizePlatforms(game.platforms),
+    posterBadge: normalisePosterBadge(game.posterBadge),
     url: isSafeUrl(game.url) ? game.url : "#",
     description: typeof game.description === "string" ? game.description.trim() : "",
     originalIndex: index
@@ -613,6 +745,8 @@ async function coordinateStartupReadiness({ success = true } = {}) {
       ]);
     }
   } catch { }
+
+  evaluateDeviceCapability();
 
   // 2. Ensure background canvas has initialized its buffer and rendered a valid initial frame
   window.__ensureCanvasReady?.();
@@ -684,6 +818,9 @@ async function loadGames() {
   }
 }
 
+const VALID_SEARCH_MODES = ["title", "gameplay", "review", "platform", "badge", "everything"];
+const VALID_SORT_MODES = ["rating-desc", "rating-asc", "title-asc", "title-desc", "default"];
+
 function matchesSearch(game, query, searchMode) {
   if (!query) return true;
 
@@ -693,6 +830,18 @@ function matchesSearch(game, query, searchMode) {
 
     case "review":
       return (game.description || "").toLocaleLowerCase().includes(query);
+
+    case "platform": {
+      if (!Array.isArray(game.platforms)) return false;
+      return game.platforms.some((p) => p.toLocaleLowerCase().includes(query));
+    }
+
+    case "badge": {
+      if (!game.posterBadge) return false;
+      const labelText = (game.posterBadge.label || "").toLocaleLowerCase();
+      const typeText = (game.posterBadge.type || "").toLocaleLowerCase();
+      return labelText.includes(query) || typeText.includes(query);
+    }
 
     case "everything": {
       if ((game.title || "").toLocaleLowerCase().includes(query)) return true;
@@ -713,6 +862,11 @@ function matchesSearch(game, query, searchMode) {
       if (Array.isArray(game.platforms)) {
         const platformsText = game.platforms.join(" ").toLocaleLowerCase();
         if (platformsText.includes(query)) return true;
+      }
+
+      if (game.posterBadge) {
+        if ((game.posterBadge.label || "").toLocaleLowerCase().includes(query)) return true;
+        if ((game.posterBadge.type || "").toLocaleLowerCase().includes(query)) return true;
       }
 
       for (const [key, value] of Object.entries(game)) {
@@ -740,36 +894,59 @@ function matchesSearch(game, query, searchMode) {
   }
 }
 
-function matchesFilter(game, filterMode) {
-  const gameplay = game.gameplay || "";
-  const description = (game.description || "").trim();
-
-  switch (filterMode) {
-    case "100":
-      return gameplay.includes("100%");
-
-    case "not-100":
-      return !gameplay.includes("100%");
-
-    case "reviews":
-      return description.length > 0;
-
-    case "no-reviews":
-      return description.length === 0;
-
-    case "none":
-    default:
-      return true;
+function matchesAdvancedFilters(game) {
+  // 1. Platform filter
+  if (state.platforms && state.platforms.length > 0) {
+    if (!Array.isArray(game.platforms) || !game.platforms.some((p) => state.platforms.includes(p))) {
+      return false;
+    }
   }
+
+  // 2. Poster badge status filter
+  if (state.badgeStatus && state.badgeStatus !== "any") {
+    if (state.badgeStatus === "completed") {
+      if (!game.posterBadge || game.posterBadge.type !== "completed") return false;
+    } else if (state.badgeStatus === "dropped") {
+      if (!game.posterBadge || game.posterBadge.type !== "dropped") return false;
+    } else if (state.badgeStatus === "custom") {
+      if (!game.posterBadge || game.posterBadge.type !== "custom") return false;
+    } else if (state.badgeStatus === "none") {
+      if (game.posterBadge) return false;
+    }
+  }
+
+  // 3. Review availability filter
+  if (state.reviewAvailability && state.reviewAvailability !== "any") {
+    const hasRev = Boolean((game.description || "").trim().length > 0);
+    if (state.reviewAvailability === "has-review" && !hasRev) return false;
+    if (state.reviewAvailability === "no-review" && hasRev) return false;
+  }
+
+  // 4. Rating range filter
+  const minR = typeof state.minRating === "number" ? state.minRating : 0;
+  const maxR = typeof state.maxRating === "number" ? state.maxRating : 10;
+  const actualMin = Math.min(minR, maxR);
+  const actualMax = Math.max(minR, maxR);
+  if (game.rating < actualMin || game.rating > actualMax) {
+    return false;
+  }
+
+  // 5. Gameplay completion marker (legacy 100%)
+  if (state.gameplayProgress && state.gameplayProgress !== "any") {
+    const gameplay = game.gameplay || "";
+    if (state.gameplayProgress === "100" && !gameplay.includes("100%")) return false;
+    if (state.gameplayProgress === "not-100" && gameplay.includes("100%")) return false;
+  }
+
+  return true;
 }
 
 function getVisibleGames() {
   const query = state.query.trim().toLocaleLowerCase();
   const searchMode = state.searchMode || "title";
-  const filterMode = state.filterMode || "none";
 
   const filtered = state.games.filter((game) => {
-    return matchesSearch(game, query, searchMode) && matchesFilter(game, filterMode);
+    return matchesSearch(game, query, searchMode) && matchesAdvancedFilters(game);
   });
 
   switch (state.sortMode) {
@@ -960,7 +1137,6 @@ function createGameCard(game, position) {
   const image = card.querySelector(".game-poster");
   const posterLoader = card.querySelector(".poster-loader");
   const placeholder = card.querySelector(".poster-placeholder");
-  const cardId = card.querySelector(".card-id");
   const platformBadges = card.querySelector(".platform-badges");
   const rating = card.querySelector(".rating-badge b");
   const titleCurtain = card.querySelector(".game-title-curtain");
@@ -969,12 +1145,24 @@ function createGameCard(game, position) {
   const viewLink = card.querySelector(".view-game");
 
   const identifier = `GW-${String(position + 1).padStart(3, "0")}`;
-  cardId.textContent = identifier;
+  const posterBadge = card.querySelector(".poster-badge");
+  if (posterBadge) {
+    if (game.posterBadge) {
+      posterBadge.hidden = false;
+      posterBadge.textContent = game.posterBadge.label;
+      posterBadge.className = `poster-badge badge-${game.posterBadge.type}`;
+      posterBadge.setAttribute("aria-label", `Progress status: ${game.posterBadge.label}`);
+      posterBadge.title = `Progress status: ${game.posterBadge.label}`;
+    } else {
+      posterBadge.hidden = true;
+      posterBadge.remove();
+    }
+  }
   renderPlatforms(platformBadges, game.platforms, game.title);
   rating.textContent = formatRating(game.rating);
   title.textContent = game.title;
   title.setAttribute("aria-label", game.title);
-  if (!animationsEnabled) {
+  if (!animationsEnabled || isLowPowerDevice) {
     titleCurtain.classList.add("is-revealed");
     fitText(title, 0.85, 1.35);
   } else {
@@ -1271,32 +1459,88 @@ function observeGameplayBadge(textElement) {
   }
 }
 
-const VALID_SEARCH_MODES = ["title", "gameplay", "review", "everything"];
-const VALID_FILTERS = ["none", "100", "not-100", "reviews", "no-reviews"];
+function getActiveFilterCount() {
+  let count = 0;
+  if (state.platforms && state.platforms.length > 0) count += state.platforms.length;
+  if (state.badgeStatus && state.badgeStatus !== "any") count += 1;
+  if (state.reviewAvailability && state.reviewAvailability !== "any") count += 1;
+  if (state.minRating > 0 || state.maxRating < 10) count += 1;
+  if (state.gameplayProgress && state.gameplayProgress !== "any") count += 1;
+  return count;
+}
 
-function buildSearchQueryString(query = state.query, searchMode = state.searchMode, filterMode = state.filterMode) {
+function updateActiveFilterBadge() {
+  const count = getActiveFilterCount();
+  const badge = elements.activeFilterBadge || document.querySelector("#active-filter-badge");
+  if (badge) {
+    badge.textContent = String(count);
+    badge.hidden = count === 0;
+  }
+  const toggleBtn = elements.filterToggleBtn || document.querySelector("#filter-toggle-btn");
+  if (toggleBtn) {
+    if (count > 0) {
+      toggleBtn.classList.add("has-active-filters");
+    } else {
+      toggleBtn.classList.remove("has-active-filters");
+    }
+  }
+}
+
+function buildSearchQueryString() {
   const params = new URLSearchParams();
-  const trimmed = (query || "").trim();
+  const trimmed = (state.query || "").trim();
   if (trimmed) {
-    params.set("s", trimmed);
+    params.set("q", trimmed);
   }
-  if (searchMode && searchMode !== "title" && VALID_SEARCH_MODES.includes(searchMode)) {
-    params.set("p1", searchMode);
+  if (state.searchMode && state.searchMode !== "title" && VALID_SEARCH_MODES.includes(state.searchMode)) {
+    params.set("scope", state.searchMode);
   }
-  if (filterMode && filterMode !== "none" && VALID_FILTERS.includes(filterMode)) {
-    params.set("p2", filterMode);
+  if (state.platforms && state.platforms.length > 0) {
+    state.platforms.forEach((p) => params.append("platform", p));
   }
+  if (state.badgeStatus && state.badgeStatus !== "any") {
+    params.set("badge", state.badgeStatus);
+  }
+  if (state.reviewAvailability === "has-review") {
+    params.set("hasReview", "true");
+  } else if (state.reviewAvailability === "no-review") {
+    params.set("hasReview", "false");
+  }
+  if (typeof state.minRating === "number" && state.minRating > 0) {
+    params.set("minRating", String(state.minRating));
+  }
+  if (typeof state.maxRating === "number" && state.maxRating < 10) {
+    params.set("maxRating", String(state.maxRating));
+  }
+  if (state.gameplayProgress && state.gameplayProgress !== "any") {
+    params.set("gameplayProgress", state.gameplayProgress);
+  }
+  if (state.sortMode && state.sortMode !== "rating-desc" && VALID_SORT_MODES.includes(state.sortMode)) {
+    params.set("sort", state.sortMode);
+  }
+
   const qs = params.toString();
   return qs ? `?${qs}` : "";
 }
 
 function syncSearchUrl() {
   if (activeReviewSlug) return;
-  const currentPath = window.location.pathname;
-  const qs = buildSearchQueryString();
-  const newUrl = `${currentPath}${qs}${window.location.hash}`;
-  const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-  if (currentUrl !== newUrl) {
+  const currentUrl = new URL(window.location.href);
+
+  ["s", "p1", "p2", "q", "scope", "platform", "badge", "hasReview", "minRating", "maxRating", "gameplayProgress", "sort"].forEach((k) => {
+    currentUrl.searchParams.delete(k);
+  });
+
+  const newQs = buildSearchQueryString();
+  if (newQs) {
+    const newParams = new URLSearchParams(newQs.slice(1));
+    newParams.forEach((val, key) => currentUrl.searchParams.append(key, val));
+  }
+
+  const searchStr = currentUrl.searchParams.toString();
+  const newUrl = `${currentUrl.pathname}${searchStr ? "?" + searchStr : ""}${currentUrl.hash}`;
+  const existingRelative = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+  if (existingRelative !== newUrl) {
     window.history.replaceState({ type: "search" }, "", newUrl);
   }
 }
@@ -1305,74 +1549,244 @@ function initUrlState() {
   try {
     const params = new URLSearchParams(window.location.search);
 
-    const sParam = params.get("s");
-    if (typeof sParam === "string" && sParam.length > 0) {
-      state.query = sParam;
-      if (elements.search) {
-        elements.search.value = sParam;
-      }
+    const qParam = params.get("q") ?? params.get("s");
+    if (typeof qParam === "string" && qParam.length > 0) {
+      state.query = qParam;
+      if (elements.search) elements.search.value = qParam;
+    } else {
+      state.query = "";
+      if (elements.search) elements.search.value = "";
     }
 
-    const p1Param = params.get("p1");
-    if (p1Param && VALID_SEARCH_MODES.includes(p1Param)) {
-      state.searchMode = p1Param;
-      if (elements.searchMode) {
-        elements.searchMode.value = p1Param;
-      }
+    const scopeParam = params.get("scope") ?? params.get("p1");
+    if (scopeParam && VALID_SEARCH_MODES.includes(scopeParam)) {
+      state.searchMode = scopeParam;
     } else {
       state.searchMode = "title";
-      if (elements.searchMode) {
-        elements.searchMode.value = "title";
-      }
     }
+    if (elements.searchMode) elements.searchMode.value = state.searchMode;
 
-    const p2Param = params.get("p2");
-    if (p2Param && VALID_FILTERS.includes(p2Param)) {
-      state.filterMode = p2Param;
-      if (elements.filter) {
-        elements.filter.value = p2Param;
-      }
+    const platformParams = params.getAll("platform");
+    const parsedPlatforms = [];
+    platformParams.forEach((val) => {
+      val.split(",").map((v) => v.trim()).forEach((v) => {
+        const norm = normalizePlatform(v);
+        if (norm && !parsedPlatforms.includes(norm)) parsedPlatforms.push(norm);
+      });
+    });
+    state.platforms = parsedPlatforms;
+    const platformCheckboxes = document.querySelectorAll("input[name='platform-filter']");
+    platformCheckboxes.forEach((cb) => {
+      cb.checked = state.platforms.includes(cb.value);
+    });
+
+    const badgeParam = params.get("badge");
+    if (badgeParam && ["completed", "dropped", "custom", "none"].includes(badgeParam.toLowerCase())) {
+      state.badgeStatus = badgeParam.toLowerCase();
     } else {
-      state.filterMode = "none";
-      if (elements.filter) {
-        elements.filter.value = "none";
-      }
+      state.badgeStatus = "any";
     }
+    const badgeSelect = elements.filterBadge || document.querySelector("#filter-badge");
+    if (badgeSelect) badgeSelect.value = state.badgeStatus;
+
+    const hasReviewParam = params.get("hasReview");
+    const p2Param = params.get("p2");
+    if (hasReviewParam === "true" || p2Param === "reviews") {
+      state.reviewAvailability = "has-review";
+    } else if (hasReviewParam === "false" || p2Param === "no-reviews") {
+      state.reviewAvailability = "no-review";
+    } else {
+      state.reviewAvailability = "any";
+    }
+    const reviewSelect = elements.filterReview || document.querySelector("#filter-review");
+    if (reviewSelect) reviewSelect.value = state.reviewAvailability;
+
+    const minR = parseFloat(params.get("minRating"));
+    const maxR = parseFloat(params.get("maxRating"));
+    state.minRating = !isNaN(minR) && minR >= 0 && minR <= 10 ? minR : 0;
+    state.maxRating = !isNaN(maxR) && maxR >= 0 && maxR <= 10 ? maxR : 10;
+    const minInput = elements.filterMinRating || document.querySelector("#filter-min-rating");
+    const maxInput = elements.filterMaxRating || document.querySelector("#filter-max-rating");
+    if (minInput) minInput.value = state.minRating;
+    if (maxInput) maxInput.value = state.maxRating;
+
+    const gpParam = params.get("gameplayProgress");
+    if (gpParam === "100" || p2Param === "100") {
+      state.gameplayProgress = "100";
+    } else if (gpParam === "not-100" || p2Param === "not-100") {
+      state.gameplayProgress = "not-100";
+    } else {
+      state.gameplayProgress = "any";
+    }
+    const gpSelect = elements.filterGameplay || document.querySelector("#filter-gameplay");
+    if (gpSelect) gpSelect.value = state.gameplayProgress;
+
+    const sortParam = params.get("sort");
+    if (sortParam && VALID_SORT_MODES.includes(sortParam)) {
+      state.sortMode = sortParam;
+    } else {
+      state.sortMode = "rating-desc";
+    }
+    if (elements.sort) elements.sort.value = state.sortMode;
+
+    updateActiveFilterBadge();
   } catch (err) {
     console.warn("[GameWall] Error initializing URL search state:", err);
   }
 }
 
-if (elements.search) {
-  elements.search.addEventListener("input", (event) => {
-    state.query = event.target.value;
-    syncSearchUrl();
-    renderGames();
-  });
+function resetSearchAndFilters() {
+  state.query = "";
+  state.searchMode = "title";
+  state.platforms = [];
+  state.badgeStatus = "any";
+  state.reviewAvailability = "any";
+  state.minRating = 0;
+  state.maxRating = 10;
+  state.gameplayProgress = "any";
+  state.sortMode = "rating-desc";
+
+  if (elements.search) elements.search.value = "";
+  if (elements.searchMode) elements.searchMode.value = "title";
+  if (elements.sort) elements.sort.value = "rating-desc";
+
+  const platformCheckboxes = document.querySelectorAll("input[name='platform-filter']");
+  platformCheckboxes.forEach((cb) => (cb.checked = false));
+
+  const badgeSelect = elements.filterBadge || document.querySelector("#filter-badge");
+  if (badgeSelect) badgeSelect.value = "any";
+
+  const reviewSelect = elements.filterReview || document.querySelector("#filter-review");
+  if (reviewSelect) reviewSelect.value = "any";
+
+  const minInput = elements.filterMinRating || document.querySelector("#filter-min-rating");
+  if (minInput) minInput.value = "0";
+
+  const maxInput = elements.filterMaxRating || document.querySelector("#filter-max-rating");
+  if (maxInput) maxInput.value = "10";
+
+  const gpSelect = elements.filterGameplay || document.querySelector("#filter-gameplay");
+  if (gpSelect) gpSelect.value = "any";
+
+  updateActiveFilterBadge();
+  syncSearchUrl();
+  renderGames();
 }
 
-if (elements.searchMode) {
-  elements.searchMode.addEventListener("change", (event) => {
-    state.searchMode = event.target.value;
+function initControlsEvents() {
+  if (elements.search) {
+    elements.search.addEventListener("input", (event) => {
+      state.query = event.target.value;
+      syncSearchUrl();
+      renderGames();
+    });
+  }
+
+  if (elements.searchMode) {
+    elements.searchMode.addEventListener("change", (event) => {
+      state.searchMode = event.target.value;
+      syncSearchUrl();
+      renderGames();
+    });
+  }
+
+  if (elements.sort) {
+    elements.sort.addEventListener("change", (event) => {
+      state.sortMode = event.target.value;
+      syncSearchUrl();
+      renderGames();
+    });
+  }
+
+  const toggleBtn = elements.filterToggleBtn || document.querySelector("#filter-toggle-btn");
+  const panel = elements.advancedFiltersPanel || document.querySelector("#advanced-filters-panel");
+  if (toggleBtn && panel) {
+    toggleBtn.addEventListener("click", () => {
+      const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
+      const willExpand = !isExpanded;
+      toggleBtn.setAttribute("aria-expanded", String(willExpand));
+      toggleBtn.classList.toggle("is-active", willExpand);
+      panel.hidden = !willExpand;
+    });
+  }
+
+  const resetBtn = elements.resetFiltersBtn || document.querySelector("#reset-filters-btn");
+  if (resetBtn) {
+    resetBtn.addEventListener("click", () => {
+      resetSearchAndFilters();
+    });
+  }
+
+  const platformCheckboxes = document.querySelectorAll("input[name='platform-filter']");
+  platformCheckboxes.forEach((cb) => {
+    cb.addEventListener("change", () => {
+      const selected = [];
+      platformCheckboxes.forEach((box) => {
+        if (box.checked) selected.push(box.value);
+      });
+      state.platforms = selected;
+      updateActiveFilterBadge();
+      syncSearchUrl();
+      renderGames();
+    });
+  });
+
+  const badgeSelect = elements.filterBadge || document.querySelector("#filter-badge");
+  if (badgeSelect) {
+    badgeSelect.addEventListener("change", (e) => {
+      state.badgeStatus = e.target.value;
+      updateActiveFilterBadge();
+      syncSearchUrl();
+      renderGames();
+    });
+  }
+
+  const reviewSelect = elements.filterReview || document.querySelector("#filter-review");
+  if (reviewSelect) {
+    reviewSelect.addEventListener("change", (e) => {
+      state.reviewAvailability = e.target.value;
+      updateActiveFilterBadge();
+      syncSearchUrl();
+      renderGames();
+    });
+  }
+
+  const minInput = elements.filterMinRating || document.querySelector("#filter-min-rating");
+  const maxInput = elements.filterMaxRating || document.querySelector("#filter-max-rating");
+  const onRatingChange = () => {
+    let minVal = parseFloat(minInput?.value);
+    let maxVal = parseFloat(maxInput?.value);
+    if (isNaN(minVal)) minVal = 0;
+    if (isNaN(maxVal)) maxVal = 10;
+    minVal = Math.max(0, Math.min(10, minVal));
+    maxVal = Math.max(0, Math.min(10, maxVal));
+    state.minRating = minVal;
+    state.maxRating = maxVal;
+    updateActiveFilterBadge();
     syncSearchUrl();
     renderGames();
-  });
+  };
+  if (minInput) {
+    minInput.addEventListener("input", onRatingChange);
+    minInput.addEventListener("change", onRatingChange);
+  }
+  if (maxInput) {
+    maxInput.addEventListener("input", onRatingChange);
+    maxInput.addEventListener("change", onRatingChange);
+  }
+
+  const gpSelect = elements.filterGameplay || document.querySelector("#filter-gameplay");
+  if (gpSelect) {
+    gpSelect.addEventListener("change", (e) => {
+      state.gameplayProgress = e.target.value;
+      updateActiveFilterBadge();
+      syncSearchUrl();
+      renderGames();
+    });
+  }
 }
 
-if (elements.filter) {
-  elements.filter.addEventListener("change", (event) => {
-    state.filterMode = event.target.value;
-    syncSearchUrl();
-    renderGames();
-  });
-}
-
-if (elements.sort) {
-  elements.sort.addEventListener("change", (event) => {
-    state.sortMode = event.target.value;
-    renderGames();
-  });
-}
+initControlsEvents();
 
 function initBackgroundCanvas() {
   const canvas = document.querySelector("#background-canvas");
@@ -3619,7 +4033,6 @@ async function decelerateCursorFan() {
 
     fanTransitionRequested = true;
 
-    // Await achievement of continuous high-speed state so user sees full sequence
     await Promise.race([
       fanReadyForDecelPromise,
       new Promise((r) => setTimeout(r, 4000))
@@ -3631,9 +4044,6 @@ async function decelerateCursorFan() {
       return;
     }
 
-    // Ensure the fan has completed at least a brief cruising period at high speed (200ms)
-    // so peak rotation is visually appreciated even if DB loading completed instantly.
-    // If the DB took longer than spin-up, elapsed is already >= 200ms, resulting in 0ms delay.
     if (fanHighSpeedStartTime > 0) {
       const elapsed = performance.now() - fanHighSpeedStartTime;
       const minCruisingTime = 200;
@@ -3649,15 +4059,12 @@ async function decelerateCursorFan() {
       return;
     }
 
-    // Deceleration officially begins now
     fanDecelerating = true;
     fanStartupTimeouts.forEach((t) => clearTimeout(t));
     fanStartupTimeouts = [];
 
-    // Phase D - Coordinated transition sequence
     const decelDuration = 750;
 
-    // 1. Rotation deceleration on .gw-cursor-fan
     let currentAngle = 0;
     if (fanHighSpeedAnimation && typeof fanHighSpeedAnimation.currentTime === "number") {
       currentAngle = ((fanHighSpeedAnimation.currentTime % 180) / 180) * 360;
@@ -3671,12 +4078,13 @@ async function decelerateCursorFan() {
       fanHighSpeedAnimation = null;
     }
 
-    // Target angle is calculated to end at an exact multiple of 360deg (0 mod 360)
-    // Ensures zero angle jump when handing off to CSS animation gw-fan-spin starting at 0deg
-    const remainingTo360 = (360 - (currentAngle % 360)) % 360;
-    const deltaAngle = remainingTo360 + 720;
+    // High speed: 2000 deg/s. Final idle speed: 138.46 deg/s. Average: 1069.23 deg/s.
+    // Over 0.75s, distance = 1069.23 * 0.75 = 801.9 deg.
+    const deltaAngle = 802;
     const targetAngle = currentAngle + deltaAngle;
+    const finalAngle = (targetAngle % 360 + 360) % 360;
 
+    // Easing with non-zero exit slope matching idle speed (0.13)
     const decelAnim = fan.animate(
       [
         { transform: `rotate(${currentAngle}deg)` },
@@ -3684,12 +4092,11 @@ async function decelerateCursorFan() {
       ],
       {
         duration: decelDuration,
-        easing: "cubic-bezier(0.2, 0.8, 0.4, 1)",
+        easing: "cubic-bezier(0.2, 0.75, 0.5, 0.935)",
         fill: "forwards"
       }
     );
 
-    // 2. Positional and sizing transformation vs fade out dismissal
     let cursorAnim = null;
     let targetX = null;
     let targetY = null;
@@ -3745,28 +4152,68 @@ async function decelerateCursorFan() {
       await Promise.all(promises);
     } catch { }
 
-    document.documentElement.classList.remove("gw-booting");
-    cursor.classList.remove("is-loading");
-    fanStartupDone = true;
-    isBooting = false;
+    // Establish final visual states BEFORE removing boot-state class
+    fan.style.setProperty("--gw-fan-start-angle", `${finalAngle.toFixed(2)}deg`);
 
-    try {
-      decelAnim.cancel();
-    } catch { }
-    if (cursorAnim) {
-      try {
-        cursorAnim.cancel();
-      } catch { }
+    if (shouldEnableCustomCursor) {
+      cursor.style.transform = `translate3d(${targetX}px, ${targetY}px, 0)`;
+      cursor.style.display = "";
+      cursor.style.opacity = "";
+      cursor.classList.remove("is-loading");
+      document.documentElement.classList.remove("gw-booting");
+      isBooting = false;
+      fanStartupDone = true;
+
+      try { cursorAnim?.cancel(); } catch { }
+      try { decelAnim.cancel(); } catch { }
+      fan.style.transform = "";
+
+      if (hasKnownPointer) {
+        cursor.classList.add("is-active");
+        if (!isPointerOverIframe) {
+          document.documentElement.classList.add("has-custom-cursor");
+        }
+        customCursorActive = true;
+        const interactiveSelector = `
+          a, button, input, select, textarea, label,
+          [role="button"], [role="link"], [role="tab"],
+          .game-card, .poster-link, .review-button, .view-game,
+          .filter-chip, .filter-chip-btn, .page-nav-btn,
+          .review-modal-close, .review-modal-share, .review-modal-close-btn,
+          .anim-toggle-btn, .help-btn, .toolbar-btn
+        `;
+        try {
+          const hovered = document.elementFromPoint(targetX, targetY);
+          if (hovered && hovered.closest && hovered.closest(interactiveSelector)) {
+            cursor.classList.add("is-hover");
+          } else {
+            cursor.classList.remove("is-hover");
+          }
+        } catch { }
+      } else {
+        cursor.classList.remove("is-active");
+        document.documentElement.classList.remove("has-custom-cursor");
+        customCursorActive = true;
+      }
+    } else {
+      document.documentElement.classList.remove("gw-booting", "has-custom-cursor");
+      cursor.classList.remove("is-loading", "is-active", "is-hover");
+      cursor.style.display = "none";
+      cursor.style.opacity = "0";
+      isBooting = false;
+      fanStartupDone = true;
+      customCursorActive = false;
+
+      try { cursorAnim?.cancel(); } catch { }
+      try { decelAnim.cancel(); } catch { }
+      fan.style.transform = "";
     }
 
     fanActiveAnimations.forEach((a) => {
-      try {
-        a.cancel();
-      } catch { }
+      try { a.cancel(); } catch { }
     });
     fanActiveAnimations = [];
 
-    fan.style.transform = "";
     const deploys = fan.querySelectorAll(".gw-blade-deploy");
     deploys.forEach((d) => (d.style.transform = ""));
     const greys = fan.querySelectorAll(".gw-blade-grey");
@@ -3779,29 +4226,14 @@ async function decelerateCursorFan() {
       hubCore.style.filter = "";
     }
 
-    if (animationsEnabled && isDesktopPointer) {
-      cursor.style.display = "";
-      cursor.style.opacity = "";
-      if (hasKnownPointer) {
-        cursor.style.transform = `translate3d(${targetX}px, ${targetY}px, 0)`;
-        cursor.classList.add("is-active");
-        if (!isPointerOverIframe) {
-          document.documentElement.classList.add("has-custom-cursor");
-        }
-      } else {
-        cursor.style.transform = `translate3d(${window.innerWidth / 2}px, ${window.innerHeight / 2}px, 0)`;
-        cursor.classList.remove("is-active");
-        document.documentElement.classList.remove("has-custom-cursor");
-      }
-      setCustomCursorEnabled(true);
-      window.__updateCursorProgress?.();
-    } else {
-      document.documentElement.classList.remove("has-custom-cursor");
-      cursor.classList.remove("is-active", "is-hover");
-      cursor.style.display = "none";
-      cursor.style.opacity = "0";
-      setCustomCursorEnabled(false);
+    if (elements.loadingScreen) {
+      elements.loadingScreen.classList.remove("is-fading");
+      elements.loadingScreen.classList.add("is-hidden");
     }
+    document.documentElement.classList.remove("background-entering");
+    document.documentElement.classList.add("background-ready");
+    window.__resumeCanvasAnimations?.();
+    window.__updateCursorProgress?.();
   })();
 
   return fanDecelerationPromise;
@@ -4049,6 +4481,289 @@ function initAnimationToggle() {
   }
 }
 
+
+/* ==========================================================================
+   Interactive Website Tutorial Tour
+   ========================================================================== */
+const tutorialSteps = [
+  {
+    target: ".title-lockup",
+    title: "WELCOME TO GAMEWALL",
+    desc: "A personal cyber-themed video game archive tracking lifetime titles, personal ratings, and detailed game reviews."
+  },
+  {
+    target: ".stats",
+    title: "ARCHIVE METRICS",
+    desc: "Live collection statistics: total archived games, personal rating average, database update timestamp, highest-rated title, and access counter."
+  },
+  {
+    target: "#anim-toggle-btn",
+    title: "SYSTEM ANIMATIONS",
+    desc: "Toggle ambient background particles, cyber circuit canvas, and custom cursor animations. The startup CPU fan loader always animates independently."
+  },
+  {
+    target: "#game-search",
+    title: "INSTANT SEARCH",
+    desc: "Search across the database in real-time. Matches update the collection immediately as you type."
+  },
+  {
+    target: "#search-mode",
+    title: "SEARCH SCOPES",
+    desc: "Target your search by Game Title (and abbreviations), Gameplay status, Reviews, Platforms, Poster Badges, or Everything across all fields."
+  },
+  {
+    target: "#filter-toggle-btn",
+    title: "ADVANCED FILTERS",
+    desc: "Combine independent filters with AND logic: platforms (PC, Mobile, Console), poster status, review availability, rating range (0-10), and gameplay completion."
+  },
+  {
+    target: "#sort-games",
+    title: "COLLECTION SORTING",
+    desc: "Order titles by personal rating (highest or lowest first), title alphabetically (A-Z or Z-A), or original data entry order."
+  },
+  {
+    target: "#reset-filters-btn",
+    title: "RESET TO DEFAULTS",
+    desc: "Quickly clear search queries, restore default scope, reset all advanced filters, and restore default sorting with one click."
+  },
+  {
+    target: ".poster-frame",
+    fallbackTarget: ".library",
+    title: "POSTER STATUS BADGES",
+    desc: "Posters feature distinct status indicators: Green for COMPLETED (100%), Red for DROPPED with percentage, White for CUSTOM labels (e.g. ENDLESS MODE), or no badge if unassigned."
+  },
+  {
+    target: ".poster-meta",
+    fallbackTarget: ".library",
+    title: "RATINGS & PLATFORMS",
+    desc: "Inspect personal scores out of 10 and platform icons indicating PC, Mobile, or Console support."
+  },
+  {
+    target: ".gameplay-row",
+    fallbackTarget: ".library",
+    title: "GAMEPLAY STATUS",
+    desc: "An independent personal status label for each game. If text is long, it automatically scrolls horizontally."
+  },
+  {
+    target: ".card-actions",
+    fallbackTarget: ".library",
+    title: "VIEWING & REVIEWS",
+    desc: "Clicking a poster or 'VIEW GAME' opens the game's official site. Click 'REVIEW' to read detailed reviews, screenshots, and copy shareable links."
+  },
+  {
+    target: "#page-nav-btn",
+    title: "QUICK PAGE NAVIGATION",
+    desc: "Use the floating navigation button in the lower corner to warp quickly between the top and bottom of the page."
+  }
+];
+
+let tutorialCurrentStep = 0;
+let isTutorialOpen = false;
+
+function initTutorial() {
+  const tutorialBtn = elements.tutorialBtn || document.querySelector("#tutorial-btn");
+  const overlay = elements.tutorialOverlay || document.querySelector("#tutorial-overlay");
+  const closeBtn = elements.tutorialCloseBtn || document.querySelector("#tutorial-close-btn");
+  const prevBtn = elements.tutorialBtnPrev || document.querySelector("#tutorial-btn-prev");
+  const nextBtn = elements.tutorialBtnNext || document.querySelector("#tutorial-btn-next");
+  const dotsContainer = elements.tutorialDots || document.querySelector("#tutorial-dots");
+
+  if (!tutorialBtn || !overlay) return;
+
+  function renderDots() {
+    if (!dotsContainer) return;
+    dotsContainer.innerHTML = "";
+    tutorialSteps.forEach((_, idx) => {
+      const dot = document.createElement("span");
+      dot.className = `tutorial-dot ${idx === tutorialCurrentStep ? "is-active" : ""}`;
+      dotsContainer.appendChild(dot);
+    });
+  }
+
+  function positionTourStep(stepIndex) {
+    const step = tutorialSteps[stepIndex];
+    if (!step) return;
+
+    tutorialCurrentStep = stepIndex;
+
+    let targetEl = document.querySelector(step.target);
+    if (!targetEl && step.fallbackTarget) {
+      targetEl = document.querySelector(step.fallbackTarget);
+    }
+
+    const wasNavBtnHidden = step.target === "#page-nav-btn" && elements.pageNavBtn?.hasAttribute("hidden");
+    if (wasNavBtnHidden && elements.pageNavBtn) {
+      elements.pageNavBtn.removeAttribute("hidden");
+    }
+
+    if (targetEl) {
+      targetEl.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+    }
+
+    setTimeout(() => {
+      const cutout = elements.tutorialSpotlightCutout || document.querySelector("#tutorial-spotlight-cutout");
+      const box = elements.tutorialSpotlightBox || document.querySelector("#tutorial-spotlight-box");
+      const dialog = elements.tutorialDialog || document.querySelector("#tutorial-dialog");
+      const badge = elements.tutorialStepBadge || document.querySelector("#tutorial-step-badge");
+      const title = elements.tutorialStepTitle || document.querySelector("#tutorial-step-title");
+      const desc = elements.tutorialStepDesc || document.querySelector("#tutorial-step-desc");
+      const liveRegion = elements.tutorialLiveRegion || document.querySelector("#tutorial-live-region");
+
+      if (badge) badge.textContent = `STEP ${String(stepIndex + 1).padStart(2, "0")} // ${String(tutorialSteps.length).padStart(2, "0")}`;
+      if (title) title.textContent = step.title;
+      if (desc) desc.textContent = step.desc;
+      if (liveRegion) liveRegion.textContent = `${step.title}: ${step.desc}`;
+
+      renderDots();
+
+      if (prevBtn) {
+        prevBtn.disabled = stepIndex === 0;
+      }
+      if (nextBtn) {
+        nextBtn.textContent = stepIndex === tutorialSteps.length - 1 ? "FINISH" : "NEXT";
+      }
+
+      const rect = targetEl ? targetEl.getBoundingClientRect() : null;
+      const pad = 6;
+
+      if (rect && rect.width > 0 && rect.height > 0) {
+        const top = Math.max(0, rect.top - pad);
+        const left = Math.max(0, rect.left - pad);
+        const width = rect.width + pad * 2;
+        const height = rect.height + pad * 2;
+
+        if (cutout) {
+          cutout.setAttribute("x", String(left));
+          cutout.setAttribute("y", String(top));
+          cutout.setAttribute("width", String(width));
+          cutout.setAttribute("height", String(height));
+        }
+        if (box) {
+          box.style.display = "block";
+          box.style.top = `${top}px`;
+          box.style.left = `${left}px`;
+          box.style.width = `${width}px`;
+          box.style.height = `${height}px`;
+        }
+
+        if (dialog) {
+          const dialogWidth = Math.min(390, window.innerWidth - 32);
+          const dialogHeight = dialog.offsetHeight || 220;
+
+          let dialogLeft = left + (width / 2) - (dialogWidth / 2);
+          dialogLeft = Math.max(16, Math.min(window.innerWidth - dialogWidth - 16, dialogLeft));
+
+          let dialogTop = top + height + 16;
+          if (dialogTop + dialogHeight > window.innerHeight - 16) {
+            dialogTop = Math.max(16, top - dialogHeight - 16);
+          }
+
+          dialog.style.left = `${dialogLeft}px`;
+          dialog.style.top = `${dialogTop}px`;
+        }
+      } else {
+        if (cutout) {
+          cutout.setAttribute("x", "0");
+          cutout.setAttribute("y", "0");
+          cutout.setAttribute("width", "0");
+          cutout.setAttribute("height", "0");
+        }
+        if (box) box.style.display = "none";
+        if (dialog) {
+          dialog.style.left = `${Math.max(16, (window.innerWidth - Math.min(390, window.innerWidth - 32)) / 2)}px`;
+          dialog.style.top = `${Math.max(16, (window.innerHeight - 220) / 2)}px`;
+        }
+      }
+    }, 120);
+  }
+
+  function openTour() {
+    isTutorialOpen = true;
+    overlay.hidden = false;
+    overlay.setAttribute("aria-hidden", "false");
+    document.documentElement.classList.add("tutorial-open");
+    positionTourStep(0);
+    const dialog = elements.tutorialDialog || document.querySelector("#tutorial-dialog");
+    if (dialog) {
+      dialog.focus();
+    }
+  }
+
+  function closeTour() {
+    isTutorialOpen = false;
+    overlay.hidden = true;
+    overlay.setAttribute("aria-hidden", "true");
+    document.documentElement.classList.remove("tutorial-open");
+    window.__updatePageNav?.();
+    if (tutorialBtn && typeof tutorialBtn.focus === "function") {
+      tutorialBtn.focus();
+    }
+  }
+
+  tutorialBtn.addEventListener("click", () => {
+    openTour();
+  });
+
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+      closeTour();
+    });
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      if (tutorialCurrentStep > 0) {
+        positionTourStep(tutorialCurrentStep - 1);
+      }
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      if (tutorialCurrentStep < tutorialSteps.length - 1) {
+        positionTourStep(tutorialCurrentStep + 1);
+      } else {
+        closeTour();
+      }
+    });
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if (!isTutorialOpen) return;
+    if (e.key === "Escape") {
+      e.preventDefault();
+      closeTour();
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      if (tutorialCurrentStep < tutorialSteps.length - 1) {
+        positionTourStep(tutorialCurrentStep + 1);
+      } else {
+        closeTour();
+      }
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      if (tutorialCurrentStep > 0) {
+        positionTourStep(tutorialCurrentStep - 1);
+      }
+    } else if (e.key === "Enter" && document.activeElement !== closeBtn && document.activeElement !== prevBtn) {
+      e.preventDefault();
+      if (tutorialCurrentStep < tutorialSteps.length - 1) {
+        positionTourStep(tutorialCurrentStep + 1);
+      } else {
+        closeTour();
+      }
+    }
+  });
+
+  window.addEventListener("resize", () => {
+    if (isTutorialOpen) {
+      positionTourStep(tutorialCurrentStep);
+    }
+  }, { passive: true });
+}
+
+startPerformanceSampling();
+initTutorial();
 initAnimationToggle();
 initUrlState();
 initBackgroundCanvas();

@@ -86,6 +86,11 @@
       <div class="hero-topline">
         <span class="system-status"><i></i> Archive Access Counter - <span id="access-counter">—</span></span>
         <div class="hero-topline-right">
+          <button type="button" class="help-btn" id="tutorial-btn" aria-label="Open interactive guide"
+            title="Open interactive guide">
+            <span class="help-btn-icon" aria-hidden="true">?</span>
+            <span class="help-btn-text">HELP / GUIDE</span>
+          </button>
           <button type="button" class="anim-toggle-btn" id="anim-toggle-btn" aria-label="Toggle site animations"
             aria-pressed="true" title="Toggle site animations">
             <span class="anim-toggle-dot" aria-hidden="true"></span>
@@ -137,42 +142,131 @@
         <p class="result-count" id="result-count" aria-live="polite">0 ENTRIES</p>
       </div>
 
-      <div class="controls-panel">
-        <div class="search-controls-group">
+      <div class="controls-toolbar" role="search" aria-label="Search and filter games">
+        <div class="search-primary-row">
           <div class="search-field">
             <label for="game-search">Search database</label>
             <input id="game-search" type="search" placeholder="SEARCH GAMES..." autocomplete="off">
             <span class="search-icon" aria-hidden="true"></span>
           </div>
           <div class="select-field search-mode-field">
-            <label for="search-mode">Search Mode</label>
-            <select id="search-mode" name="search-mode" aria-label="Search Mode">
+            <label for="search-mode">Search in</label>
+            <select id="search-mode" name="search-mode" aria-label="Search in">
               <option value="title" selected>Game Title</option>
               <option value="gameplay">Gameplay Status</option>
-              <option value="review">Review</option>
+              <option value="review">Reviews</option>
+              <option value="platform">Platform</option>
+              <option value="badge">Poster Badge</option>
               <option value="everything">Everything</option>
             </select>
           </div>
-          <div class="select-field filter-field">
-            <label for="filter-games">Filter</label>
-            <select id="filter-games" name="filter-games" aria-label="Filter">
-              <option value="none" selected>None</option>
-              <option value="100">100%</option>
-              <option value="not-100">Not 100%</option>
-              <option value="reviews">Reviews</option>
-              <option value="no-reviews">No Reviews</option>
+          <div class="select-field sort-field">
+            <label for="sort-games">Sort by</label>
+            <select id="sort-games" aria-label="Sort collection">
+              <option value="rating-desc" selected>RATING: HIGH → LOW</option>
+              <option value="rating-asc">RATING: LOW → HIGH</option>
+              <option value="title-asc">TITLE: A → Z</option>
+              <option value="title-desc">TITLE: Z → A</option>
+              <option value="default">DATA ENTRY ORDER</option>
             </select>
           </div>
+          <div class="toolbar-actions">
+            <button type="button" class="toolbar-btn filter-toggle-btn" id="filter-toggle-btn"
+              aria-expanded="false" aria-controls="advanced-filters-panel" title="Toggle advanced filters">
+              <svg class="filter-toggle-icon" viewBox="0 0 24 24" width="14" height="14" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+              </svg>
+              <span>FILTERS</span>
+              <span class="active-filter-badge" id="active-filter-badge" hidden>0</span>
+            </button>
+            <button type="button" class="toolbar-btn reset-filters-btn" id="reset-filters-btn"
+              title="Reset all search and filters to default">
+              <svg class="reset-icon" viewBox="0 0 24 24" width="13" height="13" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                <path d="M3 3v5h5"></path>
+              </svg>
+              <span>RESET</span>
+            </button>
+          </div>
         </div>
-        <div class="select-field sort-field">
-          <label for="sort-games">Sort collection</label>
-          <select id="sort-games">
-            <option value="rating-desc">RATING: HIGH → LOW</option>
-            <option value="rating-asc">RATING: LOW → HIGH</option>
-            <option value="title-asc">TITLE: A → Z</option>
-            <option value="title-desc">TITLE: Z → A</option>
-            <option value="default">DATA ENTRY ORDER</option>
-          </select>
+
+        <div class="advanced-filters-panel" id="advanced-filters-panel" hidden aria-label="Advanced filters">
+          <div class="filters-panel-grid">
+            <div class="filter-group">
+              <span class="filter-group-label" id="label-filter-platforms">PLATFORMS</span>
+              <div class="platform-checkbox-group" role="group" aria-labelledby="label-filter-platforms">
+                <label class="filter-checkbox-label">
+                  <input type="checkbox" name="platform-filter" value="PC" class="filter-checkbox">
+                  <span class="checkbox-box" aria-hidden="true"></span>
+                  <span class="checkbox-text">PC</span>
+                </label>
+                <label class="filter-checkbox-label">
+                  <input type="checkbox" name="platform-filter" value="Mobile" class="filter-checkbox">
+                  <span class="checkbox-box" aria-hidden="true"></span>
+                  <span class="checkbox-text">MOBILE</span>
+                </label>
+                <label class="filter-checkbox-label">
+                  <input type="checkbox" name="platform-filter" value="Console" class="filter-checkbox">
+                  <span class="checkbox-box" aria-hidden="true"></span>
+                  <span class="checkbox-text">CONSOLE</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <label for="filter-badge" class="filter-group-label">POSTER STATUS</label>
+              <div class="select-field filter-select-field">
+                <select id="filter-badge" aria-label="Poster badge status">
+                  <option value="any" selected>ANY</option>
+                  <option value="completed">COMPLETED (100%)</option>
+                  <option value="dropped">DROPPED</option>
+                  <option value="custom">CUSTOM BADGE</option>
+                  <option value="none">NO BADGE</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <label for="filter-review" class="filter-group-label">REVIEW AVAILABILITY</label>
+              <div class="select-field filter-select-field">
+                <select id="filter-review" aria-label="Review availability">
+                  <option value="any" selected>ANY</option>
+                  <option value="has-review">HAS REVIEW</option>
+                  <option value="no-review">NO REVIEW</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="filter-group filter-group-rating">
+              <span class="filter-group-label" id="label-filter-rating">PERSONAL RATING</span>
+              <div class="rating-range-controls" aria-labelledby="label-filter-rating">
+                <div class="rating-input-wrap">
+                  <label for="filter-min-rating">MIN</label>
+                  <input type="number" id="filter-min-rating" min="0" max="10" step="0.5" value="0"
+                    aria-label="Minimum rating" placeholder="0">
+                </div>
+                <span class="rating-separator" aria-hidden="true">→</span>
+                <div class="rating-input-wrap">
+                  <label for="filter-max-rating">MAX</label>
+                  <input type="number" id="filter-max-rating" min="0" max="10" step="0.5" value="10"
+                    aria-label="Maximum rating" placeholder="10">
+                </div>
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <label for="filter-gameplay" class="filter-group-label">GAMEPLAY 100%</label>
+              <div class="select-field filter-select-field">
+                <select id="filter-gameplay" aria-label="Gameplay 100% completion marker">
+                  <option value="any" selected>ANY</option>
+                  <option value="100">CONTAINS 100%</option>
+                  <option value="not-100">NOT 100%</option>
+                </select>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -264,7 +358,7 @@
             <span>IMAGE SIGNAL LOST</span>
             <small>POSTER UNAVAILABLE</small>
           </div>
-          <span class="card-id"></span>
+          <span class="poster-badge" hidden></span>
           <div class="poster-meta">
             <div class="platform-badges" aria-label="Supported platforms"></div>
             <span class="rating-badge">
@@ -423,6 +517,42 @@
       <polyline points="18 15 12 9 6 15"></polyline>
     </svg>
   </button>
+
+    <div class="tutorial-overlay" id="tutorial-overlay" hidden aria-hidden="true">
+    <svg class="tutorial-spotlight-svg" aria-hidden="true">
+      <defs>
+        <mask id="tutorial-spotlight-mask">
+          <rect width="100%" height="100%" fill="white" />
+          <rect id="tutorial-spotlight-cutout" x="0" y="0" width="0" height="0" rx="4" ry="4" fill="black" />
+        </mask>
+      </defs>
+      <rect width="100%" height="100%" fill="rgba(5, 7, 13, 0.82)" mask="url(#tutorial-spotlight-mask)" />
+    </svg>
+    <div class="tutorial-spotlight-box" id="tutorial-spotlight-box" aria-hidden="true"></div>
+    <div class="tutorial-dialog" id="tutorial-dialog" role="dialog" aria-modal="true" aria-labelledby="tutorial-step-title"
+      aria-describedby="tutorial-step-desc" tabindex="-1">
+      <div class="tutorial-dialog-header">
+        <span class="tutorial-step-badge" id="tutorial-step-badge">STEP 01 // 13</span>
+        <button type="button" class="tutorial-close-btn" id="tutorial-close-btn" aria-label="Close tutorial">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="tutorial-dialog-content">
+        <h3 class="tutorial-step-title" id="tutorial-step-title"></h3>
+        <p class="tutorial-step-desc" id="tutorial-step-desc"></p>
+      </div>
+      <div class="tutorial-dialog-footer">
+        <button type="button" class="tutorial-btn tutorial-btn-prev" id="tutorial-btn-prev">PREV</button>
+        <div class="tutorial-dots" id="tutorial-dots" aria-hidden="true"></div>
+        <button type="button" class="tutorial-btn tutorial-btn-next" id="tutorial-btn-next">NEXT</button>
+      </div>
+      <span class="tutorial-live-region sr-only" id="tutorial-live-region" aria-live="polite"></span>
+    </div>
+  </div>
 
   <script src="app.js" defer></script>
 </body>
