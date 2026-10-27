@@ -113,6 +113,14 @@ const elements = {
   reviewModalCloseBtn: document.querySelector("#review-modal-close-btn"),
   reviewModalShare: document.querySelector("#review-modal-share"),
   reviewShareToast: document.querySelector("#review-share-toast"),
+  spoilerModalBackdrop: document.querySelector("#spoiler-modal-backdrop"),
+  spoilerModal: document.querySelector("#spoiler-modal"),
+  spoilerModalTitle: document.querySelector("#spoiler-modal-title"),
+  spoilerModalDesc: document.querySelector("#spoiler-modal-desc"),
+  spoilerModalGameTarget: document.querySelector("#spoiler-modal-game-target"),
+  spoilerBtnOk: document.querySelector("#spoiler-btn-ok"),
+  spoilerBtnBack: document.querySelector("#spoiler-btn-back"),
+  spoilerBtnDontRemind: document.querySelector("#spoiler-btn-dont-remind"),
   mainContent: document.querySelector("#main-content"),
   pageNavBtn: document.querySelector("#page-nav-btn"),
   gwCursor: document.querySelector("#gw-cursor"),
@@ -3415,12 +3423,225 @@ function renderSteamReviewShortcode(container, steamReview) {
   }
 }
 
-function openReviewModal(game, identifier, triggerElement, fromPopstate = false) {
+const SPOILER_STORAGE_KEY = "gamewall-skip-spoiler-warning";
+let pendingReviewRequest = null;
+let isSpoilerWarningOpen = false;
+let spoilerCloseTimeout = null;
+
+function shouldSkipSpoilerWarning() {
+  try {
+    return localStorage.getItem(SPOILER_STORAGE_KEY) === "true";
+  } catch {
+    return false;
+  }
+}
+
+function setSkipSpoilerWarning(skip) {
+  try {
+    if (skip) {
+      localStorage.setItem(SPOILER_STORAGE_KEY, "true");
+    } else {
+      localStorage.removeItem(SPOILER_STORAGE_KEY);
+    }
+  } catch { }
+}
+
+function showSpoilerWarning(game, identifier, triggerElement, fromPopstate = false) {
+  if (!game) return;
+
+  if (spoilerCloseTimeout) {
+    clearTimeout(spoilerCloseTimeout);
+    spoilerCloseTimeout = null;
+  }
+
+  const isModalOpen = elements.reviewModalBackdrop &&
+    !elements.reviewModalBackdrop.hidden &&
+    elements.reviewModalBackdrop.classList.contains("is-open");
+
+  pendingReviewRequest = {
+    game,
+    identifier,
+    triggerElement: triggerElement || (isModalOpen ? elements.reviewModalClose : (document.activeElement && document.activeElement !== document.body ? document.activeElement : null)),
+    fromPopstate,
+    isModalOpenUnderneath: Boolean(isModalOpen),
+    previousUrl: previousSearchUrl || `${window.location.pathname}${buildSearchQueryString()}${window.location.hash}`
+  };
+
+  isSpoilerWarningOpen = true;
+
+  if (elements.spoilerModalGameTarget) {
+    elements.spoilerModalGameTarget.textContent = game.title.toUpperCase();
+  }
+
+  document.documentElement.classList.add("spoiler-modal-open");
+  document.body.classList.add("spoiler-modal-open");
+  if (!isModalOpen) {
+    elements.mainContent?.setAttribute("aria-hidden", "true");
+  }
+
+  if (elements.spoilerModalBackdrop) {
+    elements.spoilerModalBackdrop.hidden = false;
+    elements.spoilerModalBackdrop.removeAttribute("aria-hidden");
+    elements.spoilerModalBackdrop.classList.add("is-open");
+    elements.spoilerBtnOk?.focus();
+    setTimeout(() => {
+      elements.spoilerBtnOk?.focus();
+    }, 40);
+  }
+}
+
+function closeSpoilerWarning(cancelled = false) {
+  if (!elements.spoilerModalBackdrop || elements.spoilerModalBackdrop.hidden) return;
+  isSpoilerWarningOpen = false;
+
+  if (spoilerCloseTimeout) {
+    clearTimeout(spoilerCloseTimeout);
+    spoilerCloseTimeout = null;
+  }
+
+  elements.spoilerModalBackdrop.classList.remove("is-open");
+
+  const isModalOpen = elements.reviewModalBackdrop &&
+    !elements.reviewModalBackdrop.hidden &&
+    elements.reviewModalBackdrop.classList.contains("is-open");
+
+  document.documentElement.classList.remove("spoiler-modal-open");
+  document.body.classList.remove("spoiler-modal-open");
+
+  if (!isModalOpen && cancelled) {
+    elements.mainContent?.removeAttribute("aria-hidden");
+  }
+
+  if (elements.gwCursor) {
+    elements.gwCursor.classList.remove("is-danger-hover");
+  }
+
+  spoilerCloseTimeout = setTimeout(() => {
+    spoilerCloseTimeout = null;
+    if (elements.spoilerModalBackdrop) {
+      elements.spoilerModalBackdrop.hidden = true;
+      elements.spoilerModalBackdrop.setAttribute("aria-hidden", "true");
+    }
+  }, 220);
+}
+
+function handleSpoilerBack() {
+  if (!isSpoilerWarningOpen) return;
+
+  const req = pendingReviewRequest;
+  pendingReviewRequest = null;
+
+  closeSpoilerWarning(true);
+
+  if (!req) return;
+
+  if (!req.isModalOpenUnderneath) {
+    const currentParams = new URLSearchParams(window.location.search);
+    if (currentParams.has("review")) {
+      const cleanUrl = req.previousUrl || `${window.location.pathname}${buildSearchQueryString()}${window.location.hash}`;
+      safeHistoryUpdate(() => {
+        window.history.replaceState({ type: "search" }, "", cleanUrl);
+      });
+    }
+    previousSearchUrl = null;
+    activeReviewSlug = null;
+    currentReviewGame = null;
+
+    if (req.triggerElement && typeof req.triggerElement.focus === "function" && req.triggerElement.isConnected) {
+      req.triggerElement.focus();
+    } else if (req.game?.id) {
+      const card = document.querySelector(`.game-card[data-game-id="${req.game.id}"]`);
+      const btn = card?.querySelector(".review-button:not([hidden])") || card?.querySelector(".view-game");
+      if (btn && typeof btn.focus === "function") {
+        btn.focus();
+      } else {
+        elements.search?.focus();
+      }
+    } else {
+      elements.search?.focus();
+    }
+  } else {
+    if (req.triggerElement && typeof req.triggerElement.focus === "function" && req.triggerElement.isConnected) {
+      req.triggerElement.focus();
+    } else {
+      elements.reviewModalClose?.focus();
+    }
+  }
+}
+
+function handleSpoilerConfirm(dontRemind = false) {
+  if (!isSpoilerWarningOpen) return;
+
+  if (dontRemind) {
+    setSkipSpoilerWarning(true);
+  }
+
+  const req = pendingReviewRequest;
+  pendingReviewRequest = null;
+
+  closeSpoilerWarning(false);
+
+  if (req && req.game) {
+    openReviewModal(req.game, req.identifier, req.triggerElement, req.fromPopstate, true);
+  }
+}
+
+function initSpoilerWarningEvents() {
+  if (elements.spoilerBtnOk) {
+    elements.spoilerBtnOk.addEventListener("click", () => handleSpoilerConfirm(false));
+  }
+  if (elements.spoilerBtnBack) {
+    elements.spoilerBtnBack.addEventListener("click", handleSpoilerBack);
+  }
+  if (elements.spoilerBtnDontRemind) {
+    elements.spoilerBtnDontRemind.addEventListener("click", () => handleSpoilerConfirm(true));
+  }
+
+  if (elements.spoilerModalBackdrop) {
+    elements.spoilerModalBackdrop.addEventListener("click", (event) => {
+      if (event.target === elements.spoilerModalBackdrop) {
+        handleSpoilerBack();
+      }
+    });
+  }
+
+  if (elements.spoilerModal) {
+    elements.spoilerModal.addEventListener("keydown", (event) => {
+      if (event.key !== "Tab") return;
+
+      const focusables = [
+        elements.spoilerBtnOk,
+        elements.spoilerBtnBack,
+        elements.spoilerBtnDontRemind
+      ].filter((btn) => btn && !btn.disabled && btn.offsetParent !== null);
+
+      if (!focusables.length) return;
+
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+  }
+}
+
+function openReviewModal(game, identifier, triggerElement, fromPopstate = false, bypassSpoilerWarning = false) {
   if (!game || !game.description) return;
 
   const isModalOpen = elements.reviewModalBackdrop &&
     !elements.reviewModalBackdrop.hidden &&
     elements.reviewModalBackdrop.classList.contains("is-open");
+
+  if (!bypassSpoilerWarning && !shouldSkipSpoilerWarning()) {
+    showSpoilerWarning(game, identifier, triggerElement, fromPopstate);
+    return;
+  }
 
   if (isModalOpen && activeReviewSlug?.toLowerCase() === game.id.toLowerCase()) {
     return;
@@ -3581,7 +3802,7 @@ function checkInitialReviewSlug() {
   }
 }
 
-function navigateToReview(slug, fromPopstate = false) {
+function navigateToReview(slug, fromPopstate = false, triggerElement = null) {
   if (!slug) return;
   const trimmed = slug.trim().toLowerCase();
 
@@ -3591,7 +3812,7 @@ function navigateToReview(slug, fromPopstate = false) {
   if (targetGame && targetGame.description) {
     const gameIndex = state.games.indexOf(targetGame);
     const identifier = `GW-${String(gameIndex + 1).padStart(3, "0")}`;
-    openReviewModal(targetGame, identifier, null, fromPopstate);
+    openReviewModal(targetGame, identifier, triggerElement, fromPopstate);
   } else {
     if (elements.reviewModalBackdrop && !elements.reviewModalBackdrop.hidden) {
       closeReviewModal(fromPopstate);
@@ -3613,6 +3834,10 @@ function handleUrlChange(fromHistory = false) {
       });
     }
   } else {
+    if (isSpoilerWarningOpen) {
+      closeSpoilerWarning(true);
+      pendingReviewRequest = null;
+    }
     if (elements.reviewModalBackdrop && !elements.reviewModalBackdrop.hidden) {
       safeHistoryUpdate(() => {
         closeReviewModal(true);
@@ -3659,10 +3884,18 @@ function initReviewModalEvents() {
   }
 
   window.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && elements.reviewModalBackdrop && !elements.reviewModalBackdrop.hidden) {
-      closeReviewModal(false);
+    if (event.key === "Escape") {
+      if (isSpoilerWarningOpen && elements.spoilerModalBackdrop && !elements.spoilerModalBackdrop.hidden) {
+        event.preventDefault();
+        event.stopPropagation();
+        handleSpoilerBack();
+        return;
+      }
+      if (elements.reviewModalBackdrop && !elements.reviewModalBackdrop.hidden) {
+        closeReviewModal(false);
+      }
     }
-  });
+  }, true);
 
   if (elements.reviewModal) {
     elements.reviewModal.addEventListener("keydown", (event) => {
@@ -3706,7 +3939,7 @@ function initReviewModalEvents() {
         const targetSlug = url.searchParams.get("review");
         if (targetSlug && state.initialized) {
           event.preventDefault();
-          navigateToReview(targetSlug, false);
+          navigateToReview(targetSlug, false, link);
         }
       }
     } catch { }
@@ -4524,7 +4757,7 @@ function initCustomCursor() {
     .review-modal-close, .review-modal-share, .review-modal-close-btn,
     .anim-toggle-btn, .help-btn, .search-clear-btn
   `;
-  const dangerSelector = "#reset-filters-btn, .search-clear-btn, #search-clear-btn";
+  const dangerSelector = "#reset-filters-btn, .search-clear-btn, #search-clear-btn, #spoiler-btn-ok, .spoiler-btn-ok";
 
   document.addEventListener("pointerover", (e) => {
     if (e.pointerType === "touch") return;
@@ -5114,6 +5347,7 @@ initAnimationToggle();
 initUrlState();
 initBackgroundCanvas();
 initReviewModalEvents();
+initSpoilerWarningEvents();
 hookHistoryNavigation();
 loadAccessCounter();
 initPageNavigation();

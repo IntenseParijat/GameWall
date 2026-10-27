@@ -89,6 +89,7 @@ Posters can display an upper-left status badge:
   - `sort`: Ordering (`rating-desc` (default), `rating-asc`, `title-asc`, `title-desc`, `default`)
   - `review`: Direct link to open a game's review modal (e.g. `?review=minecraft`)
   - *Legacy URL compatibility:* Incoming `s`, `p1`, and `p2` parameters are automatically parsed and mapped.
+- **Spoiler Warning Protocol:** Displays a cautionary dialog before opening any review with options to proceed (**OK**), cancel (**BACK** / **Escape**), or remember your preference (**DON'T REMIND AGAIN**).
 - **Interactive Tutorial:** Click the **HELP / GUIDE** button in the header for an on-demand, 14-step guided walkthrough.
 
 ---

@@ -446,6 +446,47 @@
     </div>
   </div>
 
+  <div class="spoiler-modal-backdrop" id="spoiler-modal-backdrop" aria-hidden="true" hidden>
+    <div class="spoiler-modal" id="spoiler-modal" role="dialog" aria-modal="true"
+      aria-labelledby="spoiler-modal-title" aria-describedby="spoiler-modal-desc" tabindex="-1">
+      <div class="spoiler-modal-badge-group">
+        <span class="spoiler-modal-tag">// SPOILER PROTOCOL</span>
+        <span class="spoiler-modal-game-target" id="spoiler-modal-game-target"></span>
+      </div>
+      <div class="spoiler-modal-header">
+        <div class="spoiler-modal-icon-wrap" aria-hidden="true">
+          <svg class="spoiler-header-icon" viewBox="0 0 24 24" width="24" height="24" fill="none"
+            stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </div>
+        <h2 class="spoiler-modal-title" id="spoiler-modal-title">POTENTIAL SPOILERS AHEAD</h2>
+      </div>
+      <p class="spoiler-modal-desc" id="spoiler-modal-desc">
+        This review may contain story spoilers, major plot details, or information about the game's ending. Continue only if you're ready to read it.
+      </p>
+      <div class="spoiler-modal-actions">
+        <button type="button" class="spoiler-btn spoiler-btn-ok" id="spoiler-btn-ok">
+          <svg class="spoiler-btn-icon" viewBox="0 0 24 24" width="15" height="15" fill="none"
+            stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <span>OK</span>
+        </button>
+        <button type="button" class="spoiler-btn spoiler-btn-back" id="spoiler-btn-back">
+          <span>BACK</span>
+        </button>
+        <button type="button" class="spoiler-btn spoiler-btn-dont-remind" id="spoiler-btn-dont-remind">
+          <span>DON'T REMIND AGAIN</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div class="gw-cursor" id="gw-cursor" aria-hidden="true">
     <div class="gw-cursor-inner">
       <svg class="gw-cursor-svg" viewBox="-1 -1 102 102">
