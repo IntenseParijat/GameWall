@@ -243,22 +243,22 @@ a {
   width: 48rem;
   height: 48rem;
   border-radius: 50%;
-  filter: blur(100px);
-  opacity: .18;
+  opacity: .28;
   pointer-events: none;
   animation: ambient-drift 18s ease-in-out infinite alternate;
+  will-change: transform;
 }
 
 .ambient-one {
   top: -27rem;
   right: -18rem;
-  background: var(--neon-purple);
+  background: radial-gradient(circle at center, rgba(176, 38, 255, 0.7) 0%, rgba(176, 38, 255, 0.35) 30%, rgba(176, 38, 255, 0.1) 55%, transparent 70%);
 }
 
 .ambient-two {
   bottom: -28rem;
   left: -18rem;
-  background: var(--neon-cyan);
+  background: radial-gradient(circle at center, rgba(0, 240, 255, 0.7) 0%, rgba(0, 240, 255, 0.35) 30%, rgba(0, 240, 255, 0.1) 55%, transparent 70%);
   animation-delay: -8s;
 }
 
@@ -2710,6 +2710,16 @@ body.modal-open {
   overflow: hidden !important;
 }
 
+/* Pause background decorative animations when modal is open */
+html.modal-open .ambient,
+html.modal-open .background-particles i,
+html.modal-open .background-grid::after,
+html.spoiler-modal-open .ambient,
+html.spoiler-modal-open .background-particles i,
+html.spoiler-modal-open .background-grid::after {
+  animation-play-state: paused !important;
+}
+
 .review-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -3136,6 +3146,51 @@ body.modal-open {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.review-image-retry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+  padding: 0.35rem 0.85rem;
+  background: rgba(255, 75, 75, 0.15);
+  border: 1px solid rgba(255, 75, 75, 0.45);
+  color: #ff8585;
+  font-family: Rajdhani, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  border-radius: var(--radius);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.review-image-retry-btn:hover {
+  background: rgba(255, 75, 75, 0.32);
+  border-color: #ff4b4b;
+  color: #fff;
+}
+
+.review-image-direct-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--neon-cyan);
+  text-decoration: none;
+  font-family: Rajdhani, sans-serif;
+  letter-spacing: 0.08em;
+  pointer-events: auto;
+}
+
+.review-image-direct-link:hover {
+  text-decoration: underline;
+  color: #fff;
+}
+
 
 .review-modal-body code {
   padding: .15rem .4rem;
@@ -3928,11 +3983,11 @@ body.spoiler-modal-open {
   height: var(--gw-cursor-size, 44px);
   margin: calc(var(--gw-cursor-size, 44px) / -2) 0 0 calc(var(--gw-cursor-size, 44px) / -2);
   pointer-events: none !important;
-  z-index: 10000;
+  z-index: 2147483647 !important;
   opacity: 0;
-  transition: opacity .2s ease;
+  transition: opacity .15s ease;
   user-select: none;
-  contain: layout style;
+  contain: layout style paint;
   will-change: transform;
   transform: translate3d(-100px, -100px, 0);
 }

@@ -14,6 +14,8 @@ GameWall/
 ├── style.css         # Styling, cyber-tech theme, animations, and responsive layout
 ├── app.js            # Client-side database, search, filtering, tour, and animations
 ├── games.json        # Database containing the game entries
+├── generate_social_previews.py # Generates crawler-compatible review preview pages
+├── review/           # Static review preview pages with Open Graph & Twitter Cards
 ├── favicon.ico / png # Site icons
 └── posters/          # Poster images (e.g. title.jpg, title_small.jpg)
 ```
@@ -69,7 +71,8 @@ Posters can display an upper-left status badge:
 2. Add or edit the game entry in `games.json`.
 3. Set `id` to a unique alphanumeric slug (used for review URLs: `?review=slug`).
 4. To include a review, write Markdown in `"description"`.
-5. Test locally using a local web server (e.g., `python -m http.server 8000`).
+5. Run `python generate_social_previews.py` to regenerate static review metadata pages for social link previews.
+6. Test locally using a local web server (e.g., `python -m http.server 8000`).
 
 ---
 
