@@ -50,7 +50,6 @@ PAGE_TEMPLATE = """<!doctype html>
   <meta name="twitter:image:alt" content="{image_alt}">
 
   <!-- Instant client redirect to full interactive experience -->
-  <meta http-equiv="refresh" content="0; url=../../?review={game_id}">
   <script>
     window.location.replace("../../?review=" + encodeURIComponent("{js_game_id}"));
   </script>
@@ -164,7 +163,6 @@ def generate_previews():
 <head>
   <meta charset="utf-8">
   <title>GameWall Reviews</title>
-  <meta http-equiv="refresh" content="0; url=../">
   <script>
     const p = new URLSearchParams(window.location.search);
     const r = p.get('review') || p.get('id');
@@ -186,6 +184,10 @@ def generate_previews():
         game_id = game["id"].strip()
         title = game.get("title", "").strip()
         image_url = get_small_poster_url(game.get("image", "").strip())
+        if not image_url:
+            image_url = f"{BASE_URL}favicon.png"
+        elif not image_url.startswith(("http://", "https://")):
+            image_url = urllib.parse.urljoin(BASE_URL, image_url)
         description = f"Read Parijat's review of {title}."
         canonical_url = f"{BASE_URL}review/{urllib.parse.quote(game_id)}/"
 

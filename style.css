@@ -3969,6 +3969,12 @@ body.spoiler-modal-open {
     cursor: none !important;
   }
 
+  html.has-custom-cursor:not(.no-animations) *::-webkit-scrollbar,
+  html.has-custom-cursor:not(.no-animations) *::-webkit-scrollbar-thumb,
+  html.has-custom-cursor:not(.no-animations) *::-webkit-scrollbar-track {
+    cursor: none !important;
+  }
+
   html.has-custom-cursor:not(.no-animations) iframe,
   iframe {
     cursor: auto !important;
@@ -3987,7 +3993,7 @@ body.spoiler-modal-open {
   opacity: 0;
   transition: opacity .15s ease;
   user-select: none;
-  contain: layout style paint;
+  contain: layout style;
   will-change: transform;
   transform: translate3d(-100px, -100px, 0);
 }
@@ -4009,7 +4015,7 @@ html.gw-booting .gw-cursor,
   transform: translate3d(50dvw, 50dvh, 0);
   opacity: 1 !important;
   display: block !important;
-  z-index: 10001;
+  z-index: 2147483647 !important;
 }
 
 html.gw-booting .gw-cursor-inner,
@@ -4268,7 +4274,7 @@ html.background-ready .background-particles {
 
 /* Tutorial Layering: Cursor floats above tutorial overlay, spotlight and dialog */
 html.tutorial-open #gw-cursor {
-  z-index: 100005 !important;
+  z-index: 2147483647 !important;
 }
 
 /* ==========================================================================

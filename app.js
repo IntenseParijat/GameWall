@@ -2952,6 +2952,7 @@ function initVideoEmbed(container) {
 
   let isDone = false;
   let timer = null;
+  let onMessage = null;
 
   const markSuccess = () => {
     if (isDone) return;
@@ -2982,14 +2983,56 @@ function initVideoEmbed(container) {
     markFailure();
   }, EMBED_TIMEOUT_MS);
 
+  let iframeLoaded = false;
+  let vimeoVerified = provider !== "VIMEO";
+
   const onLoad = () => {
-    markSuccess();
+    iframeLoaded = true;
+    if (vimeoVerified) {
+      markSuccess();
+    }
   };
 
   const onError = () => {
     console.warn(`[GameWall] ${provider} iframe fired error event`);
     markFailure();
   };
+
+  if (provider === "VIMEO" && permalink) {
+    onMessage = (e) => {
+      if (typeof e.data === "string" && e.data.includes("vimeo")) {
+        try {
+          const parsed = JSON.parse(e.data);
+          if (parsed.event === "error") {
+            markFailure();
+          } else if (parsed.event === "ready") {
+            vimeoVerified = true;
+            markSuccess();
+          }
+        } catch { }
+      }
+    };
+    window.addEventListener("message", onMessage);
+
+    fetch(`https://vimeo.com/api/oembed.json?url=${encodeURIComponent(permalink)}`)
+      .then((res) => {
+        if (!res.ok) {
+          console.warn(`[GameWall] Vimeo video ${permalink} not playable (HTTP ${res.status})`);
+          markFailure();
+          return;
+        }
+        vimeoVerified = true;
+        if (iframeLoaded) {
+          markSuccess();
+        }
+      })
+      .catch(() => {
+        vimeoVerified = true;
+        if (iframeLoaded) {
+          markSuccess();
+        }
+      });
+  }
 
   iframe.addEventListener("load", onLoad);
   iframe.addEventListener("error", onError);
@@ -2999,6 +3042,7 @@ function initVideoEmbed(container) {
   activeEmbedControllers.push({
     cleanup() {
       if (timer) clearTimeout(timer);
+      if (onMessage) window.removeEventListener("message", onMessage);
       iframe.removeEventListener("load", onLoad);
       iframe.removeEventListener("error", onError);
       iframe.removeEventListener("pointerenter", deactivateCursorForIframe);
@@ -3161,19 +3205,29 @@ function setupReviewImages(container) {
 
   cleanupActiveReviewImages();
 
+  const scrollContainer = elements.reviewModalBody || container;
+
   reviewImageObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
       const frame = entry.target;
-      reviewImageObserver.unobserve(frame);
+      reviewImageObserver?.unobserve(frame);
       const img = frame.querySelector(".review-image");
-      if (img && img.dataset.src && (!img.src || img.src !== img.dataset.src)) {
-        img.src = img.dataset.src;
+      if (img) {
+        const rawSrc = (img.dataset.src || img.getAttribute("src") || "").trim();
+        if (rawSrc && (!img.src || img.src !== rawSrc)) {
+          img.src = rawSrc;
+        }
+        if (img.complete && img.naturalWidth > 0) {
+          frame.classList.remove("is-loading", "is-error");
+          frame.classList.add("is-loaded");
+          window.__updateCursorProgress?.();
+        }
       }
     });
   }, {
-    root: container,
-    rootMargin: "350px 0px"
+    root: scrollContainer,
+    rootMargin: "500px 0px"
   });
 
   images.forEach((img) => {
@@ -3181,11 +3235,14 @@ function setupReviewImages(container) {
       return;
     }
 
-    const rawSrc = (img.getAttribute("src") || "").trim();
+    const rawSrc = (img.getAttribute("src") || img.src || "").trim();
     if (!rawSrc) return;
 
     img.classList.add("review-image");
     img.dataset.src = rawSrc;
+    img.loading = "lazy";
+    img.decoding = "async";
+    img.src = rawSrc;
 
     const frame = document.createElement("figure");
     frame.className = "review-image-frame is-loading";
@@ -3272,48 +3329,48 @@ function setupReviewImages(container) {
       window.__updateCursorProgress?.();
     };
 
-    const startLoading = (bypassCache = false) => {
+    img.addEventListener("load", onLoad);
+    img.addEventListener("error", onError);
+
+    if (img.complete) {
+      if (img.naturalWidth > 0) {
+        onLoad();
+      } else {
+        requestAnimationFrame(() => {
+          if (!finished) {
+            if (img.naturalWidth > 0) onLoad();
+            else if (img.complete) onError();
+          }
+        });
+      }
+    }
+
+    retryBtn.addEventListener("click", () => {
+      retryCount++;
       finished = false;
       frame.classList.remove("is-error", "is-loaded");
       frame.classList.add("is-loading");
 
       img.removeEventListener("load", onLoad);
       img.removeEventListener("error", onError);
-      img.addEventListener("load", onLoad, { once: true });
-      img.addEventListener("error", onError, { once: true });
+      img.addEventListener("load", onLoad);
+      img.addEventListener("error", onError);
 
-      let targetUrl = rawSrc;
-      if (bypassCache) {
-        const separator = rawSrc.includes("?") ? "&" : "?";
-        targetUrl = `${rawSrc}${separator}_gw_retry=${Date.now()}`;
+      let retryUrl = rawSrc;
+      try {
+        const parsed = new URL(rawSrc, window.location.href);
+        parsed.searchParams.set("_gw_retry", Date.now().toString());
+        retryUrl = parsed.toString();
+      } catch {
+        const clean = rawSrc.replace(/([?&])_gw_retry=\d+/, "");
+        const sep = clean.includes("?") ? "&" : "?";
+        retryUrl = `${clean}${sep}_gw_retry=${Date.now()}`;
       }
 
-      if (img.src !== targetUrl) {
-        img.src = targetUrl;
-      }
+      img.src = retryUrl;
 
-      if (img.complete) {
-        if (img.naturalWidth > 0) {
-          onLoad();
-        } else if (!bypassCache) {
-          setTimeout(() => {
-            if (!finished) {
-              if (img.complete && img.naturalWidth > 0) onLoad();
-              else if (img.complete && img.naturalWidth === 0) onError();
-            }
-          }, 100);
-        }
-      }
-    };
-
-    retryBtn.addEventListener("click", () => {
-      retryCount++;
-      if (retryCount <= 3) {
-        errorText.textContent = "IMAGE FAILED TO LOAD";
-        startLoading(true);
-      } else {
+      if (retryCount > 3) {
         errorText.textContent = "LOAD FAILED AFTER MULTIPLE RETRIES";
-        retryBtn.style.display = "none";
         let directLink = errorDiv.querySelector(".review-image-direct-link");
         if (!directLink) {
           directLink = document.createElement("a");
@@ -3328,11 +3385,6 @@ function setupReviewImages(container) {
     });
 
     reviewImageObserver.observe(frame);
-
-    const rect = frame.getBoundingClientRect();
-    if (rect.top < window.innerHeight + 300) {
-      startLoading(false);
-    }
 
     activeReviewImageControllers.push({
       cleanup() {
@@ -4836,14 +4888,10 @@ function initCustomCursor() {
       activateCursorFromIframe(e);
     }
 
-    const event = (e.getCoalescedEvents && e.getCoalescedEvents().length > 0)
-      ? e.getCoalescedEvents().pop()
-      : e;
+    const x = e.clientX;
+    const y = e.clientY;
 
-    const x = event.clientX;
-    const y = event.clientY;
-
-    if (x === lastPointerX && y === lastPointerY) return;
+    if (x === lastPointerX && y === lastPointerY && cursorVisible) return;
     lastPointerX = x;
     lastPointerY = y;
 
@@ -4862,10 +4910,12 @@ function initCustomCursor() {
 
   window.addEventListener("pointermove", onPointerMove, { passive: true });
 
-  window.addEventListener("pointerleave", () => {
+  window.addEventListener("pointerleave", (e) => {
+    if (e && e.relatedTarget) return;
     cursorVisible = false;
     if (isBooting || !customCursorActive) return;
     cursor.classList.remove("is-active");
+    document.documentElement.classList.remove("has-custom-cursor");
   }, { passive: true });
 
   window.addEventListener("pointerenter", (e) => {
