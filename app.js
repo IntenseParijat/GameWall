@@ -1086,6 +1086,7 @@ function renderGames() {
   activeGlitchElements.clear();
   gameTitleObserver?.disconnect();
   gameplayObserver?.disconnect();
+  resetPosterLoading();
   const token = ++activeRenderToken;
   const games = getVisibleGames();
   elements.grid.replaceChildren();
@@ -1255,6 +1256,123 @@ function observeGameTitle(curtainElement) {
   if (curtainElement) gameTitleObserver.observe(curtainElement);
 }
 
+const loadedPosterUrls = new Set();
+const offscreenPosterQueue = [];
+let activeOffscreenLoads = 0;
+const MAX_OFFSCREEN_POSTER_CONCURRENCY = 3;
+let posterObserver = null;
+
+function getPosterObserver() {
+  if (!posterObserver && typeof IntersectionObserver !== "undefined") {
+    posterObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const card = entry.target;
+        posterObserver?.unobserve(card);
+        const task = card._pendingPosterTask;
+        if (task) {
+          card._pendingPosterTask = null;
+          enqueuePosterTask(task);
+        }
+      });
+    }, {
+      root: null,
+      rootMargin: "800px 0px"
+    });
+  }
+  return posterObserver;
+}
+
+function resetPosterLoading() {
+  offscreenPosterQueue.length = 0;
+  if (posterObserver) {
+    posterObserver.disconnect();
+    posterObserver = null;
+  }
+}
+
+function enqueuePosterTask(task) {
+  if (!task || !task.card.isConnected || task.token !== activeRenderToken) {
+    return;
+  }
+  offscreenPosterQueue.push(task);
+  processPosterQueue();
+}
+
+function processPosterQueue() {
+  while (activeOffscreenLoads < MAX_OFFSCREEN_POSTER_CONCURRENCY && offscreenPosterQueue.length > 0) {
+    const task = offscreenPosterQueue.shift();
+    if (!task.card.isConnected || task.token !== activeRenderToken) {
+      continue;
+    }
+    activeOffscreenLoads++;
+    loadPosterImage(task, () => {
+      activeOffscreenLoads--;
+      processPosterQueue();
+    });
+  }
+}
+
+function loadPosterImage(task, onComplete = null) {
+  const { card, image, posterFrame, posterLoader, placeholder, primaryUrl, fallbackUrl, token } = task;
+
+  let finished = false;
+  const finish = () => {
+    if (finished) return;
+    finished = true;
+    if (onComplete) onComplete();
+  };
+
+  if (!card.isConnected || token !== activeRenderToken) {
+    finish();
+    return;
+  }
+
+  let currentUrl = primaryUrl;
+
+  const onPosterLoad = () => {
+    loadedPosterUrls.add(currentUrl);
+    posterFrame.style.setProperty(
+      "--poster-bg",
+      `url("${currentUrl}")`
+    );
+    image.classList.remove("is-loading");
+    placeholder.hidden = true;
+    posterLoader.classList.add("is-hidden");
+    window.__updateCursorProgress?.();
+    finish();
+  };
+
+  const onPosterError = () => {
+    if (fallbackUrl && currentUrl !== fallbackUrl) {
+      currentUrl = fallbackUrl;
+      image.removeEventListener("load", onPosterLoad);
+      image.removeEventListener("error", onPosterError);
+      image.addEventListener("load", onPosterLoad, { once: true });
+      image.addEventListener("error", onPosterError, { once: true });
+      image.src = currentUrl;
+
+      if (image.complete && image.naturalWidth > 0) {
+        onPosterLoad();
+      }
+      return;
+    }
+
+    image.classList.add("is-loading");
+    posterLoader.classList.add("is-hidden");
+    placeholder.hidden = false;
+    finish();
+  };
+
+  image.addEventListener("load", onPosterLoad, { once: true });
+  image.addEventListener("error", onPosterError, { once: true });
+  image.src = currentUrl;
+
+  if (image.complete && image.naturalWidth > 0) {
+    onPosterLoad();
+  }
+}
+
 function createGameCard(game, position) {
   const card = elements.template.content.cloneNode(true);
   const cardElement = card.querySelector(".game-card");
@@ -1354,42 +1472,54 @@ function createGameCard(game, position) {
   if (game.image) {
     const originalUrl = game.image.trim();
     const isSlow = state.connectionMode === "slow";
-    const primaryUrl = isSlow ? getSmallPosterUrl(originalUrl) : originalUrl;
-    let currentUrl = primaryUrl;
+    const smallUrl = getSmallPosterUrl(originalUrl);
+    const primaryUrl = isSlow ? smallUrl : originalUrl;
+    const fallbackUrl = isSlow ? originalUrl : (smallUrl !== originalUrl ? smallUrl : null);
 
-    image.classList.add("is-loading");
-    placeholder.hidden = true;
-    posterLoader.classList.remove("is-hidden");
     image.alt = `${game.title} poster`;
+    placeholder.hidden = true;
 
-    const onPosterLoad = () => {
-      posterFrame.style.setProperty(
-        "--poster-bg",
-        `url("${currentUrl}")`
-      );
-      image.classList.remove("is-loading");
-      placeholder.hidden = true;
-      posterLoader.classList.add("is-hidden");
-      window.__updateCursorProgress?.();
+    const isAlreadyLoaded = loadedPosterUrls.has(primaryUrl);
+    const isImmediatelyVisible = position < 6;
+
+    const task = {
+      card: cardElement,
+      image,
+      posterFrame,
+      posterLoader,
+      placeholder,
+      primaryUrl,
+      fallbackUrl,
+      token: activeRenderToken
     };
 
-    const onPosterError = () => {
-      if (currentUrl !== originalUrl && originalUrl) {
-        currentUrl = originalUrl;
-        image.src = currentUrl;
-        return;
-      }
+    if (position < 4) {
+      image.setAttribute("fetchpriority", "high");
+    } else {
+      image.removeAttribute("fetchpriority");
+    }
+
+    if (isImmediatelyVisible || isAlreadyLoaded) {
+      image.loading = isImmediatelyVisible && position < 4 ? "eager" : "lazy";
       image.classList.add("is-loading");
-      posterLoader.classList.add("is-hidden");
-      placeholder.hidden = false;
-    };
+      if (isAlreadyLoaded) {
+        posterLoader.classList.add("is-hidden");
+      } else {
+        posterLoader.classList.remove("is-hidden");
+      }
+      loadPosterImage(task);
+    } else {
+      image.loading = "lazy";
+      image.classList.add("is-loading");
+      posterLoader.classList.remove("is-hidden");
+      cardElement._pendingPosterTask = task;
 
-    image.addEventListener("load", onPosterLoad, { once: true });
-    image.addEventListener("error", onPosterError, { once: true });
-    image.src = currentUrl;
-
-    if (image.complete && image.naturalWidth > 0) {
-      onPosterLoad();
+      const observer = getPosterObserver();
+      if (observer) {
+        observer.observe(cardElement);
+      } else {
+        enqueuePosterTask(task);
+      }
     }
   } else {
     image.classList.add("is-loading");

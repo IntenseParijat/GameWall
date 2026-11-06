@@ -6,14 +6,16 @@
   <title>Control — Parijat&#x27;s Review | GameWall</title>
   <meta name="description" content="Read Parijat&#x27;s review of Control.">
   <link rel="canonical" href="https://intenseparijat.github.io/GameWall/review/control/">
+  <link rel="icon" type="image/x-icon" href="https://intenseparijat.github.io/GameWall/favicon.ico">
+  <link rel="icon" type="image/png" href="https://intenseparijat.github.io/GameWall/favicon.png">
 
-  <!-- Open Graph / Facebook / Discord / WhatsApp -->
+  <!-- Open Graph / Facebook / Discord / WhatsApp / Telegram -->
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="GameWall">
   <meta property="og:url" content="https://intenseparijat.github.io/GameWall/review/control/">
   <meta property="og:title" content="Control">
   <meta property="og:description" content="Read Parijat&#x27;s review of Control.">
-  <meta property="og:image" content="https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Control_small.jpg">
+  <meta property="og:image" content="https://intenseparijat.github.io/GameWall/posters/Control_small.jpg">
   <meta property="og:image:alt" content="Control Poster">
 
   <!-- Twitter Card -->
@@ -21,66 +23,192 @@
   <meta name="twitter:url" content="https://intenseparijat.github.io/GameWall/review/control/">
   <meta name="twitter:title" content="Control">
   <meta name="twitter:description" content="Read Parijat&#x27;s review of Control.">
-  <meta name="twitter:image" content="https://raw.githubusercontent.com/IntenseParijat/GameWall/main/posters/Control_small.jpg">
+  <meta name="twitter:image" content="https://intenseparijat.github.io/GameWall/posters/Control_small.jpg">
   <meta name="twitter:image:alt" content="Control Poster">
 
-  <!-- Instant client redirect to full interactive experience -->
-  <script>
-    var p = window.location.pathname;
-    var base = p.endsWith("/") ? "../../" : "../";
-    window.location.replace(base + "?review=" + encodeURIComponent("control"));
-  </script>
   <style>
-    body {
+    :root {
+      --bg: #05070d;
+      --card-bg: #0c111d;
+      --border: #1e293b;
+      --accent: #00f0ff;
+      --accent-hover: #38bdf8;
+      --text: #f1f5f9;
+      --text-dim: #94a3b8;
+      --badge-purple: rgba(138, 92, 255, 0.15);
+      --badge-border: rgba(138, 92, 255, 0.4);
+    }
+    * {
+      box-sizing: border-box;
       margin: 0;
-      padding: 2rem;
-      background: #05070d;
-      color: #94a3b8;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 0;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .review-landing-card {
+      max-width: 520px;
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-banner {
+      position: relative;
+      width: 100%;
+      height: 320px;
+      background: #020408;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      box-sizing: border-box;
-      text-align: center;
     }
-    .redirect-card {
-      max-width: 480px;
-      padding: 2rem;
-      background: #0d121f;
-      border: 1px solid #1e293b;
-      border-radius: 8px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    .card-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+    }
+    .card-banner::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(5, 7, 13, 0.1) 0%, rgba(12, 17, 29, 0.95) 100%);
+    }
+    .card-content {
+      padding: 1.5rem 1.75rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+    .archive-tag {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      font-weight: 700;
+      text-transform: uppercase;
     }
     h1 {
-      font-size: 1.25rem;
-      color: #00f0ff;
-      margin: 0 0 0.75rem;
+      font-size: 1.5rem;
+      line-height: 1.25;
+      color: #fff;
+      font-weight: 700;
     }
-    p {
-      margin: 0 0 1.5rem;
-      line-height: 1.5;
+    .meta-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
     }
-    a {
-      display: inline-block;
-      padding: 0.65rem 1.3rem;
-      background: #00f0ff;
-      color: #05070d;
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.55rem;
+      font-size: 0.72rem;
       font-weight: 600;
-      text-decoration: none;
+      letter-spacing: 0.05em;
       border-radius: 4px;
-      transition: opacity 0.2s;
+      text-transform: uppercase;
     }
-    a:hover {
-      opacity: 0.9;
+    .badge-rating {
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      color: var(--accent);
+    }
+    .badge-gameplay {
+      background: var(--badge-purple);
+      border: 1px solid var(--badge-border);
+      color: #dce9ff;
+    }
+    .desc {
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: var(--text-dim);
+      margin-top: 0.25rem;
+    }
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      margin-top: 0.75rem;
+    }
+    .btn-read-review {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 0.85rem 1.5rem;
+      background: var(--accent);
+      color: #05070d;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-read-review:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+    .btn-home {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      background: transparent;
+      color: var(--text-dim);
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-home:hover {
+      color: var(--text);
+      border-color: #334155;
+    }
+    .note {
+      font-size: 0.75rem;
+      color: #64748b;
+      text-align: center;
+      margin-top: 0.25rem;
     }
   </style>
 </head>
 <body>
-  <div class="redirect-card">
-    <h1>Opening Review...</h1>
-    <p>Loading Parijat's review of <strong>Control</strong> on GameWall.</p>
-    <a href="../../?review=control">Click here if not redirected automatically</a>
+  <div class="review-landing-card">
+    <div class="card-banner">
+      <img src="https://intenseparijat.github.io/GameWall/posters/Control_small.jpg" alt="Control Poster">
+    </div>
+    <div class="card-content">
+      <span class="archive-tag">// GameWall Review Archive</span>
+      <h1>Control</h1>
+      <div class="meta-badges">
+        <span class="meta-badge badge-rating">Rating: 8.7 / 10</span>
+        <span class="meta-badge badge-gameplay">Hiss Hunter</span>
+      </div>
+      <p class="desc">Read Parijat&#x27;s review of Control.</p>
+      <div class="actions">
+        <a href="../../?review=control" class="btn-read-review">READ REVIEW</a>
+        <a href="../../" class="btn-home">Browse Full Collection</a>
+      </div>
+      <p class="note">Opens the interactive review and spoiler controls on GameWall.</p>
+    </div>
   </div>
 </body>
 </html>
