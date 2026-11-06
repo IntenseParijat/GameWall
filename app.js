@@ -1104,6 +1104,7 @@ function renderGames() {
     const fragment = document.createDocumentFragment();
     games.forEach((game, index) => fragment.append(createGameCard(game, index)));
     elements.grid.append(fragment);
+    processPosterQueue();
     return Promise.resolve();
   }
 
@@ -1124,6 +1125,7 @@ function renderGames() {
       }
 
       elements.grid.append(fragment);
+      processPosterQueue();
       currentIndex = endIndex;
 
       if (currentIndex < games.length) {
@@ -1258,8 +1260,9 @@ function observeGameTitle(curtainElement) {
 
 const loadedPosterUrls = new Set();
 const offscreenPosterQueue = [];
+const activePosterTasks = new Set();
 let activeOffscreenLoads = 0;
-const MAX_OFFSCREEN_POSTER_CONCURRENCY = 3;
+const MAX_OFFSCREEN_POSTER_CONCURRENCY = 6;
 let posterObserver = null;
 
 function getPosterObserver() {
@@ -1270,7 +1273,7 @@ function getPosterObserver() {
         const card = entry.target;
         posterObserver?.unobserve(card);
         const task = card._pendingPosterTask;
-        if (task) {
+        if (task && !task.cancelled && task.token === activeRenderToken) {
           card._pendingPosterTask = null;
           enqueuePosterTask(task);
         }
@@ -1284,8 +1287,15 @@ function getPosterObserver() {
 }
 
 function resetPosterLoading() {
+  for (const task of offscreenPosterQueue) {
+    task.cancelled = true;
+    if (task.card && task.card._pendingPosterTask === task) {
+      task.card._pendingPosterTask = null;
+    }
+  }
   offscreenPosterQueue.length = 0;
-  activeOffscreenLoads = 0;
+  // Preserve activeOffscreenLoads reflecting in-flight requests from activePosterTasks
+  activeOffscreenLoads = activePosterTasks.size;
   if (posterObserver) {
     posterObserver.disconnect();
     posterObserver = null;
@@ -1293,29 +1303,48 @@ function resetPosterLoading() {
 }
 
 function enqueuePosterTask(task) {
-  if (!task || task.token !== activeRenderToken) {
+  if (!task || task.cancelled || task.token !== activeRenderToken) {
     return;
   }
-  offscreenPosterQueue.push(task);
+  if (task.image) {
+    task.image.loading = "eager";
+  }
+  const insertIndex = offscreenPosterQueue.findIndex((t) => t.position > task.position);
+  if (insertIndex === -1) {
+    offscreenPosterQueue.push(task);
+  } else {
+    offscreenPosterQueue.splice(insertIndex, 0, task);
+  }
   processPosterQueue();
 }
 
 function processPosterQueue() {
-  while (activeOffscreenLoads < MAX_OFFSCREEN_POSTER_CONCURRENCY && offscreenPosterQueue.length > 0) {
+  if (offscreenPosterQueue.length === 0) return;
+  if (activePosterTasks.size >= MAX_OFFSCREEN_POSTER_CONCURRENCY) return;
+
+  const deferred = [];
+  while (activePosterTasks.size < MAX_OFFSCREEN_POSTER_CONCURRENCY && offscreenPosterQueue.length > 0) {
     const task = offscreenPosterQueue.shift();
-    if (!task || task.token !== activeRenderToken) {
+    if (!task || task.cancelled || task.token !== activeRenderToken) {
       continue;
     }
     if (!task.card.isConnected) {
-      continue;
+      // Do not discard cards that are currently in a document fragment being constructed.
+      deferred.push(task);
+      break;
     }
-    activeOffscreenLoads++;
+
+    activePosterTasks.add(task);
+    activeOffscreenLoads = activePosterTasks.size;
     loadPosterImage(task, () => {
-      if (task.token === activeRenderToken) {
-        activeOffscreenLoads = Math.max(0, activeOffscreenLoads - 1);
-        processPosterQueue();
-      }
+      activePosterTasks.delete(task);
+      activeOffscreenLoads = activePosterTasks.size;
+      processPosterQueue();
     });
+  }
+
+  if (deferred.length > 0) {
+    offscreenPosterQueue.unshift(...deferred);
   }
 }
 
@@ -1338,7 +1367,7 @@ function loadPosterImage(task, onComplete = null) {
     if (onComplete) onComplete();
   };
 
-  if (token !== activeRenderToken) {
+  if (token !== activeRenderToken || task.cancelled) {
     finish();
     return;
   }
@@ -1347,12 +1376,13 @@ function loadPosterImage(task, onComplete = null) {
 
   const onPosterLoad = () => {
     if (finished) return;
-    if (token !== activeRenderToken) {
+    if (token !== activeRenderToken || task.cancelled) {
       finish();
       return;
     }
 
     if (!image.naturalWidth || image.naturalWidth === 0) {
+      console.warn(`[GameWall] Poster load event fired but naturalWidth is 0 for "${task.title || "game"}": ${currentUrl}`);
       onPosterError();
       return;
     }
@@ -1363,6 +1393,7 @@ function loadPosterImage(task, onComplete = null) {
       card._pendingPosterTask = null;
     }
     loadedPosterUrls.add(currentUrl);
+    if (primaryUrl) loadedPosterUrls.add(primaryUrl);
 
     posterFrame.style.setProperty(
       "--poster-bg",
@@ -1377,28 +1408,26 @@ function loadPosterImage(task, onComplete = null) {
 
   const onPosterError = () => {
     if (finished) return;
-    if (token !== activeRenderToken) {
+    if (token !== activeRenderToken || task.cancelled) {
       finish();
       return;
     }
 
     if (fallbackUrl && currentUrl !== fallbackUrl) {
+      console.warn(`[GameWall] Poster load failed for "${task.title || "game"}": ${currentUrl}. Trying fallback: ${fallbackUrl}`);
       currentUrl = fallbackUrl;
       cleanup();
       image.addEventListener("load", onPosterLoad, { once: true });
       image.addEventListener("error", onPosterError, { once: true });
       image.src = currentUrl;
 
-      if (image.complete) {
-        if (image.naturalWidth > 0) {
-          onPosterLoad();
-        } else {
-          onPosterError();
-        }
+      if (image.complete && image.naturalWidth > 0) {
+        onPosterLoad();
       }
       return;
     }
 
+    console.error(`[GameWall] Poster image failed to load for "${task.title || "game"}": ${currentUrl} (primary: ${primaryUrl}, fallback: ${fallbackUrl})`);
     finished = true;
     cleanup();
     if (card._pendingPosterTask === task) {
@@ -1414,12 +1443,8 @@ function loadPosterImage(task, onComplete = null) {
   image.addEventListener("error", onPosterError, { once: true });
   image.src = currentUrl;
 
-  if (image.complete) {
-    if (image.naturalWidth > 0) {
-      onPosterLoad();
-    } else {
-      onPosterError();
-    }
+  if (image.complete && image.naturalWidth > 0) {
+    onPosterLoad();
   }
 }
 
@@ -1543,16 +1568,22 @@ function createGameCard(game, position) {
       primaryUrl,
       fallbackUrl,
       token: activeRenderToken,
-      position
+      position,
+      title: game.title,
+      cancelled: false
     };
 
     cardElement._pendingPosterTask = task;
 
     if (position < 4) {
       image.setAttribute("fetchpriority", "high");
-      image.loading = "eager";
     } else {
       image.removeAttribute("fetchpriority");
+    }
+
+    if (isInitialBatch) {
+      image.loading = "eager";
+    } else {
       image.loading = "lazy";
     }
 
@@ -1560,7 +1591,7 @@ function createGameCard(game, position) {
       if (isAlreadyLoaded) {
         posterLoader.classList.add("is-hidden");
       }
-      loadPosterImage(task);
+      enqueuePosterTask(task);
     } else {
       const observer = getPosterObserver();
       if (observer) {
