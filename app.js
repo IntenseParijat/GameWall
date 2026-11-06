@@ -1285,6 +1285,7 @@ function getPosterObserver() {
 
 function resetPosterLoading() {
   offscreenPosterQueue.length = 0;
+  activeOffscreenLoads = 0;
   if (posterObserver) {
     posterObserver.disconnect();
     posterObserver = null;
@@ -1292,7 +1293,7 @@ function resetPosterLoading() {
 }
 
 function enqueuePosterTask(task) {
-  if (!task || !task.card.isConnected || task.token !== activeRenderToken) {
+  if (!task || task.token !== activeRenderToken) {
     return;
   }
   offscreenPosterQueue.push(task);
@@ -1302,13 +1303,18 @@ function enqueuePosterTask(task) {
 function processPosterQueue() {
   while (activeOffscreenLoads < MAX_OFFSCREEN_POSTER_CONCURRENCY && offscreenPosterQueue.length > 0) {
     const task = offscreenPosterQueue.shift();
-    if (!task.card.isConnected || task.token !== activeRenderToken) {
+    if (!task || task.token !== activeRenderToken) {
+      continue;
+    }
+    if (!task.card.isConnected) {
       continue;
     }
     activeOffscreenLoads++;
     loadPosterImage(task, () => {
-      activeOffscreenLoads--;
-      processPosterQueue();
+      if (task.token === activeRenderToken) {
+        activeOffscreenLoads = Math.max(0, activeOffscreenLoads - 1);
+        processPosterQueue();
+      }
     });
   }
 }
@@ -1317,13 +1323,22 @@ function loadPosterImage(task, onComplete = null) {
   const { card, image, posterFrame, posterLoader, placeholder, primaryUrl, fallbackUrl, token } = task;
 
   let finished = false;
+  const cleanup = () => {
+    image.removeEventListener("load", onPosterLoad);
+    image.removeEventListener("error", onPosterError);
+  };
+
   const finish = () => {
     if (finished) return;
     finished = true;
+    cleanup();
+    if (card._pendingPosterTask === task) {
+      card._pendingPosterTask = null;
+    }
     if (onComplete) onComplete();
   };
 
-  if (!card.isConnected || token !== activeRenderToken) {
+  if (token !== activeRenderToken) {
     finish();
     return;
   }
@@ -1331,7 +1346,24 @@ function loadPosterImage(task, onComplete = null) {
   let currentUrl = primaryUrl;
 
   const onPosterLoad = () => {
+    if (finished) return;
+    if (token !== activeRenderToken) {
+      finish();
+      return;
+    }
+
+    if (!image.naturalWidth || image.naturalWidth === 0) {
+      onPosterError();
+      return;
+    }
+
+    finished = true;
+    cleanup();
+    if (card._pendingPosterTask === task) {
+      card._pendingPosterTask = null;
+    }
     loadedPosterUrls.add(currentUrl);
+
     posterFrame.style.setProperty(
       "--poster-bg",
       `url("${currentUrl}")`
@@ -1340,36 +1372,54 @@ function loadPosterImage(task, onComplete = null) {
     placeholder.hidden = true;
     posterLoader.classList.add("is-hidden");
     window.__updateCursorProgress?.();
-    finish();
+    if (onComplete) onComplete();
   };
 
   const onPosterError = () => {
+    if (finished) return;
+    if (token !== activeRenderToken) {
+      finish();
+      return;
+    }
+
     if (fallbackUrl && currentUrl !== fallbackUrl) {
       currentUrl = fallbackUrl;
-      image.removeEventListener("load", onPosterLoad);
-      image.removeEventListener("error", onPosterError);
+      cleanup();
       image.addEventListener("load", onPosterLoad, { once: true });
       image.addEventListener("error", onPosterError, { once: true });
       image.src = currentUrl;
 
-      if (image.complete && image.naturalWidth > 0) {
-        onPosterLoad();
+      if (image.complete) {
+        if (image.naturalWidth > 0) {
+          onPosterLoad();
+        } else {
+          onPosterError();
+        }
       }
       return;
     }
 
+    finished = true;
+    cleanup();
+    if (card._pendingPosterTask === task) {
+      card._pendingPosterTask = null;
+    }
     image.classList.add("is-loading");
     posterLoader.classList.add("is-hidden");
     placeholder.hidden = false;
-    finish();
+    if (onComplete) onComplete();
   };
 
   image.addEventListener("load", onPosterLoad, { once: true });
   image.addEventListener("error", onPosterError, { once: true });
   image.src = currentUrl;
 
-  if (image.complete && image.naturalWidth > 0) {
-    onPosterLoad();
+  if (image.complete) {
+    if (image.naturalWidth > 0) {
+      onPosterLoad();
+    } else {
+      onPosterError();
+    }
   }
 }
 
@@ -1478,9 +1528,11 @@ function createGameCard(game, position) {
 
     image.alt = `${game.title} poster`;
     placeholder.hidden = true;
+    image.classList.add("is-loading");
+    posterLoader.classList.remove("is-hidden");
 
     const isAlreadyLoaded = loadedPosterUrls.has(primaryUrl);
-    const isImmediatelyVisible = position < 6;
+    const isInitialBatch = position < 6;
 
     const task = {
       card: cardElement,
@@ -1490,30 +1542,26 @@ function createGameCard(game, position) {
       placeholder,
       primaryUrl,
       fallbackUrl,
-      token: activeRenderToken
+      token: activeRenderToken,
+      position
     };
+
+    cardElement._pendingPosterTask = task;
 
     if (position < 4) {
       image.setAttribute("fetchpriority", "high");
+      image.loading = "eager";
     } else {
       image.removeAttribute("fetchpriority");
+      image.loading = "lazy";
     }
 
-    if (isImmediatelyVisible || isAlreadyLoaded) {
-      image.loading = isImmediatelyVisible && position < 4 ? "eager" : "lazy";
-      image.classList.add("is-loading");
+    if (isInitialBatch || isAlreadyLoaded) {
       if (isAlreadyLoaded) {
         posterLoader.classList.add("is-hidden");
-      } else {
-        posterLoader.classList.remove("is-hidden");
       }
       loadPosterImage(task);
     } else {
-      image.loading = "lazy";
-      image.classList.add("is-loading");
-      posterLoader.classList.remove("is-hidden");
-      cardElement._pendingPosterTask = task;
-
       const observer = getPosterObserver();
       if (observer) {
         observer.observe(cardElement);
@@ -3610,53 +3658,9 @@ function legacyCopyToClipboard(text) {
 
 const CANONICAL_SITE_URL = "https://intenseparijat.github.io/GameWall/";
 
-function getReviewStaticUrl(gameId) {
-  const id = typeof gameId === "string" ? gameId.trim() : "";
-  if (!id) return CANONICAL_SITE_URL;
-  return `${CANONICAL_SITE_URL}review/${encodeURIComponent(id)}/`;
-}
-
-function updateDocumentMeta(title, description, imageUrl, pageUrl) {
-  document.title = title;
-
-  const setMeta = (attr, key, content) => {
-    let el = document.querySelector(`meta[${attr}="${key}"]`);
-    if (!el) {
-      el = document.createElement("meta");
-      el.setAttribute(attr, key);
-      document.head.appendChild(el);
-    }
-    el.setAttribute("content", content);
-  };
-
-  setMeta("name", "description", description);
-  setMeta("property", "og:title", title);
-  setMeta("property", "og:description", description);
-  setMeta("property", "og:image", imageUrl);
-  setMeta("property", "og:url", pageUrl);
-  setMeta("name", "twitter:url", pageUrl);
-  setMeta("name", "twitter:title", title);
-  setMeta("name", "twitter:description", description);
-  setMeta("name", "twitter:image", imageUrl);
-
-  const canonicalEl = document.querySelector('link[rel="canonical"]');
-  if (canonicalEl && pageUrl) {
-    canonicalEl.setAttribute("href", pageUrl);
-  }
-}
-
-function restoreMainDocumentMeta() {
-  updateDocumentMeta(
-    "GameWall — Parijat's Personal Game Collection",
-    "GameWall is Parijat's personal game collection featuring lifetime games, personal ratings, gameplay progress, and detailed reviews.",
-    `${CANONICAL_SITE_URL}favicon.png`,
-    CANONICAL_SITE_URL
-  );
-}
-
 async function shareCurrentReview() {
   if (!currentReviewGame) return;
-  const shareUrl = getReviewStaticUrl(currentReviewGame.id);
+  const shareUrl = `${CANONICAL_SITE_URL}?review=${encodeURIComponent(currentReviewGame.id)}`;
   const shareData = {
     title: `${currentReviewGame.title} — Review`,
     text: `Read Parijat's review of ${currentReviewGame.title}.`,
@@ -4025,15 +4029,6 @@ function openReviewModal(game, identifier, triggerElement, fromPopstate = false,
     elements.mainContent?.setAttribute("aria-hidden", "true");
   }
 
-  const reviewSmallPoster = getSmallPosterUrl(game.image) || game.image || `${CANONICAL_SITE_URL}favicon.png`;
-  const canonicalReviewUrl = getReviewStaticUrl(game.id);
-  updateDocumentMeta(
-    `${game.title} — Review | GameWall`,
-    `Read Parijat's review of ${game.title}.`,
-    reviewSmallPoster.startsWith("http") ? reviewSmallPoster : `${CANONICAL_SITE_URL}${reviewSmallPoster.replace(/^\//, "")}`,
-    canonicalReviewUrl
-  );
-
   if (copyFeedbackTimeout) {
     clearTimeout(copyFeedbackTimeout);
     copyFeedbackTimeout = null;
@@ -4109,7 +4104,6 @@ function closeReviewModal(fromPopstate = false) {
   document.documentElement.classList.remove("modal-open");
   document.body.classList.remove("modal-open");
   elements.mainContent?.removeAttribute("aria-hidden");
-  restoreMainDocumentMeta();
   window.__resumeCanvasAnimations?.();
 
   window.scrollTo(0, savedScrollY);
