@@ -1167,16 +1167,37 @@ function setupGameplayMarquee(textElement) {
   const badge = track?.parentElement;
 
   if (!track || !badge) return;
+  if (!badge.isConnected || badge.clientWidth === 0) return;
 
-  track.classList.remove("is-scrolling");
-  track.style.removeProperty("--gameplay-duration");
+  const wasScrolling = track.classList.contains("is-scrolling");
+  if (wasScrolling) {
+    track.classList.remove("is-scrolling");
+    track.style.removeProperty("--gameplay-duration");
+    track.style.removeProperty("--gameplay-distance");
+    textElement.removeAttribute("data-text");
+  }
 
-  textElement.removeAttribute("data-text");
+  const styles = window.getComputedStyle(badge);
+  const padLeft = parseFloat(styles.paddingLeft) || 0;
+  const padRight = parseFloat(styles.paddingRight) || 0;
+  const borderLeft = parseFloat(styles.borderLeftWidth) || 0;
+  const borderRight = parseFloat(styles.borderRightWidth) || 0;
 
-  const textWidth = textElement.scrollWidth;
-  const availableWidth = badge.clientWidth > 16 ? badge.clientWidth - 16 : badge.clientWidth;
+  const badgeRect = badge.getBoundingClientRect();
+  const visibleWidth = badgeRect.width - borderLeft - borderRight - padLeft - padRight;
 
-  if (textWidth <= availableWidth + 1) {
+  const textRect = textElement.getBoundingClientRect();
+  const textWidth = textRect.width;
+
+  const overflow = textWidth - visibleWidth;
+
+  if (overflow <= 1.1) {
+    if (wasScrolling) {
+      track.classList.remove("is-scrolling");
+      track.style.removeProperty("--gameplay-duration");
+      track.style.removeProperty("--gameplay-distance");
+      textElement.removeAttribute("data-text");
+    }
     return;
   }
 
@@ -1575,12 +1596,24 @@ function fitText(element, minSize, maxSize) {
 
 const gameplayObserver =
   new ResizeObserver((entries) => {
-    entries.forEach((entry) => {
-      const textElement = entry.target.querySelector(".gameplay-text");
+    for (const entry of entries) {
+      const badge = entry.target;
+      if (!badge.isConnected) continue;
+
+      const width = entry.contentRect.width;
+      if (width === 0) continue;
+
+      const lastWidth = badge._lastMeasuredWidth;
+      if (lastWidth !== undefined && Math.abs(lastWidth - width) < 0.5) {
+        continue;
+      }
+      badge._lastMeasuredWidth = width;
+
+      const textElement = badge.querySelector(".gameplay-text");
       if (textElement) {
         setupGameplayMarquee(textElement);
       }
-    });
+    }
   });
 
 function observeGameplayBadge(textElement) {
@@ -3445,6 +3478,14 @@ function legacyCopyToClipboard(text) {
   }
 }
 
+const CANONICAL_SITE_URL = "https://intenseparijat.github.io/GameWall/";
+
+function getReviewStaticUrl(gameId) {
+  const id = typeof gameId === "string" ? gameId.trim() : "";
+  if (!id) return CANONICAL_SITE_URL;
+  return `${CANONICAL_SITE_URL}review/${encodeURIComponent(id)}/`;
+}
+
 function updateDocumentMeta(title, description, imageUrl, pageUrl) {
   document.title = title;
 
@@ -3463,26 +3504,29 @@ function updateDocumentMeta(title, description, imageUrl, pageUrl) {
   setMeta("property", "og:description", description);
   setMeta("property", "og:image", imageUrl);
   setMeta("property", "og:url", pageUrl);
+  setMeta("name", "twitter:url", pageUrl);
   setMeta("name", "twitter:title", title);
   setMeta("name", "twitter:description", description);
   setMeta("name", "twitter:image", imageUrl);
+
+  const canonicalEl = document.querySelector('link[rel="canonical"]');
+  if (canonicalEl && pageUrl) {
+    canonicalEl.setAttribute("href", pageUrl);
+  }
 }
 
 function restoreMainDocumentMeta() {
   updateDocumentMeta(
-    "GameWall - Parijat's Personal Game Collection",
+    "GameWall — Parijat's Personal Game Collection",
     "GameWall is Parijat's personal game collection featuring lifetime games, personal ratings, gameplay progress, and detailed reviews.",
-    "https://intenseparijat.github.io/GameWall/favicon.png",
-    "https://intenseparijat.github.io/GameWall/"
+    `${CANONICAL_SITE_URL}favicon.png`,
+    CANONICAL_SITE_URL
   );
 }
 
 async function shareCurrentReview() {
   if (!currentReviewGame) return;
-  const basePath = window.location.pathname.endsWith("/")
-    ? window.location.pathname
-    : window.location.pathname.slice(0, window.location.pathname.lastIndexOf("/") + 1);
-  const shareUrl = `${window.location.origin}${basePath}review/${encodeURIComponent(currentReviewGame.id)}/`;
+  const shareUrl = getReviewStaticUrl(currentReviewGame.id);
   const shareData = {
     title: `${currentReviewGame.title} — Review`,
     text: `Read Parijat's review of ${currentReviewGame.title}.`,
@@ -3851,15 +3895,12 @@ function openReviewModal(game, identifier, triggerElement, fromPopstate = false,
     elements.mainContent?.setAttribute("aria-hidden", "true");
   }
 
-  const reviewSmallPoster = getSmallPosterUrl(game.image) || game.image || "https://intenseparijat.github.io/GameWall/favicon.png";
-  const basePath = window.location.pathname.endsWith("/")
-    ? window.location.pathname
-    : window.location.pathname.slice(0, window.location.pathname.lastIndexOf("/") + 1);
-  const canonicalReviewUrl = `${window.location.origin}${basePath}review/${encodeURIComponent(game.id)}/`;
+  const reviewSmallPoster = getSmallPosterUrl(game.image) || game.image || `${CANONICAL_SITE_URL}favicon.png`;
+  const canonicalReviewUrl = getReviewStaticUrl(game.id);
   updateDocumentMeta(
     `${game.title} — Review | GameWall`,
     `Read Parijat's review of ${game.title}.`,
-    reviewSmallPoster,
+    reviewSmallPoster.startsWith("http") ? reviewSmallPoster : `${CANONICAL_SITE_URL}${reviewSmallPoster.replace(/^\//, "")}`,
     canonicalReviewUrl
   );
 

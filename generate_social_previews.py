@@ -51,7 +51,9 @@ PAGE_TEMPLATE = """<!doctype html>
 
   <!-- Instant client redirect to full interactive experience -->
   <script>
-    window.location.replace("../../?review=" + encodeURIComponent("{js_game_id}"));
+    var p = window.location.pathname;
+    var base = p.endsWith("/") ? "../../" : "../";
+    window.location.replace(base + "?review=" + encodeURIComponent("{js_game_id}"));
   </script>
   <style>
     body {{
