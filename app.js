@@ -2976,6 +2976,30 @@ function renderReviewMarkdown(rawMarkdown) {
 }
 
 let instagramScriptPromise = null;
+const instagramEmbedCallbacks = new Map();
+
+if (typeof window !== "undefined") {
+  const originalIgEmbedLoaded = window.__igEmbedLoaded;
+  window.__igEmbedLoaded = function(payload) {
+    if (typeof originalIgEmbedLoaded === "function") {
+      try { originalIgEmbedLoaded(payload); } catch { }
+    }
+    if (payload && payload.frameId && instagramEmbedCallbacks.has(payload.frameId)) {
+      try {
+        const callback = instagramEmbedCallbacks.get(payload.frameId);
+        if (typeof callback === "function") callback();
+      } catch { }
+    }
+  };
+}
+
+function resetInstagramScriptState() {
+  instagramScriptPromise = null;
+  const deadScript = document.querySelector('script[src*="instagram.com/embed.js"]');
+  if (deadScript) {
+    try { deadScript.remove(); } catch { }
+  }
+}
 
 function loadInstagramScript() {
   if (window.instgrm?.Embeds) {
@@ -2986,23 +3010,54 @@ function loadInstagramScript() {
   }
 
   const existingScript = document.querySelector('script[src*="instagram.com/embed.js"]');
-  if (existingScript) {
+  if (existingScript && !existingScript.hasAttribute("data-failed")) {
     instagramScriptPromise = new Promise((resolve, reject) => {
+      let resolved = false;
+      const onDone = () => {
+        if (resolved) return;
+        resolved = true;
+        if (window.instgrm?.Embeds) {
+          resolve(window.instgrm);
+        } else {
+          instagramScriptPromise = null;
+          existingScript.setAttribute("data-failed", "true");
+          reject(new Error("Instagram API missing"));
+        }
+      };
+
+      const onError = () => {
+        if (resolved) return;
+        resolved = true;
+        instagramScriptPromise = null;
+        try { existingScript.remove(); } catch { }
+        reject(new Error("Failed to load Instagram script"));
+      };
+
       if (window.instgrm?.Embeds) {
         resolve(window.instgrm);
         return;
       }
-      existingScript.addEventListener("load", () => {
-        if (window.instgrm?.Embeds) resolve(window.instgrm);
-        else reject(new Error("Instagram API missing"));
-      }, { once: true });
-      existingScript.addEventListener("error", () => reject(new Error("Failed to load Instagram script")), { once: true });
-      setTimeout(() => {
-        if (window.instgrm?.Embeds) resolve(window.instgrm);
-        else reject(new Error("Instagram script timeout"));
-      }, 6000);
+
+      existingScript.addEventListener("load", onDone, { once: true });
+      existingScript.addEventListener("error", onError, { once: true });
+
+      const timer = setTimeout(() => {
+        if (resolved) return;
+        if (window.instgrm?.Embeds) {
+          onDone();
+        } else {
+          resolved = true;
+          instagramScriptPromise = null;
+          try { existingScript.remove(); } catch { }
+          reject(new Error("Instagram script timeout"));
+        }
+      }, 12000);
     });
     return instagramScriptPromise;
+  }
+
+  if (existingScript) {
+    try { existingScript.remove(); } catch { }
   }
 
   instagramScriptPromise = new Promise((resolve, reject) => {
@@ -3011,35 +3066,50 @@ function loadInstagramScript() {
     script.defer = true;
     script.src = "https://www.instagram.com/embed.js";
 
-    const timer = setTimeout(() => {
+    let timer = null;
+    let pollInterval = null;
+
+    const cleanup = () => {
+      if (timer) clearTimeout(timer);
+      if (pollInterval) clearInterval(pollInterval);
+    };
+
+    timer = setTimeout(() => {
+      cleanup();
+      instagramScriptPromise = null;
+      try { script.remove(); } catch { }
       if (window.instgrm?.Embeds) {
         resolve(window.instgrm);
       } else {
         reject(new Error("Instagram embed script timed out"));
       }
-    }, 6000);
+    }, 12000);
 
     script.onload = () => {
-      clearTimeout(timer);
       if (window.instgrm?.Embeds) {
+        cleanup();
         resolve(window.instgrm);
-      } else {
-        let retries = 0;
-        const check = setInterval(() => {
-          retries++;
-          if (window.instgrm?.Embeds) {
-            clearInterval(check);
-            resolve(window.instgrm);
-          } else if (retries > 25) {
-            clearInterval(check);
-            reject(new Error("Instagram embed object not available"));
-          }
-        }, 50);
+        return;
       }
+      let retries = 0;
+      pollInterval = setInterval(() => {
+        retries++;
+        if (window.instgrm?.Embeds) {
+          cleanup();
+          resolve(window.instgrm);
+        } else if (retries >= 30) {
+          cleanup();
+          instagramScriptPromise = null;
+          try { script.remove(); } catch { }
+          reject(new Error("Instagram embed object not available"));
+        }
+      }, 50);
     };
 
     script.onerror = (err) => {
-      clearTimeout(timer);
+      cleanup();
+      instagramScriptPromise = null;
+      try { script.remove(); } catch { }
       reject(err || new Error("Failed to load Instagram embed script"));
     };
 
@@ -3125,7 +3195,7 @@ function createEmbedLoadingState(provider) {
   return loading;
 }
 
-function createEmbedFailureState(provider, permalink = null) {
+function createEmbedFailureState(provider, permalink = null, onRetry = null) {
   const failure = document.createElement("div");
   failure.className = "embed-failure-state";
   failure.setAttribute("role", "alert");
@@ -3155,17 +3225,32 @@ function createEmbedFailureState(provider, permalink = null) {
   const reloadBtn = document.createElement("button");
   reloadBtn.type = "button";
   reloadBtn.className = "embed-reload-btn";
-  reloadBtn.setAttribute("aria-label", "Reload current page");
-  reloadBtn.innerHTML = `
-    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <polyline points="23 4 23 10 17 10"></polyline>
-      <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
-    </svg>
-    <span>RELOAD PAGE</span>
-  `;
-  reloadBtn.addEventListener("click", () => {
-    window.location.reload();
-  });
+  if (typeof onRetry === "function") {
+    reloadBtn.setAttribute("aria-label", `Retry loading ${provider} embed`);
+    reloadBtn.innerHTML = `
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="23 4 23 10 17 10"></polyline>
+        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+      </svg>
+      <span>RETRY EMBED</span>
+    `;
+    reloadBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      onRetry();
+    });
+  } else {
+    reloadBtn.setAttribute("aria-label", "Reload current page");
+    reloadBtn.innerHTML = `
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="23 4 23 10 17 10"></polyline>
+        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+      </svg>
+      <span>RELOAD PAGE</span>
+    `;
+    reloadBtn.addEventListener("click", () => {
+      window.location.reload();
+    });
+  }
 
   actions.appendChild(reloadBtn);
 
@@ -3306,21 +3391,35 @@ function initInstagramEmbed(placeholder) {
 
   const wrapper = document.createElement("div");
   wrapper.className = "review-instagram-wrapper";
+  placeholder.replaceWith(wrapper);
+
+  setupInstagramEmbedInWrapper(wrapper, validated);
+}
+
+function setupInstagramEmbedInWrapper(wrapper, validated) {
+  wrapper.innerHTML = "";
 
   const blockquote = document.createElement("blockquote");
   blockquote.className = "instagram-media";
   blockquote.setAttribute("data-instgrm-permalink", validated);
   blockquote.setAttribute("data-instgrm-version", "14");
 
-  const loadingOverlay = createEmbedLoadingState("INSTAGRAM");
+  const link = document.createElement("a");
+  link.href = validated;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.textContent = "View this post on Instagram";
+  blockquote.appendChild(link);
 
+  const loadingOverlay = createEmbedLoadingState("INSTAGRAM");
   wrapper.append(blockquote, loadingOverlay);
-  placeholder.replaceWith(wrapper);
 
   let isDone = false;
   let timer = null;
   let checkInterval = null;
   let observer = null;
+  let graceTimer = null;
+  let trackedFrameId = null;
 
   const markSuccess = () => {
     if (isDone) return;
@@ -3328,6 +3427,9 @@ function initInstagramEmbed(placeholder) {
     if (timer) clearTimeout(timer);
     if (checkInterval) clearInterval(checkInterval);
     if (observer) observer.disconnect();
+    if (graceTimer) clearTimeout(graceTimer);
+    if (trackedFrameId) instagramEmbedCallbacks.delete(trackedFrameId);
+
     wrapper.classList.add("is-loaded");
     loadingOverlay.classList.add("is-hidden");
     setTimeout(() => {
@@ -3341,16 +3443,24 @@ function initInstagramEmbed(placeholder) {
     if (timer) clearTimeout(timer);
     if (checkInterval) clearInterval(checkInterval);
     if (observer) observer.disconnect();
+    if (graceTimer) clearTimeout(graceTimer);
+    if (trackedFrameId) instagramEmbedCallbacks.delete(trackedFrameId);
+
     if (loadingOverlay.parentElement) loadingOverlay.remove();
-    try {
-      blockquote.remove();
-    } catch { }
+    try { blockquote.remove(); } catch { }
     const existingIframe = wrapper.querySelector("iframe");
     if (existingIframe) {
       try { existingIframe.src = "about:blank"; } catch { }
       existingIframe.remove();
     }
-    const failureCard = createEmbedFailureState("INSTAGRAM", validated);
+
+    wrapper.querySelectorAll(".embed-failure-state").forEach((el) => el.remove());
+    const failureCard = createEmbedFailureState("INSTAGRAM", validated, () => {
+      if (!window.instgrm?.Embeds) {
+        resetInstagramScriptState();
+      }
+      setupInstagramEmbedInWrapper(wrapper, validated);
+    });
     wrapper.appendChild(failureCard);
   };
 
@@ -3359,31 +3469,63 @@ function initInstagramEmbed(placeholder) {
     markFailure();
   }, EMBED_TIMEOUT_MS);
 
+  let iframeListenersAttached = false;
   const checkInstagramRendered = () => {
     if (isDone) return;
     const iframe = wrapper.querySelector("iframe");
-    if (iframe) {
-      try {
-        if (iframe.contentDocument && iframe.contentDocument.readyState === "complete") {
-          markSuccess();
-          return;
-        }
-      } catch { }
-      iframe.addEventListener("load", () => {
+    if (!iframe) {
+      if (wrapper.querySelector("blockquote.instagram-media") && window.instgrm?.Embeds?.process) {
+        try { window.instgrm.Embeds.process(); } catch { }
+      }
+      return;
+    }
+
+    if (iframe.id && !trackedFrameId) {
+      trackedFrameId = iframe.id;
+      instagramEmbedCallbacks.set(trackedFrameId, () => {
         markSuccess();
-      }, { once: true });
+      });
+    }
+
+    if (!iframeListenersAttached) {
+      iframeListenersAttached = true;
       iframe.addEventListener("error", () => {
         markFailure();
       }, { once: true });
+
+      iframe.addEventListener("load", () => {
+        checkInstagramRendered();
+        if (isDone) return;
+        if (!graceTimer) {
+          graceTimer = setTimeout(() => {
+            if (isDone) return;
+            checkInstagramRendered();
+            if (!isDone) {
+              console.warn(`[GameWall] Instagram embed not rendered after iframe load: ${validated}`);
+              markFailure();
+            }
+          }, 5000);
+        }
+      }, { once: true });
+    }
+
+    const hasRenderedClass = iframe.classList.contains("instagram-media-rendered");
+    const hasBlockquote = !!wrapper.querySelector("blockquote.instagram-media, blockquote.instagram-media-registered");
+    const heightAttr = parseInt(iframe.getAttribute("height") || iframe.height || "0", 10);
+    const styleHeight = parseInt(iframe.style.height || "0", 10);
+    const hasRealHeight = heightAttr > 50 || styleHeight > 50 || iframe.clientHeight > 50;
+
+    if (hasRenderedClass || (!hasBlockquote && hasRealHeight)) {
+      markSuccess();
     }
   };
 
   observer = new MutationObserver(() => {
     checkInstagramRendered();
   });
-  observer.observe(wrapper, { childList: true, subtree: true });
+  observer.observe(wrapper, { childList: true, subtree: true, attributes: true, attributeFilter: ["class", "height", "style"] });
 
-  checkInterval = setInterval(checkInstagramRendered, 150);
+  checkInterval = setInterval(checkInstagramRendered, 200);
 
   loadInstagramScript()
     .then((instgrm) => {
@@ -3405,9 +3547,12 @@ function initInstagramEmbed(placeholder) {
 
   activeEmbedControllers.push({
     cleanup() {
+      isDone = true;
       if (timer) clearTimeout(timer);
       if (checkInterval) clearInterval(checkInterval);
       if (observer) observer.disconnect();
+      if (graceTimer) clearTimeout(graceTimer);
+      if (trackedFrameId) instagramEmbedCallbacks.delete(trackedFrameId);
       const iframe = wrapper.querySelector("iframe");
       if (iframe) {
         try { iframe.src = "about:blank"; } catch { }
@@ -3422,7 +3567,22 @@ function setupReviewEmbeds(container) {
   videoEmbeds.forEach(initVideoEmbed);
 
   const instagramPlaceholders = Array.from(container.querySelectorAll(".review-instagram-placeholder"));
-  instagramPlaceholders.forEach(initInstagramEmbed);
+  if (instagramPlaceholders.length) {
+    instagramPlaceholders.forEach(initInstagramEmbed);
+    loadInstagramScript()
+      .then((instgrm) => {
+        try {
+          if (instgrm?.Embeds?.process) {
+            instgrm.Embeds.process();
+          } else if (window.instgrm?.Embeds?.process) {
+            window.instgrm.Embeds.process();
+          }
+        } catch (err) {
+          console.warn("[GameWall] Instagram Embeds.process error:", err);
+        }
+      })
+      .catch(() => { });
+  }
 }
 
 let activeReviewImageControllers = [];
@@ -3473,7 +3633,7 @@ function setupReviewImages(container) {
   });
 
   images.forEach((img) => {
-    if (img.closest(".review-image-frame, .steam-review-card, .review-video-embed, .review-instagram-placeholder")) {
+    if (img.closest(".review-image-frame, .steam-review-card, .review-video-embed, .review-instagram-placeholder, .review-instagram-wrapper")) {
       return;
     }
 
