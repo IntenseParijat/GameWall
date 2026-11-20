@@ -4091,25 +4091,28 @@ html.gw-booting .gw-cursor-reticle,
   fill: none;
   stroke: var(--neon-cyan);
   stroke: url(#gw-reticle-grad);
-  stroke-width: 3.2;
+  stroke-width: 4;
   stroke-linecap: square;
   stroke-linejoin: miter;
-  filter: drop-shadow(0 0 2px rgba(0, 240, 255, 0.65));
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.92)) drop-shadow(0 0 2.5px rgba(0, 240, 255, 0.95));
   transition: stroke 0.15s ease, filter 0.15s ease;
 }
 
 .gw-reticle-dot {
   fill: var(--neon-cyan);
-  filter: drop-shadow(0 0 2px rgba(0, 240, 255, 0.8));
-  transition: fill 0.15s ease, filter 0.15s ease;
+  stroke: var(--neon-cyan);
+  stroke-width: 0.6;
+  stroke-linejoin: miter;
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 2.5px rgba(0, 240, 255, 0.95));
+  transition: fill 0.15s ease, stroke 0.15s ease, filter 0.15s ease;
 }
 
 .gw-cursor.is-hover .gw-reticle-bracket {
-  filter: drop-shadow(0 0 4px #00f0ff);
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 3.5px #00f0ff);
 }
 
 .gw-cursor.is-hover .gw-reticle-dot {
-  filter: drop-shadow(0 0 4px #00f0ff);
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 3.5px #00f0ff);
 }
 
 .gw-cursor-svg {
@@ -4118,28 +4121,30 @@ html.gw-booting .gw-cursor-reticle,
   height: 100%;
   overflow: visible;
   will-change: transform;
+  shape-rendering: geometricPrecision;
 }
 
 /* Outer circular scroll-progress track & fill */
 .gw-cursor-track {
   fill: none;
-  stroke: rgba(0, 240, 255, 0.16);
-  stroke-width: 3.2;
+  stroke: rgba(0, 240, 255, 0.38);
+  stroke-width: 3.4;
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.65));
 }
 
 .gw-cursor-fill {
   fill: none;
   stroke: var(--neon-cyan);
   stroke: url(#gw-ring-grad);
-  stroke-width: 3.2;
+  stroke-width: 3.8;
   stroke-linecap: round;
   stroke-dasharray: 307.88 307.88;
   stroke-dashoffset: 307.88;
-  filter: drop-shadow(0 0 4px rgba(0, 240, 255, 0.8));
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.92)) drop-shadow(0 0 3px rgba(0, 240, 255, 0.95));
 }
 
 .gw-cursor.is-hover .gw-cursor-fill {
-  filter: drop-shadow(0 0 5px #00f0ff);
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 4.5px #00f0ff);
 }
 
 /* Inner rotating CPU fan light pattern */
@@ -4316,11 +4321,12 @@ html.background-ready .background-particles {
 .gw-cursor.is-danger-hover .gw-cursor-fill {
   stroke: #ff3b5c !important;
   stroke: url(#gw-ring-grad-danger) !important;
-  filter: drop-shadow(0 0 6px rgba(255, 59, 92, 0.9)) !important;
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 4.5px rgba(255, 59, 92, 0.95)) !important;
 }
 
 .gw-cursor.is-danger-hover .gw-cursor-track {
-  stroke: rgba(255, 59, 92, 0.25) !important;
+  stroke: rgba(255, 59, 92, 0.4) !important;
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.7)) !important;
 }
 
 .gw-cursor.is-danger-hover .gw-blade-neon {
@@ -4338,12 +4344,13 @@ html.background-ready .background-particles {
 
 .gw-cursor.is-danger-hover .gw-reticle-bracket {
   stroke: #ff3b5c !important;
-  filter: drop-shadow(0 0 4px rgba(255, 59, 92, 0.9)) !important;
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 3.5px rgba(255, 59, 92, 0.95)) !important;
 }
 
 .gw-cursor.is-danger-hover .gw-reticle-dot {
   fill: #ff3b5c !important;
-  filter: drop-shadow(0 0 4px #ff3b5c) !important;
+  stroke: #ff3b5c !important;
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 3.5px #ff3b5c) !important;
 }
 
 .gw-cursor.is-danger-hover .gw-cursor-fan {
