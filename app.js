@@ -2689,76 +2689,32 @@ function loadAccessCounter() {
   } catch { }
 
   const initialDisplay = cachedValue !== null ? cachedValue : ACCESS_COUNTER_BASELINE;
-  counterElement.textContent = initialDisplay.toLocaleString();
-
-  // Asynchronously query Free-Counters.org in a clean, sandboxed iframe
-  try {
-    const iframe = document.createElement("iframe");
-    iframe.style.display = "none";
-    iframe.style.pointerEvents = "none";
-    iframe.setAttribute("aria-hidden", "true");
-    iframe.title = "Access Counter Sandbox";
-
-    let resolved = false;
-    let timer = null;
-    const cleanup = () => {
-      if (resolved) return;
-      resolved = true;
-      if (timer) clearTimeout(timer);
-      if (iframe.parentNode) {
-        iframe.parentNode.removeChild(iframe);
-      }
-    };
-
-    timer = setTimeout(cleanup, 8000);
-
-    iframe.onload = () => {
-      try {
-        const idoc = iframe.contentDocument || iframe.contentWindow?.document;
-        if (!idoc) {
-          cleanup();
-          return;
-        }
-
-        let captured = "";
-        idoc.write = function (str) {
-          captured += str;
-        };
-
-        const script = idoc.createElement("script");
-        script.type = "text/javascript";
-        script.src = "https://www.free-counters.org/count/kjpa";
-
-        script.onload = () => {
-          try {
-            const match = captured.match(/Total:\s*([\d,]+)/i);
-            if (match) {
-              const val = parseInt(match[1].replace(/,/g, ""), 10);
-              if (!isNaN(val) && val >= ACCESS_COUNTER_BASELINE) {
-                counterElement.textContent = val.toLocaleString();
-                try {
-                  localStorage.setItem(ACCESS_COUNTER_STORAGE_KEY, String(val));
-                } catch { }
-              }
-            }
-          } catch { }
-          cleanup();
-        };
-
-        script.onerror = () => {
-          cleanup();
-        };
-
-        idoc.head.appendChild(script);
-      } catch {
-        cleanup();
-      }
-    };
-
-    document.body.appendChild(iframe);
-  } catch (err) {
-    console.warn("Free-Counters sandboxed loader initialization failed:", err);
+  if (cachedValue !== null) {
+    counterElement.textContent = initialDisplay.toLocaleString();
   }
+
+  // Observe CounterAPI widget updates to cache verified counts
+  try {
+    const observer = new MutationObserver(() => {
+      const countEl = counterElement.querySelector(".count") || counterElement.querySelector(".thecount") || counterElement;
+      const text = countEl.textContent || "";
+      const match = text.match(/[\d,]+/);
+      if (match) {
+        const val = parseInt(match[0].replace(/,/g, ""), 10);
+        if (!isNaN(val) && val >= ACCESS_COUNTER_BASELINE) {
+          try {
+            localStorage.setItem(ACCESS_COUNTER_STORAGE_KEY, String(val));
+          } catch { }
+        }
+      }
+    });
+
+    observer.observe(counterElement, {
+      childList: true,
+      subtree: true,
+      characterData: true
+    });
+  } catch { }
 }
 
 function validateInstagramUrl(rawUrl) {
@@ -4742,7 +4698,7 @@ function setCustomCursorEnabled(enabled) {
 
   customCursorActive = shouldBeActive;
 
-  if (isBooting) {
+  if (isBooting || document.documentElement.classList.contains("gw-booting") || cursor?.classList.contains("is-loading")) {
     return;
   }
 
@@ -6007,6 +5963,7 @@ function initTutorial() {
   }, { passive: true });
 }
 
+initCursorFanStartup();
 startPerformanceSampling();
 initTutorial();
 initAnimationToggle();

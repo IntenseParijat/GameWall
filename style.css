@@ -4036,7 +4036,8 @@ html.gw-booting .gw-cursor-hub-core,
 .gw-cursor.is-loading .gw-cursor-fan,
 .gw-cursor.is-loading .gw-cursor-hub,
 .gw-cursor.is-loading .gw-cursor-hub-core {
-  display: block;
+  display: block !important;
+  opacity: 1;
 }
 
 html.gw-booting .gw-cursor-reticle,
@@ -4053,16 +4054,16 @@ html.gw-booting .gw-cursor-reticle,
 }
 
 /* Post-loading state: CPU fan is removed, precision reticle cursor active */
-:not(html.gw-booting) .gw-cursor:not(.is-loading) .gw-cursor-fan,
-:not(html.gw-booting) .gw-cursor:not(.is-loading) .gw-cursor-hub,
-:not(html.gw-booting) .gw-cursor:not(.is-loading) .gw-cursor-hub-core {
+html:not(.gw-booting) .gw-cursor:not(.is-loading):not(.is-transitioning) .gw-cursor-fan,
+html:not(.gw-booting) .gw-cursor:not(.is-loading):not(.is-transitioning) .gw-cursor-hub,
+html:not(.gw-booting) .gw-cursor:not(.is-loading):not(.is-transitioning) .gw-cursor-hub-core {
   display: none !important;
   animation: none !important;
 }
 
-:not(html.gw-booting) .gw-cursor:not(.is-loading) .gw-cursor-reticle {
-  display: block;
-  opacity: 1;
+html:not(.gw-booting) .gw-cursor:not(.is-loading) .gw-cursor-reticle {
+  display: block !important;
+  opacity: 1 !important;
 }
 
 .gw-cursor-inner {
@@ -4087,32 +4088,52 @@ html.gw-booting .gw-cursor-reticle,
   pointer-events: none;
 }
 
+/* Layer 1: Solid dark outer stroke behind corner brackets */
+.gw-reticle-bracket-bg {
+  fill: none;
+  stroke: #03060d;
+  stroke-width: 6.8;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.85));
+}
+
+/* Layer 2: Bright crisp neon inner stroke */
 .gw-reticle-bracket {
   fill: none;
   stroke: var(--neon-cyan);
   stroke: url(#gw-reticle-grad);
-  stroke-width: 4;
+  stroke-width: 3.2;
   stroke-linecap: square;
   stroke-linejoin: miter;
-  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.92)) drop-shadow(0 0 2.5px rgba(0, 240, 255, 0.95));
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.85));
   transition: stroke 0.15s ease, filter 0.15s ease;
+}
+
+/* Central diamond: dark outer boundary and solid cyan inner */
+.gw-reticle-dot-bg {
+  fill: #03060d;
+  stroke: #03060d;
+  stroke-width: 1.2;
+  stroke-linejoin: miter;
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.85));
 }
 
 .gw-reticle-dot {
   fill: var(--neon-cyan);
-  stroke: var(--neon-cyan);
+  stroke: #03060d;
   stroke-width: 0.6;
   stroke-linejoin: miter;
-  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 2.5px rgba(0, 240, 255, 0.95));
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.85));
   transition: fill 0.15s ease, stroke 0.15s ease, filter 0.15s ease;
 }
 
 .gw-cursor.is-hover .gw-reticle-bracket {
-  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 3.5px #00f0ff);
+  filter: drop-shadow(0 0 3.5px #ffffff);
 }
 
 .gw-cursor.is-hover .gw-reticle-dot {
-  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 3.5px #00f0ff);
+  filter: drop-shadow(0 0 3.5px #ffffff);
 }
 
 .gw-cursor-svg {
@@ -4127,7 +4148,7 @@ html.gw-booting .gw-cursor-reticle,
 /* Outer circular scroll-progress track & fill */
 .gw-cursor-track {
   fill: none;
-  stroke: rgba(0, 240, 255, 0.38);
+  stroke: rgba(0, 238, 255, 0.836);
   stroke-width: 3.4;
   filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.65));
 }
@@ -4140,11 +4161,11 @@ html.gw-booting .gw-cursor-reticle,
   stroke-linecap: round;
   stroke-dasharray: 307.88 307.88;
   stroke-dashoffset: 307.88;
-  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.92)) drop-shadow(0 0 3px rgba(0, 240, 255, 0.95));
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.92)) drop-shadow(0 0 3px rgba(255, 255, 255, 0.95));
 }
 
 .gw-cursor.is-hover .gw-cursor-fill {
-  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 4.5px #00f0ff);
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 4.5px #ffffff);
 }
 
 /* Inner rotating CPU fan light pattern */
@@ -4344,13 +4365,13 @@ html.background-ready .background-particles {
 
 .gw-cursor.is-danger-hover .gw-reticle-bracket {
   stroke: #ff3b5c !important;
-  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 3.5px rgba(255, 59, 92, 0.95)) !important;
+  filter: drop-shadow(0 0 3.5px rgba(255, 59, 92, 0.95)) !important;
 }
 
 .gw-cursor.is-danger-hover .gw-reticle-dot {
   fill: #ff3b5c !important;
-  stroke: #ff3b5c !important;
-  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 3.5px #ff3b5c) !important;
+  stroke: #03060d !important;
+  filter: drop-shadow(0 0 3.5px #ff3b5c) !important;
 }
 
 .gw-cursor.is-danger-hover .gw-cursor-fan {
@@ -4406,9 +4427,49 @@ html.no-animations:not(.gw-booting) .gw-cursor-fill {
   transition: none !important;
 }
 
-html.no-animations:not(.gw-booting) .gw-cursor {
+html.no-animations:not(.gw-booting) .gw-cursor:not(.is-loading) {
   display: none !important;
   opacity: 0 !important;
+}
+
+/* CounterAPI Archive Access Counter Widget */
+.system-status .counterapi,
+#access-counter.counterapi {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+
+#access-counter .c,
+#access-counter .iconAndCount,
+#access-counter .thecount,
+#access-counter .count {
+  display: inline-flex;
+  align-items: center;
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  white-space: nowrap;
+}
+
+#access-counter a.a {
+  display: inline-flex;
+  align-items: center;
+  color: inherit;
+  text-decoration: none;
+  font: inherit;
+  transition: color 0.15s ease;
+}
+
+#access-counter a.a:hover {
+  color: var(--neon-cyan);
+}
+
+#access-counter .coulstripemini {
+  display: none !important;
 }
 
 /* Steam review card rendered natively in the review modal.

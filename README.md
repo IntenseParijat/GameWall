@@ -98,7 +98,7 @@ Posters can display an upper-left status badge:
 
 - **Startup Fan Loader:** Spans deployment, grey-to-neon illumination, acceleration, high-speed spin, and circular database loading progress.
 - **Seamless Desktop Transition:** The loading fan smoothly decelerates while shrinking and morphing into a lightweight precision gaming reticle cursor at the mouse pointer.
-- **Precision Gaming Reticle Cursor:** A 24px four-corner angular HUD reticle featuring a central cyan diamond, subtle circular scroll-progress ring, and responsive danger hover effects without continuous animation loops or CPU overhead.
+- **Precision Gaming Reticle Cursor:** A 24px four-corner angular HUD reticle featuring a dual-layer high-contrast design (opaque dark outer stroke behind bright neon inner stroke), clearly defined central diamond, subtle circular scroll-progress ring, and responsive danger hover effects without continuous animation loops or CPU overhead.
 - **Mobile & Touch Devices:** The startup fan runs completely, but custom mouse cursor tracking is never enabled.
 - **Animations Toggle:** Click **ANIMATIONS: ON / OFF** to toggle animations. The choice is saved to `localStorage` and respects `prefers-reduced-motion`. The startup fan runs independently during initial boot.
 - **Adaptive Performance:** Devices detected as low-powered during startup automatically bypass the per-card title curtain reveal to ensure fluid rendering.
@@ -107,10 +107,11 @@ Posters can display an upper-left status badge:
 
 ## Archive Access Counter
 
-GameWall tracks visits using [Free-Counters.org](https://www.free-counters.org/) (`kjpa`):
-- **Preserved Baseline:** Initialized at 600. Cached values persist in `localStorage` (`gamewall_access_count`) and display immediately on page load.
-- **Isolated Sandboxing:** Executed asynchronously in a background sandboxed frame without delaying startup, blocking rendering, or polluting the DOM.
-- **Clean Integration:** Unrelated third-party tracker scripts and backlinks are omitted. If network connectivity fails, the last confirmed count is reliably retained.
+GameWall tracks visits using the official [CounterAPI.com](https://counterapi.com/) integration:
+- **Namespace & Key:** Namespace `intenseparijat.github.io` with counter key `gamewall-archive-visits`.
+- **Preserved Baseline:** Configured with `startNumber="600"` to maintain the historical visit baseline.
+- **Widget Integration:** Loaded via CounterAPI's asynchronous widget (`c.js?ns=intenseparijat.github.io`) without blocking startup, avoiding duplicate increment requests or fragile scraping.
+- **Local Persistence & Resilient Fallback:** Verified counts persist in `localStorage` (`gamewall_access_count`) for immediate subsequent display. If network connectivity fails, the last confirmed count is reliably retained without artificial local increments.
 
 ---
 
