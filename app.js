@@ -863,34 +863,50 @@ async function coordinateStartupReadiness({ success = true } = {}) {
     }
   } catch { }
 
-  evaluateDeviceCapability();
+  try {
+    evaluateDeviceCapability();
+  } catch { }
 
   // 2. Ensure background canvas has initialized its buffer and rendered a valid initial frame
-  window.__ensureCanvasReady?.();
+  try {
+    window.__ensureCanvasReady?.();
+  } catch { }
 
   // 3. Begin background entrance: unpause CSS animations and resume canvas animation loop
-  document.documentElement.classList.remove("background-muted");
-  document.documentElement.classList.add("background-entering");
-  window.__resumeCanvasAnimations?.();
+  try {
+    document.documentElement.classList.remove("background-muted");
+    document.documentElement.classList.add("background-entering");
+    window.__resumeCanvasAnimations?.();
+  } catch { }
 
   // 4. Bounded paint-settling step: allow browser to commit initial layout & canvas frame
-  await new Promise((resolve) => {
-    requestAnimationFrame(() => {
-      requestAnimationFrame(resolve);
+  try {
+    await new Promise((resolve) => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(resolve);
+      });
     });
-  });
+  } catch { }
 
   // 5. Coordinated fan transition & overlay fade out
-  await decelerateCursorFan();
-
-  // 6. Dismiss loading overlay and finalize readiness state
-  hideLoading();
+  try {
+    await decelerateCursorFan();
+  } catch (err) {
+    console.warn("[GameWall] Fan transition error:", err);
+  } finally {
+    // 6. Dismiss loading overlay and finalize readiness state
+    hideLoading();
+  }
 
   state.initialized = true;
-  window.__updatePageNav?.();
-  window.__updateCursorProgress?.();
+  try {
+    window.__updatePageNav?.();
+    window.__updateCursorProgress?.();
+  } catch { }
   if (success) {
-    checkInitialReviewSlug();
+    try {
+      checkInitialReviewSlug();
+    } catch { }
   }
 }
 
@@ -2665,56 +2681,102 @@ function initBackgroundCanvas() {
   drawStaticFrame(0);
 }
 
+const ARCHIVE_COUNTER_API_BASE = "https://gamewall-archive-counter.parijatsoftwares.workers.dev";
 const ACCESS_COUNTER_STORAGE_KEY = "gamewall_access_count";
-const ACCESS_COUNTER_BASELINE = 600;
-let accessCounterLoaded = false;
+let accessCounterRequestPromise = null;
 
 function loadAccessCounter() {
-  if (accessCounterLoaded) return;
-  accessCounterLoaded = true;
+  if (accessCounterRequestPromise) return accessCounterRequestPromise;
 
   const counterElement = document.querySelector("#access-counter");
-  if (!counterElement) return;
 
-  // Immediately display cached count or fallback to baseline (600)
+  // Read cached value as fallback
   let cachedValue = null;
   try {
     const stored = localStorage.getItem(ACCESS_COUNTER_STORAGE_KEY);
     if (stored) {
       const parsed = parseInt(stored, 10);
-      if (!isNaN(parsed) && parsed >= ACCESS_COUNTER_BASELINE) {
+      if (!isNaN(parsed) && parsed > 0) {
         cachedValue = parsed;
       }
     }
   } catch { }
 
-  const initialDisplay = cachedValue !== null ? cachedValue : ACCESS_COUNTER_BASELINE;
-  if (cachedValue !== null) {
-    counterElement.textContent = initialDisplay.toLocaleString();
+  if (counterElement && cachedValue !== null) {
+    counterElement.textContent = cachedValue.toLocaleString();
   }
 
-  // Observe CounterAPI widget updates to cache verified counts
-  try {
-    const observer = new MutationObserver(() => {
-      const countEl = counterElement.querySelector(".count") || counterElement.querySelector(".thecount") || counterElement;
-      const text = countEl.textContent || "";
-      const match = text.match(/[\d,]+/);
-      if (match) {
-        const val = parseInt(match[0].replace(/,/g, ""), 10);
-        if (!isNaN(val) && val >= ACCESS_COUNTER_BASELINE) {
-          try {
-            localStorage.setItem(ACCESS_COUNTER_STORAGE_KEY, String(val));
-          } catch { }
+  accessCounterRequestPromise = (async () => {
+    const applyCount = (count) => {
+      try {
+        localStorage.setItem(ACCESS_COUNTER_STORAGE_KEY, String(count));
+      } catch { }
+      const el = counterElement || document.querySelector("#access-counter");
+      if (el) {
+        el.textContent = count.toLocaleString();
+      }
+    };
+
+    const applyUnavailable = () => {
+      const el = counterElement || document.querySelector("#access-counter");
+      if (el) {
+        if (cachedValue !== null) {
+          el.textContent = cachedValue.toLocaleString();
+        } else {
+          el.textContent = "—";
         }
       }
-    });
+    };
 
-    observer.observe(counterElement, {
-      childList: true,
-      subtree: true,
-      characterData: true
-    });
-  } catch { }
+    // 1. Send exactly one POST request to record page visit
+    let postSuccess = false;
+    try {
+      const response = await fetch(`${ARCHIVE_COUNTER_API_BASE}/api/visit`, {
+        method: "POST",
+        cache: "no-store",
+        headers: {
+          "Accept": "application/json"
+        }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (data && typeof data.count === "number" && Number.isFinite(data.count) && data.count > 0) {
+          applyCount(data.count);
+          postSuccess = true;
+          return;
+        }
+      }
+    } catch {
+      // Network or parse error: proceed to GET fallback without retrying POST
+    }
+
+    if (postSuccess) return;
+
+    // 4. If POST fails, attempt GET /api/count to retrieve current server-side count without incrementing
+    try {
+      const getResponse = await fetch(`${ARCHIVE_COUNTER_API_BASE}/api/count`, {
+        method: "GET",
+        cache: "no-store",
+        headers: {
+          "Accept": "application/json"
+        }
+      });
+      if (getResponse.ok) {
+        const getData = await getResponse.json();
+        if (getData && typeof getData.count === "number" && Number.isFinite(getData.count) && getData.count > 0) {
+          applyCount(getData.count);
+          return;
+        }
+      }
+    } catch {
+      // GET failed as well
+    }
+
+    // 5. If both requests fail, display last successfully confirmed cached count or unavailable indicator
+    applyUnavailable();
+  })();
+
+  return accessCounterRequestPromise;
 }
 
 function validateInstagramUrl(rawUrl) {
@@ -4842,6 +4904,26 @@ function initCursorFanStartup() {
   const bladeWraps = Array.from(fan.querySelectorAll(".gw-blade-wrap"));
   const hubCore = document.querySelector(".gw-cursor-hub-core");
 
+  // If animations are disabled in preferences, immediately reveal all 5 blades and hub core
+  if (!animationsEnabled) {
+    bladeWraps.forEach((wrap) => {
+      const deployGroup = wrap.querySelector(".gw-blade-deploy");
+      if (deployGroup) deployGroup.style.transform = "scale(1)";
+      const greyUse = wrap.querySelector(".gw-blade-grey");
+      if (greyUse) greyUse.style.opacity = "0";
+      const neonUse = wrap.querySelector(".gw-blade-neon");
+      if (neonUse) neonUse.style.opacity = "1";
+    });
+    if (hubCore) {
+      hubCore.style.opacity = "1";
+      hubCore.style.filter = "drop-shadow(0 0 2px #00f0ff)";
+    }
+    if (fanReadyForDecelResolve) {
+      fanReadyForDecelResolve();
+    }
+    return;
+  }
+
   // Phase A - Staggered mechanical blade assembly
   const bladeDeployDuration = 320;
   const bladeStaggerDelay = 110;
@@ -4985,9 +5067,39 @@ async function decelerateCursorFan() {
 
     fanTransitionRequested = true;
 
+    // Fast path when animations are disabled in preferences
+    if (!animationsEnabled) {
+      if (fanReadyForDecelResolve) fanReadyForDecelResolve();
+      cancelCursorFanStartup();
+
+      if (elements.loadingScreen) {
+        elements.loadingScreen.classList.add("is-fading");
+      }
+
+      document.documentElement.classList.remove("gw-booting", "has-custom-cursor");
+      if (cursor) {
+        cursor.classList.remove("is-loading", "is-active", "is-hover", "is-danger-hover");
+        cursor.style.display = "none";
+        cursor.style.opacity = "0";
+      }
+      isBooting = false;
+      fanStartupDone = true;
+      customCursorActive = false;
+
+      if (elements.loadingScreen) {
+        elements.loadingScreen.classList.remove("is-fading");
+        elements.loadingScreen.classList.add("is-hidden");
+      }
+      document.documentElement.classList.remove("background-entering");
+      document.documentElement.classList.add("background-ready");
+      window.__resumeCanvasAnimations?.();
+      window.__updateCursorProgress?.();
+      return;
+    }
+
     await Promise.race([
       fanReadyForDecelPromise,
-      new Promise((r) => setTimeout(r, 4000))
+      new Promise((r) => setTimeout(r, 2500))
     ]);
 
     if (fanStartupDone) {
@@ -5147,16 +5259,6 @@ async function decelerateCursorFan() {
       ]);
     } catch { }
 
-    cursor.classList.remove("is-transitioning");
-    try { fanFade?.cancel(); } catch { }
-    if (fanGroup) fanGroup.style.opacity = "";
-    try { hubFade?.cancel(); } catch { }
-    if (hub) hub.style.opacity = "";
-    try { hubCoreFade?.cancel(); } catch { }
-    if (hubCore) hubCore.style.opacity = "";
-    try { reticleFade?.cancel(); } catch { }
-    if (reticle) reticle.style.opacity = "";
-
     // Establish final visual states BEFORE removing boot-state class
     fan.style.setProperty("--gw-fan-start-angle", `${finalAngle.toFixed(2)}deg`);
 
@@ -5164,10 +5266,24 @@ async function decelerateCursorFan() {
       cursor.style.transform = `translate3d(${targetX}px, ${targetY}px, 0)`;
       cursor.style.display = "";
       cursor.style.opacity = "";
+
+      // Keep reticle visible before switching classes to eliminate momentary flicker
+      if (reticle) reticle.style.opacity = "1";
+
       cursor.classList.remove("is-loading");
       document.documentElement.classList.remove("gw-booting");
       isBooting = false;
       fanStartupDone = true;
+
+      cursor.classList.remove("is-transitioning");
+      try { fanFade?.cancel(); } catch { }
+      if (fanGroup) fanGroup.style.opacity = "";
+      try { hubFade?.cancel(); } catch { }
+      if (hub) hub.style.opacity = "";
+      try { hubCoreFade?.cancel(); } catch { }
+      if (hubCore) hubCore.style.opacity = "";
+      try { reticleFade?.cancel(); } catch { }
+      if (reticle) reticle.style.opacity = "";
 
       try { cursorAnim?.cancel(); } catch { }
       try { decelAnim.cancel(); } catch { }
@@ -5202,7 +5318,7 @@ async function decelerateCursorFan() {
       }
     } else {
       document.documentElement.classList.remove("gw-booting", "has-custom-cursor");
-      cursor.classList.remove("is-loading", "is-active", "is-hover", "is-danger-hover");
+      cursor.classList.remove("is-loading", "is-active", "is-hover", "is-danger-hover", "is-transitioning");
       cursor.style.display = "none";
       cursor.style.opacity = "0";
       isBooting = false;

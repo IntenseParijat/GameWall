@@ -4128,12 +4128,28 @@ html:not(.gw-booting) .gw-cursor:not(.is-loading) .gw-cursor-reticle {
   transition: fill 0.15s ease, stroke 0.15s ease, filter 0.15s ease;
 }
 
-.gw-cursor.is-hover .gw-reticle-bracket {
-  filter: drop-shadow(0 0 3.5px #ffffff);
+.gw-cursor.is-hover .gw-reticle-bracket,
+.gw-cursor.is-danger-hover .gw-reticle-bracket {
+  stroke: #ffffff !important;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.85));
 }
 
-.gw-cursor.is-hover .gw-reticle-dot {
-  filter: drop-shadow(0 0 3.5px #ffffff);
+.gw-cursor.is-hover .gw-reticle-dot,
+.gw-cursor.is-danger-hover .gw-reticle-dot {
+  fill: #ffffff !important;
+  stroke: #03060d !important;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.85));
+}
+
+.gw-cursor.is-hover .gw-reticle-bracket-bg,
+.gw-cursor.is-danger-hover .gw-reticle-bracket-bg {
+  stroke: #03060d !important;
+}
+
+.gw-cursor.is-hover .gw-reticle-dot-bg,
+.gw-cursor.is-danger-hover .gw-reticle-dot-bg {
+  fill: #03060d !important;
+  stroke: #03060d !important;
 }
 
 .gw-cursor-svg {
@@ -4224,6 +4240,27 @@ html.gw-booting .gw-cursor-hub-core {
   transition: none !important;
 }
 
+html.no-animations.gw-booting .gw-blade-deploy,
+html.no-animations .gw-cursor.is-loading .gw-blade-deploy {
+  transform: scale(1) !important;
+}
+
+html.no-animations.gw-booting .gw-blade-grey,
+html.no-animations .gw-cursor.is-loading .gw-blade-grey {
+  opacity: 0 !important;
+}
+
+html.no-animations.gw-booting .gw-blade-neon,
+html.no-animations .gw-cursor.is-loading .gw-blade-neon {
+  opacity: 1 !important;
+}
+
+html.no-animations.gw-booting .gw-cursor-hub-core,
+html.no-animations .gw-cursor.is-loading .gw-cursor-hub-core {
+  opacity: 1 !important;
+  filter: drop-shadow(0 0 2px #00f0ff) !important;
+}
+
 /* Coordinated background transition states */
 .background-canvas,
 .ambient,
@@ -4305,16 +4342,21 @@ html.background-ready .background-particles {
     transition: none !important;
   }
 
-  html:not(.animations-unlocked):not(.gw-booting) .gw-blade-deploy {
+  html:not(.animations-unlocked) .gw-blade-deploy {
     transform: scale(1) !important;
   }
 
-  html:not(.animations-unlocked):not(.gw-booting) .gw-blade-neon {
+  html:not(.animations-unlocked) .gw-blade-neon {
     opacity: 1 !important;
   }
 
-  html:not(.animations-unlocked):not(.gw-booting) .gw-blade-grey {
+  html:not(.animations-unlocked) .gw-blade-grey {
     opacity: 0 !important;
+  }
+
+  html:not(.animations-unlocked) .gw-cursor-hub-core {
+    opacity: 1 !important;
+    filter: drop-shadow(0 0 2px #00f0ff) !important;
   }
 
   html:not(.animations-unlocked) .review-image-spinner {
@@ -4361,17 +4403,6 @@ html.background-ready .background-particles {
 .gw-cursor.is-danger-hover .gw-cursor-hub-core {
   fill: #ff3b5c !important;
   filter: drop-shadow(0 0 5px #ff3b5c) !important;
-}
-
-.gw-cursor.is-danger-hover .gw-reticle-bracket {
-  stroke: #ff3b5c !important;
-  filter: drop-shadow(0 0 3.5px rgba(255, 59, 92, 0.95)) !important;
-}
-
-.gw-cursor.is-danger-hover .gw-reticle-dot {
-  fill: #ff3b5c !important;
-  stroke: #03060d !important;
-  filter: drop-shadow(0 0 3.5px #ff3b5c) !important;
 }
 
 .gw-cursor.is-danger-hover .gw-cursor-fan {
@@ -4432,44 +4463,16 @@ html.no-animations:not(.gw-booting) .gw-cursor:not(.is-loading) {
   opacity: 0 !important;
 }
 
-/* CounterAPI Archive Access Counter Widget */
-.system-status .counterapi,
-#access-counter.counterapi {
+/* Archive Access Counter */
+.system-status #access-counter,
+#access-counter {
   display: inline-flex;
   align-items: center;
   vertical-align: middle;
   font: inherit;
   color: inherit;
   letter-spacing: inherit;
-}
-
-#access-counter .c,
-#access-counter .iconAndCount,
-#access-counter .thecount,
-#access-counter .count {
-  display: inline-flex;
-  align-items: center;
-  font: inherit;
-  color: inherit;
-  letter-spacing: inherit;
   white-space: nowrap;
-}
-
-#access-counter a.a {
-  display: inline-flex;
-  align-items: center;
-  color: inherit;
-  text-decoration: none;
-  font: inherit;
-  transition: color 0.15s ease;
-}
-
-#access-counter a.a:hover {
-  color: var(--neon-cyan);
-}
-
-#access-counter .coulstripemini {
-  display: none !important;
 }
 
 /* Steam review card rendered natively in the review modal.

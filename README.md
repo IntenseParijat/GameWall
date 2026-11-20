@@ -96,22 +96,33 @@ Posters can display an upper-left status badge:
 
 ## Cursor, Loading, and Performance
 
-- **Startup Fan Loader:** Spans deployment, grey-to-neon illumination, acceleration, high-speed spin, and circular database loading progress.
-- **Seamless Desktop Transition:** The loading fan smoothly decelerates while shrinking and morphing into a lightweight precision gaming reticle cursor at the mouse pointer.
-- **Precision Gaming Reticle Cursor:** A 24px four-corner angular HUD reticle featuring a dual-layer high-contrast design (opaque dark outer stroke behind bright neon inner stroke), clearly defined central diamond, subtle circular scroll-progress ring, and responsive danger hover effects without continuous animation loops or CPU overhead.
-- **Mobile & Touch Devices:** The startup fan runs completely, but custom mouse cursor tracking is never enabled.
-- **Animations Toggle:** Click **ANIMATIONS: ON / OFF** to toggle animations. The choice is saved to `localStorage` and respects `prefers-reduced-motion`. The startup fan runs independently during initial boot.
+- **Startup Fan Loader:** Spans deployment, grey-to-neon illumination, acceleration, high-speed spin, and circular database loading progress. Appears during startup on all devices regardless of touch capabilities, cursor eligibility, or animation preferences.
+- **Seamless Desktop Transition:** On desktops with animations enabled, the loading fan smoothly decelerates while shrinking and morphing into a lightweight precision gaming reticle cursor at the mouse pointer without momentary flickering or disappearance.
+- **Mobile & Touch Devices / Animations Disabled:** The startup fan runs as the startup loading indicator and dismisses cleanly once startup loading finishes; native cursor behaviour is preserved and custom mouse cursor tracking is never enabled.
+- **Precision Gaming Reticle Cursor:** A 24px four-corner angular HUD reticle featuring a dual-layer high-contrast design (opaque dark outer stroke behind bright neon inner stroke in normal state; solid white inner brackets and center diamond with dark backing borders on both normal `.is-hover` and `.is-danger-hover` states), clearly defined central diamond, subtle circular scroll-progress ring, and responsive danger hover effects without continuous animation loops or CPU overhead.
+- **Animations Toggle:** Click **ANIMATIONS: ON / OFF** to toggle animations. The choice is saved to `localStorage` and respects `prefers-reduced-motion`. The startup fan is presented on initial boot across all preferences and dismissed once ready.
 - **Adaptive Performance:** Devices detected as low-powered during startup automatically bypass the per-card title curtain reveal to ensure fluid rendering.
 
 ---
 
 ## Archive Access Counter
 
-GameWall tracks visits using the official [CounterAPI.com](https://counterapi.com/) integration:
-- **Namespace & Key:** Namespace `intenseparijat.github.io` with counter key `gamewall-archive-visits`.
-- **Preserved Baseline:** Configured with `startNumber="600"` to maintain the historical visit baseline.
-- **Widget Integration:** Loaded via CounterAPI's asynchronous widget (`c.js?ns=intenseparijat.github.io`) without blocking startup, avoiding duplicate increment requests or fragile scraping.
-- **Local Persistence & Resilient Fallback:** Verified counts persist in `localStorage` (`gamewall_access_count`) for immediate subsequent display. If network connectivity fails, the last confirmed count is reliably retained without artificial local increments.
+GameWall tracks visits using a custom backend powered by Cloudflare Workers and Cloudflare D1:
+
+- **Production Worker URL:**
+  `https://gamewall-archive-counter.parijatsoftwares.workers.dev`
+- **API Endpoints:**
+  - `POST /api/visit` — Records exactly one page visit and returns the updated count JSON (`{ "count": number }`).
+  - `GET /api/count` — Retrieves the current stored count without incrementing it (`{ "count": number }`).
+- **Visit-Counting Protocol:**
+  - On each normal page load, the frontend sends exactly one `POST /api/visit` request to record the visit.
+  - The displayed counter is updated with the confirmed `count` returned by the server.
+  - The last successfully server-confirmed count is stored in `localStorage` (`gamewall_access_count`) purely as an offline display cache/fallback. LocalStorage is never the source of truth and is never used to increment the count locally.
+  - If the initial `POST` request fails, the frontend falls back to `GET /api/count` to retrieve the current count without incrementing it.
+  - If both network requests fail, the last confirmed cached count is displayed when available; otherwise, an unavailable indicator (`—`) is shown rather than inventing an artificial count.
+  - Guards prevent duplicate increments from repeated initialization calls, scroll events, cursor movements, or visibility changes. The frontend never automatically retries failed `POST` requests to prevent duplicate count increments.
+- **Maintenance Information:**
+  - The frontend API base URL is configured via `ARCHIVE_COUNTER_API_BASE` in `app.js`. If the Worker is replaced, domain names change, or the counter service is redeployed to a different address, update `ARCHIVE_COUNTER_API_BASE` to point to the new endpoint base URL.
 
 ---
 
