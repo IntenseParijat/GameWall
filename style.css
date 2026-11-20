@@ -20,7 +20,7 @@
   --border: rgba(168, 176, 192, 0.17);
   --cyan-soft: rgba(0, 240, 255, 0.16);
   --radius: 4px;
-  --gw-cursor-size: 44px;
+  --gw-cursor-size: 24px;
   --gw-loading-fan-size: clamp(140px, min(22vw, 24vh), 210px);
   color-scheme: dark;
 }
@@ -3985,9 +3985,9 @@ body.spoiler-modal-open {
   position: fixed;
   top: 0;
   left: 0;
-  width: var(--gw-cursor-size, 44px);
-  height: var(--gw-cursor-size, 44px);
-  margin: calc(var(--gw-cursor-size, 44px) / -2) 0 0 calc(var(--gw-cursor-size, 44px) / -2);
+  width: var(--gw-cursor-size, 24px);
+  height: var(--gw-cursor-size, 24px);
+  margin: calc(var(--gw-cursor-size, 24px) / -2) 0 0 calc(var(--gw-cursor-size, 24px) / -2);
   pointer-events: none !important;
   z-index: 2147483647 !important;
   opacity: 0;
@@ -4029,6 +4029,42 @@ html.gw-booting .gw-cursor-fill,
   transition: stroke-dashoffset 0.35s cubic-bezier(0.2, 0.8, 0.25, 1);
 }
 
+/* Startup loading screen: keep fan blades and hub fully visible, reticle hidden */
+html.gw-booting .gw-cursor-fan,
+html.gw-booting .gw-cursor-hub,
+html.gw-booting .gw-cursor-hub-core,
+.gw-cursor.is-loading .gw-cursor-fan,
+.gw-cursor.is-loading .gw-cursor-hub,
+.gw-cursor.is-loading .gw-cursor-hub-core {
+  display: block;
+}
+
+html.gw-booting .gw-cursor-reticle,
+.gw-cursor.is-loading .gw-cursor-reticle {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+.gw-cursor.is-transitioning .gw-cursor-fan,
+.gw-cursor.is-transitioning .gw-cursor-hub,
+.gw-cursor.is-transitioning .gw-cursor-hub-core,
+.gw-cursor.is-transitioning .gw-cursor-reticle {
+  display: block !important;
+}
+
+/* Post-loading state: CPU fan is removed, precision reticle cursor active */
+:not(html.gw-booting) .gw-cursor:not(.is-loading) .gw-cursor-fan,
+:not(html.gw-booting) .gw-cursor:not(.is-loading) .gw-cursor-hub,
+:not(html.gw-booting) .gw-cursor:not(.is-loading) .gw-cursor-hub-core {
+  display: none !important;
+  animation: none !important;
+}
+
+:not(html.gw-booting) .gw-cursor:not(.is-loading) .gw-cursor-reticle {
+  display: block;
+  opacity: 1;
+}
+
 .gw-cursor-inner {
   position: relative;
   width: 100%;
@@ -4041,7 +4077,39 @@ html.gw-booting .gw-cursor-fill,
 }
 
 .gw-cursor.is-hover .gw-cursor-inner {
-  transform: scale(1.18);
+  transform: scale(1.15);
+}
+
+/* Precision Gaming Reticle Cursor */
+.gw-cursor-reticle {
+  transform-box: view-box;
+  transform-origin: 50px 50px;
+  pointer-events: none;
+}
+
+.gw-reticle-bracket {
+  fill: none;
+  stroke: var(--neon-cyan);
+  stroke: url(#gw-reticle-grad);
+  stroke-width: 3.2;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  filter: drop-shadow(0 0 2px rgba(0, 240, 255, 0.65));
+  transition: stroke 0.15s ease, filter 0.15s ease;
+}
+
+.gw-reticle-dot {
+  fill: var(--neon-cyan);
+  filter: drop-shadow(0 0 2px rgba(0, 240, 255, 0.8));
+  transition: fill 0.15s ease, filter 0.15s ease;
+}
+
+.gw-cursor.is-hover .gw-reticle-bracket {
+  filter: drop-shadow(0 0 4px #00f0ff);
+}
+
+.gw-cursor.is-hover .gw-reticle-dot {
+  filter: drop-shadow(0 0 4px #00f0ff);
 }
 
 .gw-cursor-svg {
@@ -4266,6 +4334,16 @@ html.background-ready .background-particles {
 .gw-cursor.is-danger-hover .gw-cursor-hub-core {
   fill: #ff3b5c !important;
   filter: drop-shadow(0 0 5px #ff3b5c) !important;
+}
+
+.gw-cursor.is-danger-hover .gw-reticle-bracket {
+  stroke: #ff3b5c !important;
+  filter: drop-shadow(0 0 4px rgba(255, 59, 92, 0.9)) !important;
+}
+
+.gw-cursor.is-danger-hover .gw-reticle-dot {
+  fill: #ff3b5c !important;
+  filter: drop-shadow(0 0 4px #ff3b5c) !important;
 }
 
 .gw-cursor.is-danger-hover .gw-cursor-fan {

@@ -535,6 +535,11 @@
             <stop offset="50%" stop-color="#ff1744" />
             <stop offset="100%" stop-color="#ff3b5c" />
           </linearGradient>
+          <linearGradient id="gw-reticle-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#00f0ff" />
+            <stop offset="65%" stop-color="#00f0ff" />
+            <stop offset="100%" stop-color="#b026ff" />
+          </linearGradient>
           <path id="gw-blade-path"
             d="M 0.0,-12.0 Q 3.3,-24.8 9.9,-36.7 A 38,38 0 0,1 28.5,-25.9 Q 19.3,-15.8 4.2,-11.2 A 12,12 0 0,0 0.0,-12.0 Z" />
         </defs>
@@ -574,6 +579,13 @@
         </g>
         <circle class="gw-cursor-hub" cx="50" cy="50" r="10" />
         <circle class="gw-cursor-hub-core" cx="50" cy="50" r="2.5" />
+        <g class="gw-cursor-reticle" aria-hidden="true">
+          <path class="gw-reticle-bracket" d="M 26,38 L 26,26 L 38,26" />
+          <path class="gw-reticle-bracket" d="M 62,26 L 74,26 L 74,38" />
+          <path class="gw-reticle-bracket" d="M 74,62 L 74,74 L 62,74" />
+          <path class="gw-reticle-bracket" d="M 38,74 L 26,74 L 26,62" />
+          <polygon class="gw-reticle-dot" points="50,46.5 53.5,50 50,53.5 46.5,50" />
+        </g>
       </svg>
     </div>
   </div>

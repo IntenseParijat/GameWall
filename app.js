@@ -2665,34 +2665,99 @@ function initBackgroundCanvas() {
   drawStaticFrame(0);
 }
 
+const ACCESS_COUNTER_STORAGE_KEY = "gamewall_access_count";
+const ACCESS_COUNTER_BASELINE = 600;
 let accessCounterLoaded = false;
 
-async function loadAccessCounter() {
+function loadAccessCounter() {
   if (accessCounterLoaded) return;
   accessCounterLoaded = true;
 
   const counterElement = document.querySelector("#access-counter");
   if (!counterElement) return;
 
+  // Immediately display cached count or fallback to baseline (600)
+  let cachedValue = null;
   try {
-    const response = await fetch(
-      "https://abacus.jasoncameron.dev/hit/intenseparijat.github.io/gamewall",
-      { cache: "no-store" }
-    );
-
-    if (!response.ok) {
-      throw new Error(`Counter API returned HTTP ${response.status}`);
+    const stored = localStorage.getItem(ACCESS_COUNTER_STORAGE_KEY);
+    if (stored) {
+      const parsed = parseInt(stored, 10);
+      if (!isNaN(parsed) && parsed >= ACCESS_COUNTER_BASELINE) {
+        cachedValue = parsed;
+      }
     }
+  } catch { }
 
-    const data = await response.json();
-    if (typeof data.value === "number") {
-      counterElement.textContent = data.value.toLocaleString();
-    } else {
-      throw new Error("Invalid counter response payload");
-    }
-  } catch (error) {
-    console.warn("GameWall access counter unavailable:", error);
-    counterElement.textContent = "—";
+  const initialDisplay = cachedValue !== null ? cachedValue : ACCESS_COUNTER_BASELINE;
+  counterElement.textContent = initialDisplay.toLocaleString();
+
+  // Asynchronously query Free-Counters.org in a clean, sandboxed iframe
+  try {
+    const iframe = document.createElement("iframe");
+    iframe.style.display = "none";
+    iframe.style.pointerEvents = "none";
+    iframe.setAttribute("aria-hidden", "true");
+    iframe.title = "Access Counter Sandbox";
+
+    let resolved = false;
+    let timer = null;
+    const cleanup = () => {
+      if (resolved) return;
+      resolved = true;
+      if (timer) clearTimeout(timer);
+      if (iframe.parentNode) {
+        iframe.parentNode.removeChild(iframe);
+      }
+    };
+
+    timer = setTimeout(cleanup, 8000);
+
+    iframe.onload = () => {
+      try {
+        const idoc = iframe.contentDocument || iframe.contentWindow?.document;
+        if (!idoc) {
+          cleanup();
+          return;
+        }
+
+        let captured = "";
+        idoc.write = function (str) {
+          captured += str;
+        };
+
+        const script = idoc.createElement("script");
+        script.type = "text/javascript";
+        script.src = "https://www.free-counters.org/count/kjpa";
+
+        script.onload = () => {
+          try {
+            const match = captured.match(/Total:\s*([\d,]+)/i);
+            if (match) {
+              const val = parseInt(match[1].replace(/,/g, ""), 10);
+              if (!isNaN(val) && val >= ACCESS_COUNTER_BASELINE) {
+                counterElement.textContent = val.toLocaleString();
+                try {
+                  localStorage.setItem(ACCESS_COUNTER_STORAGE_KEY, String(val));
+                } catch { }
+              }
+            }
+          } catch { }
+          cleanup();
+        };
+
+        script.onerror = () => {
+          cleanup();
+        };
+
+        idoc.head.appendChild(script);
+      } catch {
+        cleanup();
+      }
+    };
+
+    document.body.appendChild(iframe);
+  } catch (err) {
+    console.warn("Free-Counters sandboxed loader initialization failed:", err);
   }
 }
 
@@ -5038,12 +5103,48 @@ async function decelerateCursorFan() {
     const startX = currentRect.left + currentRect.width / 2;
     const startY = currentRect.top + currentRect.height / 2;
 
+    const fanGroup = cursor.querySelector(".gw-cursor-fan");
+    const hub = cursor.querySelector(".gw-cursor-hub");
+    const hubCore = cursor.querySelector(".gw-cursor-hub-core");
+    const reticle = cursor.querySelector(".gw-cursor-reticle");
+
+    let fanFade = null;
+    let hubFade = null;
+    let hubCoreFade = null;
+    let reticleFade = null;
+
     if (shouldEnableCustomCursor) {
       targetX = hasKnownPointer ? lastPointerX : startX;
       targetY = hasKnownPointer ? lastPointerY : startY;
 
       const currentWidth = currentRect.width || 200;
-      const scaleRatio = 44 / currentWidth;
+      const targetSize = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--gw-cursor-size")) || 24;
+      const scaleRatio = targetSize / currentWidth;
+
+      cursor.classList.add("is-transitioning");
+
+      if (fanGroup && reticle) {
+        fanFade = fanGroup.animate(
+          [{ opacity: 1 }, { opacity: 0 }],
+          { duration: decelDuration, easing: "cubic-bezier(0.2, 0.75, 0.5, 0.935)", fill: "forwards" }
+        );
+        if (hub) {
+          hubFade = hub.animate(
+            [{ opacity: 1 }, { opacity: 0 }],
+            { duration: decelDuration, easing: "cubic-bezier(0.2, 0.75, 0.5, 0.935)", fill: "forwards" }
+          );
+        }
+        if (hubCore) {
+          hubCoreFade = hubCore.animate(
+            [{ opacity: 1 }, { opacity: 0 }],
+            { duration: decelDuration, easing: "cubic-bezier(0.2, 0.75, 0.5, 0.935)", fill: "forwards" }
+          );
+        }
+        reticleFade = reticle.animate(
+          [{ opacity: 0 }, { opacity: 1 }],
+          { duration: decelDuration, easing: "cubic-bezier(0.2, 0.75, 0.5, 0.935)", fill: "forwards" }
+        );
+      }
 
       cursorAnim = cursor.animate(
         [
@@ -5080,8 +5181,25 @@ async function decelerateCursorFan() {
     try {
       const promises = [decelAnim.finished];
       if (cursorAnim) promises.push(cursorAnim.finished);
-      await Promise.all(promises);
+      if (fanFade) promises.push(fanFade.finished);
+      if (hubFade) promises.push(hubFade.finished);
+      if (hubCoreFade) promises.push(hubCoreFade.finished);
+      if (reticleFade) promises.push(reticleFade.finished);
+      await Promise.race([
+        Promise.all(promises),
+        new Promise((r) => setTimeout(r, decelDuration + 200))
+      ]);
     } catch { }
+
+    cursor.classList.remove("is-transitioning");
+    try { fanFade?.cancel(); } catch { }
+    if (fanGroup) fanGroup.style.opacity = "";
+    try { hubFade?.cancel(); } catch { }
+    if (hub) hub.style.opacity = "";
+    try { hubCoreFade?.cancel(); } catch { }
+    if (hubCore) hubCore.style.opacity = "";
+    try { reticleFade?.cancel(); } catch { }
+    if (reticle) reticle.style.opacity = "";
 
     // Establish final visual states BEFORE removing boot-state class
     fan.style.setProperty("--gw-fan-start-angle", `${finalAngle.toFixed(2)}deg`);
@@ -5151,7 +5269,6 @@ async function decelerateCursorFan() {
     greys.forEach((g) => (g.style.opacity = ""));
     const neons = fan.querySelectorAll(".gw-blade-neon");
     neons.forEach((n) => (n.style.opacity = ""));
-    const hubCore = document.querySelector(".gw-cursor-hub-core");
     if (hubCore) {
       hubCore.style.opacity = "";
       hubCore.style.filter = "";
